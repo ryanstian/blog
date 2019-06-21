@@ -92,14 +92,18 @@
 
 
 
-  <meta property="og:type" content="article">
-<meta property="og:title" content="welcome">
-<meta property="og:url" content="http://yoursite.com/2019/06/20/welcome/index.html">
+  <meta name="description" content="什么是git? 首先我用通俗语言解释下,git是一种版本控制工具,你既可以在本地进行版本控制,也可以与搭建好git服务器的远端进行同步   如何使用? windows的可以官方下载安装包,linux可以命令行下载(对于window来说可能需配置环境变量,可有可无) 配置全局信息 随便找个地方右键打开git bash ps:这里配置的昵称和邮箱可以随便写,作用体现在,假如你提交了git,那么在gi">
+<meta name="keywords" content="git">
+<meta property="og:type" content="article">
+<meta property="og:title" content="git使用笔记">
+<meta property="og:url" content="http://yoursite.com/2019/06/21/git使用笔记/index.html">
 <meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="什么是git? 首先我用通俗语言解释下,git是一种版本控制工具,你既可以在本地进行版本控制,也可以与搭建好git服务器的远端进行同步   如何使用? windows的可以官方下载安装包,linux可以命令行下载(对于window来说可能需配置环境变量,可有可无) 配置全局信息 随便找个地方右键打开git bash ps:这里配置的昵称和邮箱可以随便写,作用体现在,假如你提交了git,那么在gi">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-06-20T15:53:30.267Z">
+<meta property="og:updated_time" content="2019-06-21T16:52:20.344Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="welcome">
+<meta name="twitter:title" content="git使用笔记">
+<meta name="twitter:description" content="什么是git? 首先我用通俗语言解释下,git是一种版本控制工具,你既可以在本地进行版本控制,也可以与搭建好git服务器的远端进行同步   如何使用? windows的可以官方下载安装包,linux可以命令行下载(对于window来说可能需配置环境变量,可有可无) 配置全局信息 随便找个地方右键打开git bash ps:这里配置的昵称和邮箱可以随便写,作用体现在,假如你提交了git,那么在gi">
 
 
 
@@ -107,7 +111,7 @@
 
   
   
-  <link rel="canonical" href="http://yoursite.com/2019/06/20/welcome/">
+  <link rel="canonical" href="http://yoursite.com/2019/06/21/git使用笔记/">
 
 
 
@@ -117,7 +121,7 @@
   };
 </script>
 
-  <title>welcome | Hexo</title>
+  <title>git使用笔记 | Hexo</title>
   
 
 
@@ -308,7 +312,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/06/20/welcome/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/06/21/git使用笔记/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="John Doe">
@@ -325,7 +329,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">welcome
+          <h1 class="post-title" itemprop="name headline">git使用笔记
 
               
             
@@ -351,16 +355,46 @@
                 
               
 
-              <time title="Article créé le: 2019-06-20 23:53:15 / Mise à jour le: 23:53:30" itemprop="dateCreated datePublished" datetime="2019-06-20T23:53:15+08:00">2019-06-20</time>
+              <time title="Article créé le: 2019-06-21 13:02:51" itemprop="dateCreated datePublished" datetime="2019-06-21T13:02:51+08:00">2019-06-21</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Éditer sur</span>
+                
+                <time title="Mise à jour le: 2019-06-22 00:52:20" itemprop="dateModified" datetime="2019-06-22T00:52:20+08:00">2019-06-22</time>
               
             
           </span>
 
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/学习笔记/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a></span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -390,7 +424,57 @@
       
 
       
-        
+        <ul>
+<li><h4 id="什么是git"><a href="#什么是git" class="headerlink" title="什么是git?"></a>什么是git?</h4><ul>
+<li>首先我用通俗语言解释下,git是一种版本控制工具,你既可以在本地进行版本控制,也可以与搭建好git服务器的远端进行同步</li>
+</ul>
+</li>
+<li><h4 id="如何使用"><a href="#如何使用" class="headerlink" title="如何使用?"></a>如何使用?</h4><ul>
+<li>windows的可以官方下载安装包,linux可以命令行下载(对于window来说可能需配置环境变量,可有可无)<br></li>
+<li>配置全局信息<ul>
+<li>随便找个地方右键打开git bash</li>
+<li>ps:这里配置的昵称和邮箱可以随便写,作用体现在,假如你提交了git,那么在git记录中会显示提交者昵称和邮箱,即为下面输入的</li>
+<li>输入git config –global user.name “你的昵称”</li>
+<li>输入git config –global user.name “你的邮箱”<br></li>
+</ul>
+</li>
+<li>创建git仓库<ul>
+<li>随便找个地方新建文件夹进去打开git bash(此处建议选一个父文件夹作为git仓库目录)</li>
+<li>输入git init<ul>
+<li>该命令的作用是在当前文件夹下生成git仓库所需文件(注意,这里git仓库通常指的是一个项目,而不是管理多个项目的仓库,而且生成的文件为.git是个隐藏文件夹)<br></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>使用git<ul>
+<li>当我们在文件夹下做了操作以后(添加修改删除文件),可以git add .<ul>
+<li>.代表暂存全部文件,当然也可以是其他写法或部分文件</li>
+</ul>
+</li>
+<li>此时我们已经add成功,接下来git commit -m”此次提交的注释”</li>
+<li>此时,本地的使用基本就到这里(此外还有分支,冲突等各种概念,不在本篇讲)<br></li>
+</ul>
+</li>
+<li>关联github/码云(也可以是其他的或者自己搭建的git服务器)<ul>
+<li>首先我们在git bash中生成一对密钥,命令为:ssh-keygen -t rsa -C “你之前填写的邮箱”<ul>
+<li>其实一般码云或者github都要官方绑定密钥教程,基本都一样</li>
+</ul>
+</li>
+<li>生成密钥后我们把密钥配置到git服务器上<ul>
+<li>如果是github之类的你从个人setting可以找到配置密钥的地方,如果是个人git服务器则可能需要手动添加</li>
+<li>刚才生成的密钥分为公钥和私钥,一般公钥以.pub结尾,这部分涉及到密码学,你只需要知道这是非对称密钥用来代替用户密码做身份验证就好了,具体内容请自行搜索<ul>
+<li>在window中默认保存在C://user/{你的用户名}/.ssh文件夹中</li>
+</ul>
+</li>
+<li>当我们配置到服务器公钥后,就可以正常的git clone 远程私有仓库等操作</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
       
     </div>
 
@@ -411,6 +495,15 @@
 
     <footer class="post-footer">
       
+        
+          
+        
+        <div class="post-tags">
+          
+            <a href="/tags/git/" rel="tag"># git</a>
+          
+        </div>
+      
 
       
       
@@ -420,15 +513,15 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
+              <a href="/2019/06/21/解决maven导入项目pom-xml报错unknown/" rel="next" title="解决maven导入项目pom.xml报错unknown">
+                <i class="fa fa-chevron-left"></i> 解决maven导入项目pom.xml报错unknown
+              </a>
+            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/06/21/解决maven导入项目pom-xml报错unknown/" rel="prev" title="解决maven导入项目pom.xml报错unknown">
-                解决maven导入项目pom.xml报错unknown <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -472,8 +565,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table Des Matières
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Ensemble
+          </li>
+        </ul>
+      
 
-      <div class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <div class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -576,6 +678,23 @@
         </div>
       </div>
 
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#什么是git"><span class="nav-number">1.</span> <span class="nav-text">什么是git?</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#如何使用"><span class="nav-number">2.</span> <span class="nav-text">如何使用?</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
       
 
       
