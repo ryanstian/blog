@@ -185,7 +185,7 @@
   </div>
 
   <div class="site-nav-toggle">
-    <button aria-label="Basculer la barre de navigation">
+    <button aria-label="Cambiar a barra de navegación">
       <span class="btn-bar"></span>
       <span class="btn-bar"></span>
       <span class="btn-bar"></span>
@@ -211,7 +211,7 @@
 
     
 
-    <a href="/" rel="section">Accueil</a>
+    <a href="/" rel="section">Inicio</a>
 
   </li>
         
@@ -226,7 +226,7 @@
 
     
 
-    <a href="/tags/" rel="section">Mots clés</a>
+    <a href="/tags/" rel="section">Etiquetas</a>
 
   </li>
         
@@ -241,7 +241,7 @@
 
     
 
-    <a href="/categories/" rel="section">Catégories</a>
+    <a href="/categories/" rel="section">Categorías</a>
 
   </li>
         
@@ -256,7 +256,7 @@
 
     
 
-    <a href="/archives/" rel="section">Archives</a>
+    <a href="/archives/" rel="section">Archivo</a>
 
   </li>
 
@@ -292,6 +292,171 @@
           <div id="content" class="content">
             
   <section id="posts" class="posts-expand">
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/06/22/mysql启动(无需添加到服务)/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2019/06/22/mysql启动(无需添加到服务)/" class="post-title-link" itemprop="url">mysql启动(无需添加到服务)</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Publicado el</span>
+              
+
+              
+                
+              
+
+              <time title="Creado por: 2019-06-22 16:02:51 / Modificado por: 16:18:21" itemprop="dateCreated datePublished" datetime="2019-06-22T16:02:51+08:00">2019-06-22</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">En</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/学习笔记/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h6 id="ps-接下来的步骤仅限于已经安装配置好mysql-但不想将其添加到服务项中来启动的朋友"><a href="#ps-接下来的步骤仅限于已经安装配置好mysql-但不想将其添加到服务项中来启动的朋友" class="headerlink" title="ps:接下来的步骤仅限于已经安装配置好mysql,但不想将其添加到服务项中来启动的朋友"></a>ps:接下来的步骤仅限于已经安装配置好mysql,但不想将其添加到服务项中来启动的朋友</h6><p>1.打开cmd,通过cd到mysql安装/解压文件夹下</p>
+<p>2.调用bin下的mysqld.exe文件(如果是linux则可能是.sh)</p>
+<p>3.参数为my.ini/my.cnf</p>
+<p>4.具体命令为<br>&emsp;bin/mysqld –defaults-file=./my.ini</p>
+<p>5.输入该命令后cmd应该会挂起,此时mysql已经启动成功。如果关闭cmd命令行那么mysql关闭</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
     
       
 
@@ -346,14 +511,14 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posté le</span>
+                <span class="post-meta-item-text">Publicado el</span>
               
 
               
                 
               
 
-              <time title="Article créé le: 2019-06-21 13:02:51" itemprop="dateCreated datePublished" datetime="2019-06-21T13:02:51+08:00">2019-06-21</time>
+              <time title="Creado por: 2019-06-21 13:02:51" itemprop="dateCreated datePublished" datetime="2019-06-21T13:02:51+08:00">2019-06-21</time>
             
 
             
@@ -368,9 +533,9 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 
-                  <span class="post-meta-item-text">Éditer sur</span>
+                  <span class="post-meta-item-text">Editado el</span>
                 
-                <time title="Mise à jour le: 2019-06-22 00:52:20" itemprop="dateModified" datetime="2019-06-22T00:52:20+08:00">2019-06-22</time>
+                <time title="Modificado por: 2019-06-22 00:52:20" itemprop="dateModified" datetime="2019-06-22T00:52:20+08:00">2019-06-22</time>
               
             
           </span>
@@ -384,7 +549,7 @@
                 <i class="fa fa-folder-o"></i>
               </span>
               
-                <span class="post-meta-item-text">In</span>
+                <span class="post-meta-item-text">En</span>
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/学习笔记/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a></span>
@@ -568,14 +733,14 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posté le</span>
+                <span class="post-meta-item-text">Publicado el</span>
               
 
               
                 
               
 
-              <time title="Article créé le: 2019-06-21 13:02:51" itemprop="dateCreated datePublished" datetime="2019-06-21T13:02:51+08:00">2019-06-21</time>
+              <time title="Creado por: 2019-06-21 13:02:51" itemprop="dateCreated datePublished" datetime="2019-06-21T13:02:51+08:00">2019-06-21</time>
             
 
             
@@ -590,9 +755,9 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 
-                  <span class="post-meta-item-text">Éditer sur</span>
+                  <span class="post-meta-item-text">Editado el</span>
                 
-                <time title="Mise à jour le: 2019-06-22 00:52:22" itemprop="dateModified" datetime="2019-06-22T00:52:22+08:00">2019-06-22</time>
+                <time title="Modificado por: 2019-06-22 00:52:22" itemprop="dateModified" datetime="2019-06-22T00:52:22+08:00">2019-06-22</time>
               
             
           </span>
@@ -606,7 +771,7 @@
                 <i class="fa fa-folder-o"></i>
               </span>
               
-                <span class="post-meta-item-text">In</span>
+                <span class="post-meta-item-text">En</span>
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/BUG记录/" itemprop="url" rel="index"><span itemprop="name">BUG记录</span></a></span>
@@ -745,14 +910,14 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posté le</span>
+                <span class="post-meta-item-text">Publicado el</span>
               
 
               
                 
               
 
-              <time title="Article créé le: 2019-06-20 23:53:15 / Mise à jour le: 23:53:30" itemprop="dateCreated datePublished" datetime="2019-06-20T23:53:15+08:00">2019-06-20</time>
+              <time title="Creado por: 2019-06-20 23:53:15 / Modificado por: 23:53:30" itemprop="dateCreated datePublished" datetime="2019-06-20T23:53:15+08:00">2019-06-20</time>
             
 
             
@@ -876,8 +1041,8 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">3</span>
-                    <span class="site-state-item-name">articles</span>
+                    <span class="site-state-item-count">4</span>
+                    <span class="site-state-item-name">entradas</span>
                   </a>
                 </div>
               
@@ -898,7 +1063,7 @@
                       
                     
                     <span class="site-state-item-count">2</span>
-                    <span class="site-state-item-name">catégories</span>
+                    <span class="site-state-item-name">categorías</span>
                   </a>
                 </div>
               
@@ -922,8 +1087,10 @@
                     
                       
                     
-                    <span class="site-state-item-count">4</span>
-                    <span class="site-state-item-name">mots clé</span>
+                      
+                    
+                    <span class="site-state-item-count">5</span>
+                    <span class="site-state-item-name">tags</span>
                   </a>
                 </div>
               
