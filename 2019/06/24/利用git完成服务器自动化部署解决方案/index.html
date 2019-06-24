@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<html class="theme-next gemini" lang="en">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+<link rel="stylesheet" href="/css/main.css?v=7.1.2">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.1.2">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.1.2">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.1.2">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.1.2" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.1.2',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="&amp;emsp;介绍:本篇主要讲述在团队合作时,如何利用脚本和git在前后端分离模式下,测试时的服务器自动化部署问题(只是个人想法和实践,仅作参考。下方代码已经经过测试,保证做好适配后可用)&amp;emsp;适用情况:团队合作,前后端分离,后端需根据前端需求持续变更代码并提供给前端测试&amp;emsp;需要的环境:linux服务器,git,maven,java&amp;emsp;首先讲成果,上代码,我会在其中伴随大量讲解">
+<meta name="keywords" content="git,shell,服务器部署">
+<meta property="og:type" content="article">
+<meta property="og:title" content="利用git完成服务器自动化部署解决方案">
+<meta property="og:url" content="https://qq616023844.github.io/2019/06/24/利用git完成服务器自动化部署解决方案/index.html">
+<meta property="og:site_name" content="柠檬不酸的博客">
+<meta property="og:description" content="&amp;emsp;介绍:本篇主要讲述在团队合作时,如何利用脚本和git在前后端分离模式下,测试时的服务器自动化部署问题(只是个人想法和实践,仅作参考。下方代码已经经过测试,保证做好适配后可用)&amp;emsp;适用情况:团队合作,前后端分离,后端需根据前端需求持续变更代码并提供给前端测试&amp;emsp;需要的环境:linux服务器,git,maven,java&amp;emsp;首先讲成果,上代码,我会在其中伴随大量讲解">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2019-06-24T08:18:01.135Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="利用git完成服务器自动化部署解决方案">
+<meta name="twitter:description" content="&amp;emsp;介绍:本篇主要讲述在团队合作时,如何利用脚本和git在前后端分离模式下,测试时的服务器自动化部署问题(只是个人想法和实践,仅作参考。下方代码已经经过测试,保证做好适配后可用)&amp;emsp;适用情况:团队合作,前后端分离,后端需根据前端需求持续变更代码并提供给前端测试&amp;emsp;需要的环境:linux服务器,git,maven,java&amp;emsp;首先讲成果,上代码,我会在其中伴随大量讲解">
+
+
+
+
+
+  
+  
+  <link rel="canonical" href="https://qq616023844.github.io/2019/06/24/利用git完成服务器自动化部署解决方案/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>利用git完成服务器自动化部署解决方案 | 柠檬不酸的博客</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">柠檬不酸的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">萌新上路,请多指教</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Toggle navigation bar">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+
+    
+
+    <a href="/" rel="section">Home</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+
+    
+
+    <a href="/tags/" rel="section">Tags</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+
+    
+
+    <a href="/categories/" rel="section">Categories</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+
+    
+
+    <a href="/archives/" rel="section">Archives</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://qq616023844.github.io/2019/06/24/利用git完成服务器自动化部署解决方案/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Lemon Sour">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="柠檬不酸的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">利用git完成服务器自动化部署解决方案
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2019-06-24 14:51:55 / Modified: 16:18:01" itemprop="dateCreated datePublished" datetime="2019-06-24T14:51:55+08:00">2019-06-24</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/学习笔记/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h4 id="emsp-介绍-本篇主要讲述在团队合作时-如何利用脚本和git在前后端分离模式下-测试时的服务器自动化部署问题-只是个人想法和实践-仅作参考。下方代码已经经过测试-保证做好适配后可用"><a href="#emsp-介绍-本篇主要讲述在团队合作时-如何利用脚本和git在前后端分离模式下-测试时的服务器自动化部署问题-只是个人想法和实践-仅作参考。下方代码已经经过测试-保证做好适配后可用" class="headerlink" title="&emsp;介绍:本篇主要讲述在团队合作时,如何利用脚本和git在前后端分离模式下,测试时的服务器自动化部署问题(只是个人想法和实践,仅作参考。下方代码已经经过测试,保证做好适配后可用)"></a>&emsp;介绍:本篇主要讲述在团队合作时,如何利用脚本和git在前后端分离模式下,测试时的服务器自动化部署问题(只是个人想法和实践,仅作参考。下方代码已经经过测试,保证做好适配后可用)</h4><h4 id="emsp-适用情况-团队合作-前后端分离-后端需根据前端需求持续变更代码并提供给前端测试"><a href="#emsp-适用情况-团队合作-前后端分离-后端需根据前端需求持续变更代码并提供给前端测试" class="headerlink" title="&emsp;适用情况:团队合作,前后端分离,后端需根据前端需求持续变更代码并提供给前端测试"></a>&emsp;适用情况:团队合作,前后端分离,后端需根据前端需求持续变更代码并提供给前端测试</h4><h4 id="emsp-需要的环境-linux服务器-git-maven-java"><a href="#emsp-需要的环境-linux服务器-git-maven-java" class="headerlink" title="&emsp;需要的环境:linux服务器,git,maven,java"></a>&emsp;需要的环境:linux服务器,git,maven,java</h4><h4 id="emsp-首先讲成果-上代码-我会在其中伴随大量讲解"><a href="#emsp-首先讲成果-上代码-我会在其中伴随大量讲解" class="headerlink" title="&emsp;首先讲成果,上代码,我会在其中伴随大量讲解"></a>&emsp;首先讲成果,上代码,我会在其中伴随大量讲解</h4><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/sh</span></span><br><span class="line"><span class="comment">###为保护隐私,本代码中的该项目特有名称均会用其他文本代替</span></span><br><span class="line"><span class="comment">###该项目的git文件夹我们暂且称呼为demo</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="function"><span class="title">updateAndRestart</span></span>()&#123;</span><br><span class="line">	<span class="comment">#切换到online分支,这个地方需要根据自己的git分支做适配</span></span><br><span class="line">	git checkout online</span><br><span class="line">	<span class="comment">#git rev-parse online命令用于查看本地的online分支最后一次提交id</span></span><br><span class="line">	LOCALONLINE=$(git rev-parse online)</span><br><span class="line">    <span class="comment">#用于这句话就是打印到控制台,没什么意义</span></span><br><span class="line">	<span class="built_in">echo</span> <span class="string">"本地ONLINE为<span class="variable">$&#123;LOCALONLINE&#125;</span>"</span></span><br><span class="line">	<span class="comment">#从远程仓库fetch,这里选择fetch而不是pull也是为了性能考虑,如有偏差,请根据自己想法修改</span></span><br><span class="line">	git fetch</span><br><span class="line">	<span class="built_in">echo</span> <span class="string">"从远程仓库拉取结束"</span></span><br><span class="line">	<span class="comment">#获取已经fetch下来的远程仓库的HEAD,这里要做郑重说明,如果git rev-parse orgin/online虽然是获取远程仓库online分支的最后一次提交,但是他不会真的去连接远程仓库拉取信息,而是读取本地的远程仓库的缓存信息,所以之前需要git fetch也是为了刷新本地缓存的作用。</span></span><br><span class="line">    <span class="comment">#关于如何直接去远程查看远程仓库最后一次提交这个问题,我找了一半天没有找到这个方法</span></span><br><span class="line">	REMOTEONLINE=$(git rev-parse origin/online)</span><br><span class="line">	<span class="built_in">echo</span> <span class="string">"远程HEAD为<span class="variable">$&#123;REMOTEONLINE&#125;</span>"</span></span><br><span class="line">	<span class="comment">#检查远程仓库是否与本地ONLINE一致,若不一致,则证明了远程已更新</span></span><br><span class="line">	<span class="keyword">if</span> [[ <span class="variable">$LOCALONLINE</span> != <span class="variable">$REMOTEONLINE</span> ]]; <span class="keyword">then</span></span><br><span class="line">		<span class="built_in">echo</span> <span class="string">"进入重启-------------------------------------------"</span></span><br><span class="line">		<span class="comment">#将远程分支的更新合并到本地,由于git pull命令可以理解为git fetch+git merge,这一步的意义这里不做赘述</span></span><br><span class="line">		git merge <span class="variable">$REMOTEONLINE</span></span><br><span class="line">		<span class="comment">#杀死所有名为下列的进程</span></span><br><span class="line">        <span class="comment">#这里只讲一点,由于awk命令下文介绍过,那么此时可以想象文本状态是kill -9 进程pid,sh命令是把之前的输出当作脚本来执行,那么就成果实现了批量kill进程</span></span><br><span class="line">		jps | grep demo.jar|awk <span class="string">'&#123;print "kill -9 " $1&#125;'</span>|sh</span><br><span class="line">		<span class="comment">#重新打包jar</span></span><br><span class="line">		mvn clean package</span><br><span class="line">		<span class="comment">#给jar授权</span></span><br><span class="line">        <span class="comment">#这里有必要作下说明,此脚本我是运行在root用户下(这点很重要,如果是其他用户,则在权限方面需要注意做适配)</span></span><br><span class="line">        <span class="comment">#chomd是赋权命令,后面参数则是其权限,参数每部分的具体意义请自行查询</span></span><br><span class="line">        <span class="comment">#这条命令是授予demo.jar的root用户可执行权限(原本被mvn打包后默认为读写权限,没有执行权限)</span></span><br><span class="line">		chmod 744 /你的目录/demo.jar</span><br><span class="line">        <span class="comment">#这个文件是否也需要授权我也不知道,暂时还未验证(凭着程序员奇妙的直觉我给他授权了)</span></span><br><span class="line">		chmod 744 /你的目录/demo.jar.original</span><br><span class="line">		<span class="comment">#后台运行jar,具体意义可见后半部分文章</span></span><br><span class="line">		nohup java -jar /你的目录t/demo.jar &gt;  /你的目录/xxx-`date +%Y-%m-%d-%H-%M-%S`.<span class="built_in">log</span> 2&gt;&amp;1 &amp;</span><br><span class="line">		sleep 15</span><br><span class="line">	<span class="keyword">fi</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">###上面的是函数,只有调用时才会运行,首先运行的是下面代码</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#首先cd到你的demo存放目录,这一步可有可无,根据你的项目路径做好适配就行</span></span><br><span class="line"><span class="built_in">cd</span> /xxx/xxx/demo</span><br><span class="line"><span class="comment">#下面这行代码是脚本启动时用来检测是否demo程序正在运行</span></span><br><span class="line"><span class="comment">#这里顺便讲解下shell和java的知识</span></span><br><span class="line"><span class="comment">#   jps该命令可以理解为和ps命令类似,只不过是用来显示java进程</span></span><br><span class="line"><span class="comment">#   |这个管道命令我无法解释,自己去搜索引擎</span></span><br><span class="line"><span class="comment">#   grep用来抓取出包含demo.jar字段的行</span></span><br><span class="line"><span class="comment">#   awk一种文本处理命令,将文本按照我们定义的规则处理</span></span><br><span class="line"><span class="comment">#       这里'&#123;print $1&#125;'代表的是输出每行的第一个参数(在我的linux系统中,每行的第一个参数正好是java进程的pid,其他人需要根据情况适配,注意'引号一定要有)</span></span><br><span class="line"><span class="comment">#   wc -l是统计命令,由于之前都是一行一行打印的,所以此命令可以很轻松统计有多少在运行</span></span><br><span class="line"><span class="comment">#   综上所述,该条命令的意义在于:统计名为demo.jar的java进程的数目,awk这段命令后来想了想属于冗余命令了,可视情况去除</span></span><br><span class="line">SUMMERTRAINPID=$(jps | grep demo.jar |awk <span class="string">'&#123;print $1&#125;'</span> |wc -l)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> [[ SUMMERTRAINPID!=0 ]]; <span class="keyword">then</span></span><br><span class="line">	<span class="built_in">echo</span> <span class="string">"脚本开始,检测到程序未启动,先启动程序------------------------"</span></span><br><span class="line">    <span class="comment">#summertrain-`date +%Y-%m-%d-%H-%M-%S`</span></span><br><span class="line">    <span class="comment">#下面这条命令是在后台启动demo.jar并且将输出重定向到指定的log文件,如果文件不存在会新建</span></span><br><span class="line">    <span class="comment">#其实nohup java -jar /你的路径/demo.jar &gt;  /你log日志的路径/文件名.log &amp;这条命令就可以做到这一点</span></span><br><span class="line">    <span class="comment">#下面这条命令多出来的几个字段表示的是将error日志也重定向到log文件</span></span><br><span class="line">    <span class="comment">#小提示,在自己的脚本,log日志太长不易于观看,所以可以文件名可以在后缀加上`date +%Y-%m-%d-%H-%M-%S`,参数可以在生成文件时自动加上当前实际后缀,例如demolog-`date +%Y-%m-%d-%H-%M-%S`.log</span></span><br><span class="line">	nohup java -jar /你的路径/demo.jar &gt;  /你<span class="built_in">log</span>日志的路径/文件名.<span class="built_in">log</span> 2&gt;&amp;1 &amp;</span><br><span class="line">    <span class="comment">#这里我令他休眠15秒等待java程序启动</span></span><br><span class="line">	sleep 15</span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#接下来开始循环检测是否git有更新</span></span><br><span class="line"><span class="keyword">while</span> <span class="literal">true</span></span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">	<span class="built_in">echo</span> <span class="string">"自动循环中"</span></span><br><span class="line">	updateAndRestart</span><br><span class="line">	sleep 10</span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></table></figure>
+
+<p>后记:写该脚本时参考了git命令,shell语法,linux命令<br>shell脚本中的空格一定要注意,少一个空格往往意义就会不同<br>如果团队人数更多,那么该方法不再试用,每次程序启动都需一定时间。届时可以将程序分为一个个子项目,每个子项目单独作为一个jar包,利用分布式的方式来运行,可以采用zookeeper做分布式应用程序协调服务,这样就有点类似java中的分段加锁提高并法的思想,具体本次不再做探讨</p>
+
+      
+    </div>
+
+    
+
+    
+    <div>
+      
+          
+<div class="my_post_copyright">
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+  
+  <!-- JS库 sweetalert 可修改路径 -->
+  <script type="text/javascript" src="http://jslibs.wuxubj.cn/sweetalert_mini/jquery-1.7.1.min.js"></script>
+  <script src="http://jslibs.wuxubj.cn/sweetalert_mini/sweetalert.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="http://jslibs.wuxubj.cn/sweetalert_mini/sweetalert.mini.css">
+
+  <p><span>版权声明:</span> 转载请保留并置顶原文链接及作者</p>  
+</div>
+
+
+      
+    </div>
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        
+          
+        
+        <div class="post-tags">
+          
+            <a href="/tags/git/" rel="tag"># git</a>
+          
+            <a href="/tags/shell/" rel="tag"># shell</a>
+          
+            <a href="/tags/服务器部署/" rel="tag"># 服务器部署</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/06/23/git中文目录变为八进制编码的解决方案/" rel="next" title="git中文目录变为八进制编码的解决方案">
+                <i class="fa fa-chevron-left"></i> git中文目录变为八进制编码的解决方案
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Lemon Sour</p>
+              <div class="site-description motion-element" itemprop="description"></div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">7</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">3</span>
+                    <span class="site-state-item-name">categories</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">7</span>
+                    <span class="site-state-item-name">tags</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/qq616023844" title="GitHub &rarr; https://github.com/qq616023844" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:qq616023844@gmail.com" title="E-Mail &rarr; mailto:qq616023844@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#emsp-介绍-本篇主要讲述在团队合作时-如何利用脚本和git在前后端分离模式下-测试时的服务器自动化部署问题-只是个人想法和实践-仅作参考。下方代码已经经过测试-保证做好适配后可用"><span class="nav-number">1.</span> <span class="nav-text"> 介绍:本篇主要讲述在团队合作时,如何利用脚本和git在前后端分离模式下,测试时的服务器自动化部署问题(只是个人想法和实践,仅作参考。下方代码已经经过测试,保证做好适配后可用)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#emsp-适用情况-团队合作-前后端分离-后端需根据前端需求持续变更代码并提供给前端测试"><span class="nav-number">2.</span> <span class="nav-text"> 适用情况:团队合作,前后端分离,后端需根据前端需求持续变更代码并提供给前端测试</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#emsp-需要的环境-linux服务器-git-maven-java"><span class="nav-number">3.</span> <span class="nav-text"> 需要的环境:linux服务器,git,maven,java</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#emsp-首先讲成果-上代码-我会在其中伴随大量讲解"><span class="nav-number">4.</span> <span class="nav-text"> 首先讲成果,上代码,我会在其中伴随大量讲解</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Lemon sour</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=3.4.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.1.2"></script>
+
+  <script src="/js/motion.js?v=7.1.2"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/affix.js?v=7.1.2"></script>
+
+  <script src="/js/schemes/pisces.js?v=7.1.2"></script>
+
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.1.2"></script>
+<script src="/js/post-details.js?v=7.1.2"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.1.2"></script>
+
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+
+  
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
