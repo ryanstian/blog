@@ -312,6 +312,173 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://qq616023844.github.io/2019/06/25/hibernate查询(组合查询,多条件筛选查询,动态查询,条件查询)/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Lemon Sour">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="柠檬不酸的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2019/06/25/hibernate查询(组合查询,多条件筛选查询,动态查询,条件查询)/" class="post-title-link" itemprop="url">hibernate查询(组合查询,多条件筛选查询,动态查询,条件查询,Criteria)</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2019-06-25 14:17:00 / Modified: 14:33:32" itemprop="dateCreated datePublished" datetime="2019-06-25T14:17:00+08:00">2019-06-25</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/学习笔记/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h5 id="后续更新会解释原理-等我弄懂了以后-先临时贴一部分使用情况-这应该是最新hibernate5-3-9引入session和动态查询的方式-笔者尝试其他的各种方式均已提示过期"><a href="#后续更新会解释原理-等我弄懂了以后-先临时贴一部分使用情况-这应该是最新hibernate5-3-9引入session和动态查询的方式-笔者尝试其他的各种方式均已提示过期" class="headerlink" title="后续更新会解释原理(等我弄懂了以后),先临时贴一部分使用情况,这应该是最新hibernate5.3.9引入session和动态查询的方式,笔者尝试其他的各种方式均已提示过期"></a>后续更新会解释原理(等我弄懂了以后),先临时贴一部分使用情况,这应该是最新hibernate5.3.9引入session和动态查询的方式,笔者尝试其他的各种方式均已提示过期</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//下面这行代码是为了调用到session</span></span><br><span class="line"><span class="meta">@PersistenceContext</span></span><br><span class="line"><span class="keyword">private</span> EntityManager entityManger;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="comment">//TODO 暂时不知道session需不需要关闭</span></span><br><span class="line">    Session session = entityManger.unwrap(Session.class);</span><br><span class="line"></span><br><span class="line">    CriteriaBuilder crb = session.getCriteriaBuilder();</span><br><span class="line">    CriteriaQuery&lt;SupplierGood&gt; crq = crb.createQuery(你的实体类名.class);</span><br><span class="line"></span><br><span class="line">    Root&lt;SupplierGood&gt; root = crq.from(你的实体类名.class);</span><br><span class="line">    crq.select(root);</span><br><span class="line">    <span class="comment">//这里写你需要的查询条件,具体的语法搜索引擎查询CriteriaBuilder这个类</span></span><br><span class="line">    crq.where(crb.equal(root.get(<span class="string">"数据库中该字段名"</span>),查询的参数);</span><br><span class="line"></span><br><span class="line">    session.createQuery(crq).getResultList();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    <div>
+      
+    </div>
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://qq616023844.github.io/2019/06/24/利用git完成服务器自动化部署解决方案/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -374,7 +541,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2019-06-25 08:40:33" itemprop="dateModified" datetime="2019-06-25T08:40:33+08:00">2019-06-25</time>
+                <time title="Modified: 2019-06-25 17:02:25" itemprop="dateModified" datetime="2019-06-25T17:02:25+08:00">2019-06-25</time>
               
             
           </span>
@@ -428,9 +595,9 @@
       
         
           
-            <p>2019.6.25更新<br>昨天忘记了说一个重要的问题,如果你是在window环境下写的shell脚本到linux环境下运行,由于两者系统换行符不一致,需要在linux中执行vim 你的脚本名,进入脚本:set ff=unix,注意”:”这个符号需要带着,不明白的请去搜vim命令</p>
+            <p>2019.6.25更新<br>昨天忘记了说一个重要的问题,如果你是在window环境下写的shell脚本到linux环境下运行,由于两者系统换行符不一致,需要在linux中执行vim 你的脚本名,进入脚本:set ff=unix,注意”:”这个符号需要带着,不明白的请去搜vim命令<br>刚才看了些博客,有提到用hook触发,而不是自己去循环访问,思路待定</p>
 <hr>
-<h4 id="emsp-介绍-本篇主要讲述在团队合作时-如何利用脚本和git在前后端分离模式下-测试时的服务器自动化部署问题-只是个人想法和实践-仅作参考。下方代码已经经过测试-保证做好适配后可用"><a href="#emsp-介绍-本篇主要讲述在团队合作时-如何利用脚本和git在前后端分离模式下-测试时的服务器自动化部署问题-只是个人想法和实践-仅作参考。下方代码已经经过测试-保证做好适配后可用" class="headerlink" title="&emsp;介绍:本篇主要讲述在团队合作时,如何利用脚本和git在前后端分离模式下,测试时的服务器自动化部署问题(只是个人想法和实践,仅作参考。下方代码已经经过测试,保证做好适配后可用)"></a>&emsp;介绍:本篇主要讲述在团队合作时,如何利用脚本和git在前后端分离模式下,测试时的服务器自动化部署问题(只是个人想法和实践,仅作参考。下方代码已经经过测试,保证做好适配后可用)</h4><h4 id="emsp-适用情况-团队合作-前后端分离-后端需根据前端需求持续变更代码并提供给前端测试"><a href="#emsp-适用情况-团队合作-前后端分离-后端需根据前端需求持续变更代码并提供给前端测试" class="headerlink" title="&emsp;适用情况:团队合作,前后端分离,后端需根据前端需求持续变更代码并提供给前端测试"></a>&emsp;适用情况:团队合作,前后端分离,后端需根据前端需求持续变更代码并提供给前端测试</h4><h4 id="emsp-需要的环境-linux服务器-git-maven-java"><a href="#emsp-需要的环境-linux服务器-git-maven-java" class="headerlink" title="&emsp;需要的环境:linux服务器,git,maven,java"></a>&emsp;需要的环境:linux服务器,git,maven,java</h4><h4 id="emsp-首先讲成果-上代码-我会在其中伴随大量讲解"><a href="#emsp-首先讲成果-上代码-我会在其中伴随大量讲解" class="headerlink" title="&emsp;首先讲成果,上代码,我会在其中伴随大量讲解"></a>&emsp;首先讲成果,上代码,我会在其中伴随大量讲解</h4><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/sh</span></span><br><span class="line"><span class="comment">###为保护隐私,本代码中的该项目特有名称均会用其他文本代替</span></span><br><span class="line"><span class="comment">###该项目的git文件夹我们暂且称呼为demo</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="function"><span class="title">updateAndRestart</span></span>()&#123;</span><br><span class="line">	<span class="comment">#切换到online分支,这个地方需要根据自己的git分支做适配</span></span><br><span class="line">	git checkout online</span><br><span class="line">	<span class="comment">#git rev-parse online命令用于查看本地的online分支最后一次提交id</span></span><br><span class="line">	LOCALONLINE=$(git rev-parse online)</span><br><span class="line">    <span class="comment">#用于这句话就是打印到控制台,没什么意义</span></span><br><span class="line">	<span class="built_in">echo</span> <span class="string">"本地ONLINE为<span class="variable">$&#123;LOCALONLINE&#125;</span>"</span></span><br><span class="line">	<span class="comment">#从远程仓库fetch,这里选择fetch而不是pull也是为了性能考虑,如有偏差,请根据自己想法修改</span></span><br><span class="line">	git fetch</span><br><span class="line">	<span class="built_in">echo</span> <span class="string">"从远程仓库拉取结束"</span></span><br><span class="line">	<span class="comment">#获取已经fetch下来的远程仓库的HEAD,这里要做郑重说明,如果git rev-parse orgin/online虽然是获取远程仓库online分支的最后一次提交,但是他不会真的去连接远程仓库拉取信息,而是读取本地的远程仓库的缓存信息,所以之前需要git fetch也是为了刷新本地缓存的作用。</span></span><br><span class="line">    <span class="comment">#关于如何直接去远程查看远程仓库最后一次提交这个问题,我找了一半天没有找到这个方法</span></span><br><span class="line">	REMOTEONLINE=$(git rev-parse origin/online)</span><br><span class="line">	<span class="built_in">echo</span> <span class="string">"远程HEAD为<span class="variable">$&#123;REMOTEONLINE&#125;</span>"</span></span><br><span class="line">	<span class="comment">#检查远程仓库是否与本地ONLINE一致,若不一致,则证明了远程已更新</span></span><br><span class="line">	<span class="keyword">if</span> [[ <span class="variable">$LOCALONLINE</span> != <span class="variable">$REMOTEONLINE</span> ]]; <span class="keyword">then</span></span><br><span class="line">		<span class="built_in">echo</span> <span class="string">"进入重启-------------------------------------------"</span></span><br><span class="line">		<span class="comment">#将远程分支的更新合并到本地,由于git pull命令可以理解为git fetch+git merge,这一步的意义这里不做赘述</span></span><br><span class="line">		git merge <span class="variable">$REMOTEONLINE</span></span><br><span class="line">		<span class="comment">#杀死所有名为下列的进程</span></span><br><span class="line">        <span class="comment">#这里只讲一点,由于awk命令下文介绍过,那么此时可以想象文本状态是kill -9 进程pid,sh命令是把之前的输出当作脚本来执行,那么就成果实现了批量kill进程</span></span><br><span class="line">		jps | grep demo.jar|awk <span class="string">'&#123;print "kill -9 " $1&#125;'</span>|sh</span><br><span class="line">		<span class="comment">#重新打包jar</span></span><br><span class="line">		mvn clean package</span><br><span class="line">		<span class="comment">#给jar授权</span></span><br><span class="line">        <span class="comment">#这里有必要作下说明,此脚本我是运行在root用户下(这点很重要,如果是其他用户,则在权限方面需要注意做适配)</span></span><br><span class="line">        <span class="comment">#chomd是赋权命令,后面参数则是其权限,参数每部分的具体意义请自行查询</span></span><br><span class="line">        <span class="comment">#这条命令是授予demo.jar的root用户可执行权限(原本被mvn打包后默认为读写权限,没有执行权限)</span></span><br><span class="line">		chmod 744 /你的目录/demo.jar</span><br><span class="line">        <span class="comment">#这个文件我不知道是什么,在window环境下尝试情况,删除了也不会有什么影响。有人说.jar是不带依赖的,original是带依赖的,但是观察文件大小,发现original文件只有几十k,明显不是带着依赖一起打包的样子</span></span><br><span class="line">		chmod 744 /你的目录/demo.jar.original</span><br><span class="line">		<span class="comment">#后台运行jar,具体意义可见后半部分文章</span></span><br><span class="line">		nohup java -jar /你的目录t/demo.jar &gt;  /你的目录/xxx-`date +%Y-%m-%d-%H-%M-%S`.<span class="built_in">log</span> 2&gt;&amp;1 &amp;</span><br><span class="line">		sleep 15</span><br><span class="line">	<span class="keyword">fi</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">###上面的是函数,只有调用时才会运行,首先运行的是下面代码</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#首先cd到你的demo存放目录,这一步可有可无,根据你的项目路径做好适配就行</span></span><br><span class="line"><span class="built_in">cd</span> /xxx/xxx/demo</span><br><span class="line"><span class="comment">#下面这行代码是脚本启动时用来检测是否demo程序正在运行</span></span><br><span class="line"><span class="comment">#这里顺便讲解下shell和java的知识</span></span><br><span class="line"><span class="comment">#   jps该命令可以理解为和ps命令类似,只不过是用来显示java进程</span></span><br><span class="line"><span class="comment">#   |这个管道命令我无法解释,自己去搜索引擎</span></span><br><span class="line"><span class="comment">#   grep用来抓取出包含demo.jar字段的行</span></span><br><span class="line"><span class="comment">#   awk一种文本处理命令,将文本按照我们定义的规则处理</span></span><br><span class="line"><span class="comment">#       这里'&#123;print $1&#125;'代表的是输出每行的第一个参数(在我的linux系统中,每行的第一个参数正好是java进程的pid,其他人需要根据情况适配,注意'引号一定要有)</span></span><br><span class="line"><span class="comment">#   wc -l是统计命令,由于之前都是一行一行打印的,所以此命令可以很轻松统计有多少在运行</span></span><br><span class="line"><span class="comment">#   综上所述,该条命令的意义在于:统计名为demo.jar的java进程的数目,awk这段命令后来想了想属于冗余命令了,可视情况去除</span></span><br><span class="line">SUMMERTRAINPID=$(jps | grep demo.jar |awk <span class="string">'&#123;print $1&#125;'</span> |wc -l)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> [[ SUMMERTRAINPID!=0 ]]; <span class="keyword">then</span></span><br><span class="line">	<span class="built_in">echo</span> <span class="string">"脚本开始,检测到程序未启动,先启动程序------------------------"</span></span><br><span class="line">    <span class="comment">#summertrain-`date +%Y-%m-%d-%H-%M-%S`</span></span><br><span class="line">    <span class="comment">#下面这条命令是在后台启动demo.jar并且将输出重定向到指定的log文件,如果文件不存在会新建</span></span><br><span class="line">    <span class="comment">#其实nohup java -jar /你的路径/demo.jar &gt;  /你log日志的路径/文件名.log &amp;这条命令就可以做到这一点</span></span><br><span class="line">    <span class="comment">#下面这条命令多出来的几个字段表示的是将error日志也重定向到log文件</span></span><br><span class="line">    <span class="comment">#小提示,在自己的脚本,log日志太长不易于观看,所以可以文件名可以在后缀加上`date +%Y-%m-%d-%H-%M-%S`,参数可以在生成文件时自动加上当前实际后缀,例如demolog-`date +%Y-%m-%d-%H-%M-%S`.log</span></span><br><span class="line">	nohup java -jar /你的路径/demo.jar &gt;  /你<span class="built_in">log</span>日志的路径/文件名.<span class="built_in">log</span> 2&gt;&amp;1 &amp;</span><br><span class="line">    <span class="comment">#这里我令他休眠15秒等待java程序启动</span></span><br><span class="line">	sleep 15</span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#接下来开始循环检测是否git有更新</span></span><br><span class="line"><span class="keyword">while</span> <span class="literal">true</span></span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">	<span class="built_in">echo</span> <span class="string">"自动循环中"</span></span><br><span class="line">	updateAndRestart</span><br><span class="line">	sleep 10</span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></table></figure>
+<h4 id="emsp-介绍-本篇主要讲述在团队合作时-如何利用脚本和git在前后端分离模式下-测试时的服务器自动化部署问题-只是个人想法和实践-仅作参考。下方代码已经经过测试-保证做好适配后可用"><a href="#emsp-介绍-本篇主要讲述在团队合作时-如何利用脚本和git在前后端分离模式下-测试时的服务器自动化部署问题-只是个人想法和实践-仅作参考。下方代码已经经过测试-保证做好适配后可用" class="headerlink" title="&emsp;介绍:本篇主要讲述在团队合作时,如何利用脚本和git在前后端分离模式下,测试时的服务器自动化部署问题(只是个人想法和实践,仅作参考。下方代码已经经过测试,保证做好适配后可用)"></a>&emsp;介绍:本篇主要讲述在团队合作时,如何利用脚本和git在前后端分离模式下,测试时的服务器自动化部署问题(只是个人想法和实践,仅作参考。下方代码已经经过测试,保证做好适配后可用)</h4><h4 id="emsp-适用情况-团队合作-前后端分离-后端需根据前端需求持续变更代码并提供给前端测试"><a href="#emsp-适用情况-团队合作-前后端分离-后端需根据前端需求持续变更代码并提供给前端测试" class="headerlink" title="&emsp;适用情况:团队合作,前后端分离,后端需根据前端需求持续变更代码并提供给前端测试"></a>&emsp;适用情况:团队合作,前后端分离,后端需根据前端需求持续变更代码并提供给前端测试</h4><h4 id="emsp-需要的环境-linux服务器-git-maven-java"><a href="#emsp-需要的环境-linux服务器-git-maven-java" class="headerlink" title="&emsp;需要的环境:linux服务器,git,maven,java"></a>&emsp;需要的环境:linux服务器,git,maven,java</h4><h4 id="emsp-首先讲成果-上代码-我会在其中伴随大量讲解"><a href="#emsp-首先讲成果-上代码-我会在其中伴随大量讲解" class="headerlink" title="&emsp;首先讲成果,上代码,我会在其中伴随大量讲解"></a>&emsp;首先讲成果,上代码,我会在其中伴随大量讲解</h4><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/sh</span></span><br><span class="line"><span class="comment">###本代码中的该项目特有名称均会用其他文本代替,例如我的项目名就用demo代替</span></span><br><span class="line"><span class="comment">###该项目的git文件夹我们暂且称呼为demo</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="function"><span class="title">updateAndRestart</span></span>()&#123;</span><br><span class="line">	<span class="comment">#切换到online分支,这个地方需要根据自己的git分支做适配</span></span><br><span class="line">	git checkout online</span><br><span class="line">	<span class="comment">#git rev-parse online命令用于查看本地的online分支最后一次提交id</span></span><br><span class="line">	LOCALONLINE=$(git rev-parse online)</span><br><span class="line">    <span class="comment">#用于这句话就是打印到控制台,没什么意义</span></span><br><span class="line">	<span class="built_in">echo</span> <span class="string">"本地ONLINE为<span class="variable">$&#123;LOCALONLINE&#125;</span>"</span></span><br><span class="line">	<span class="comment">#从远程仓库fetch,这里选择fetch而不是pull也是为了性能考虑,如有偏差,请根据自己想法修改</span></span><br><span class="line">	git fetch</span><br><span class="line">	<span class="built_in">echo</span> <span class="string">"从远程仓库拉取结束"</span></span><br><span class="line">	<span class="comment">#获取已经fetch下来的远程仓库的HEAD,这里要做郑重说明,如果git rev-parse orgin/online虽然是获取远程仓库online分支的最后一次提交,但是他不会真的去连接远程仓库拉取信息,而是读取本地的远程仓库的缓存信息,所以之前需要git fetch也是为了刷新本地缓存的作用。</span></span><br><span class="line">    <span class="comment">#关于如何直接去远程查看远程仓库最后一次提交这个问题,我找了一半天没有找到这个方法</span></span><br><span class="line">	REMOTEONLINE=$(git rev-parse origin/online)</span><br><span class="line">	<span class="built_in">echo</span> <span class="string">"远程HEAD为<span class="variable">$&#123;REMOTEONLINE&#125;</span>"</span></span><br><span class="line">	<span class="comment">#检查远程仓库是否与本地ONLINE一致,若不一致,则证明了远程已更新</span></span><br><span class="line">	<span class="keyword">if</span> [[ <span class="variable">$LOCALONLINE</span> != <span class="variable">$REMOTEONLINE</span> ]]; <span class="keyword">then</span></span><br><span class="line">		<span class="built_in">echo</span> <span class="string">"进入重启-------------------------------------------"</span></span><br><span class="line">		<span class="comment">#将远程分支的更新合并到本地,由于git pull命令可以理解为git fetch+git merge,这一步的意义这里不做赘述</span></span><br><span class="line">		git merge <span class="variable">$REMOTEONLINE</span></span><br><span class="line">		<span class="comment">#杀死所有名为下列的进程</span></span><br><span class="line">        <span class="comment">#这里只讲一点,由于awk命令下文介绍过,那么此时可以想象文本状态是kill -9 进程pid,sh命令是把之前的输出当作脚本来执行,那么就成果实现了批量kill进程</span></span><br><span class="line">		jps | grep demo.jar|awk <span class="string">'&#123;print "kill -9 " $1&#125;'</span>|sh</span><br><span class="line">		<span class="comment">#重新打包jar</span></span><br><span class="line">		mvn clean package</span><br><span class="line">		<span class="comment">#给jar授权</span></span><br><span class="line">        <span class="comment">#这里有必要作下说明,此脚本我是运行在root用户下(这点很重要,如果是其他用户,则在权限方面需要注意做适配)</span></span><br><span class="line">        <span class="comment">#chomd是赋权命令,后面参数则是其权限,参数每部分的具体意义请自行查询</span></span><br><span class="line">        <span class="comment">#这条命令是授予demo.jar的root用户可执行权限(原本被mvn打包后默认为读写权限,没有执行权限)</span></span><br><span class="line">		chmod 744 /你的目录/demo.jar</span><br><span class="line">        <span class="comment">#这个文件我不知道是什么,在window环境下尝试情况,删除了也不会有什么影响。有人说.jar是不带依赖的,original是带依赖的,但是观察文件大小,发现original文件只有几十k,明显不是带着依赖一起打包的样子</span></span><br><span class="line">		chmod 744 /你的目录/demo.jar.original</span><br><span class="line">		<span class="comment">#后台运行jar,具体意义可见后半部分文章</span></span><br><span class="line">		nohup java -jar /你的目录t/demo.jar &gt;  /你的目录/xxx-`date +%Y-%m-%d-%H-%M-%S`.<span class="built_in">log</span> 2&gt;&amp;1 &amp;</span><br><span class="line">		sleep 15</span><br><span class="line">	<span class="keyword">fi</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">###上面的是函数,只有调用时才会运行,首先运行的是下面代码</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#首先cd到你的demo存放目录,这一步可有可无,根据你的项目路径做好适配就行</span></span><br><span class="line"><span class="built_in">cd</span> /xxx/xxx/demo</span><br><span class="line"><span class="comment">#下面这行代码是脚本启动时用来检测是否demo程序正在运行</span></span><br><span class="line"><span class="comment">#这里顺便讲解下shell和java的知识</span></span><br><span class="line"><span class="comment">#   jps该命令可以理解为和ps命令类似,只不过是用来显示java进程</span></span><br><span class="line"><span class="comment">#   |这个管道命令我无法解释,自己去搜索引擎</span></span><br><span class="line"><span class="comment">#   grep用来抓取出包含demo.jar字段的行</span></span><br><span class="line"><span class="comment">#   awk一种文本处理命令,将文本按照我们定义的规则处理</span></span><br><span class="line"><span class="comment">#       这里'&#123;print $1&#125;'代表的是输出每行的第一个参数(在我的linux系统中,每行的第一个参数正好是java进程的pid,其他人需要根据情况适配,注意'引号一定要有)</span></span><br><span class="line"><span class="comment">#   wc -l是统计命令,由于之前都是一行一行打印的,所以此命令可以很轻松统计有多少在运行</span></span><br><span class="line"><span class="comment">#   综上所述,该条命令的意义在于:统计名为demo.jar的java进程的数目,awk这段命令后来想了想属于冗余命令了,可视情况去除</span></span><br><span class="line">SUMMERTRAINPID=$(jps | grep demo.jar |awk <span class="string">'&#123;print $1&#125;'</span> |wc -l)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> [[ SUMMERTRAINPID!=0 ]]; <span class="keyword">then</span></span><br><span class="line">	<span class="built_in">echo</span> <span class="string">"脚本开始,检测到程序未启动,先启动程序------------------------"</span></span><br><span class="line">    <span class="comment">#summertrain-`date +%Y-%m-%d-%H-%M-%S`</span></span><br><span class="line">    <span class="comment">#下面这条命令是在后台启动demo.jar并且将输出重定向到指定的log文件,如果文件不存在会新建</span></span><br><span class="line">    <span class="comment">#其实nohup java -jar /你的路径/demo.jar &gt;  /你log日志的路径/文件名.log &amp;这条命令就可以做到这一点</span></span><br><span class="line">    <span class="comment">#下面这条命令多出来的几个字段表示的是将error日志也重定向到log文件</span></span><br><span class="line">    <span class="comment">#小提示,在自己的脚本,log日志太长不易于观看,所以可以文件名可以在后缀加上`date +%Y-%m-%d-%H-%M-%S`,参数可以在生成文件时自动加上当前实际后缀,例如demolog-`date +%Y-%m-%d-%H-%M-%S`.log</span></span><br><span class="line">	nohup java -jar /你的路径/demo.jar &gt;  /你<span class="built_in">log</span>日志的路径/文件名.<span class="built_in">log</span> 2&gt;&amp;1 &amp;</span><br><span class="line">    <span class="comment">#这里我令他休眠15秒等待java程序启动</span></span><br><span class="line">	sleep 15</span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#接下来开始循环检测是否git有更新</span></span><br><span class="line"><span class="keyword">while</span> <span class="literal">true</span></span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">	<span class="built_in">echo</span> <span class="string">"自动循环中"</span></span><br><span class="line">	updateAndRestart</span><br><span class="line">	sleep 10</span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></table></figure>
 
 <p>后记:写该脚本时参考了git命令,shell语法,linux命令<br>shell脚本中的空格一定要注意,少一个空格往往意义就会不同<br>如果团队人数更多,那么该方法不再试用,每次程序启动都需一定时间。届时可以将程序分为一个个子项目,每个子项目单独作为一个jar包,利用分布式的方式来运行,可以采用zookeeper做分布式应用程序协调服务,这样就有点类似java中的分段加锁提高并法的思想,具体本次不再做探讨</p>
 
@@ -838,6 +1005,190 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://qq616023844.github.io/2019/06/21/git忽略规则.gitignore/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Lemon Sour">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="柠檬不酸的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2019/06/21/git忽略规则.gitignore/" class="post-title-link" itemprop="url">git忽略规则.gitignore</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2019-06-21 13:02:51" itemprop="dateCreated datePublished" datetime="2019-06-21T13:02:51+08:00">2019-06-21</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2019-06-22 22:16:41" itemprop="dateModified" datetime="2019-06-22T22:16:41+08:00">2019-06-22</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/学习笔记/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h4 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h4><p>&emsp;当我们同步到远程仓库时,配置了.gitignore可以令git按照我们定义的规则,选择性的跟踪本地仓库的文件</p>
+<h4 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h4><p>&emsp;具体的语法规范这里不做描述,搜索引擎搜教程即可</p>
+<p>&emsp;这里我将列出学生team一个springboot项目合作时使用的.gitignore。对官方生成的git做了少许改动</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">HELP.md</span><br><span class="line">target/</span><br><span class="line">!.mvn/wrapper/maven-wrapper.jar</span><br><span class="line">!**/src/main/**</span><br><span class="line">!**/src/test/**</span><br><span class="line"></span><br><span class="line">###团队合作config###</span><br><span class="line">###由于团队合作时每个成员数据库账户密码不一样,所以每个成员都有个个人配置信息,在通用配置里面引入###</span><br><span class="line">person.properties</span><br><span class="line"></span><br><span class="line">###springboot###</span><br><span class="line">###此处表示忽略测试文件夹###</span><br><span class="line">/src/test/java</span><br><span class="line"></span><br><span class="line">### STS ###</span><br><span class="line">.apt_generated</span><br><span class="line">.classpath</span><br><span class="line">.factorypath</span><br><span class="line">.project</span><br><span class="line">.settings</span><br><span class="line">.springBeans</span><br><span class="line">.sts4-cache</span><br><span class="line"></span><br><span class="line">### IntelliJ IDEA ###</span><br><span class="line">.idea</span><br><span class="line">*.iws</span><br><span class="line">*.iml</span><br><span class="line">*.ipr</span><br><span class="line"></span><br><span class="line">### NetBeans ###</span><br><span class="line">/nbproject/private/</span><br><span class="line">/nbbuild/</span><br><span class="line">/dist/</span><br><span class="line">/nbdist/</span><br><span class="line">/.nb-gradle/</span><br><span class="line">build/</span><br><span class="line"></span><br><span class="line">### VS Code ###</span><br><span class="line">.vscode/</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># Log file</span><br><span class="line">*.log</span><br><span class="line"></span><br><span class="line"># Compiled class file</span><br><span class="line">*.class</span><br><span class="line"></span><br><span class="line"># BlueJ files</span><br><span class="line">*.ctxt</span><br><span class="line"></span><br><span class="line"># Mobile Tools for Java (J2ME)</span><br><span class="line">.mtj.tmp/</span><br><span class="line"></span><br><span class="line"># Package Files #</span><br><span class="line">*.jar</span><br><span class="line">*.war</span><br><span class="line">*.nar</span><br><span class="line">*.ear</span><br><span class="line">*.zip</span><br><span class="line">*.tar.gz</span><br><span class="line">*.rar</span><br><span class="line"></span><br><span class="line">hs_err_pid*</span><br></pre></td></tr></table></figure>
+
+<h4 id="常见问题"><a href="#常见问题" class="headerlink" title="常见问题"></a>常见问题</h4><p>配置了.gitignore仍然无法忽略</p>
+<p>&emsp;解决方式:git rm –cached filename<br>&emsp;&emsp;删除该filename文件的本地缓存,然后再进行add和commit等操作,等push到远端后,以后再就不会被追踪<br>&emsp;原因:这是由于在配置.gitignore之前该文件就已经被git追踪造成的,</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    <div>
+      
+    </div>
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://qq616023844.github.io/2019/06/21/git使用笔记/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1004,190 +1355,6 @@
 </ul>
 </li>
 </ul>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    <div>
-      
-    </div>
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://qq616023844.github.io/2019/06/21/git忽略规则.gitignore/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Lemon Sour">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="柠檬不酸的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2019/06/21/git忽略规则.gitignore/" class="post-title-link" itemprop="url">git忽略规则.gitignore</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-
-              
-                
-              
-
-              <time title="Created: 2019-06-21 13:02:51" itemprop="dateCreated datePublished" datetime="2019-06-21T13:02:51+08:00">2019-06-21</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">Edited on</span>
-                
-                <time title="Modified: 2019-06-22 22:16:41" itemprop="dateModified" datetime="2019-06-22T22:16:41+08:00">2019-06-22</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/学习笔记/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h4 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h4><p>&emsp;当我们同步到远程仓库时,配置了.gitignore可以令git按照我们定义的规则,选择性的跟踪本地仓库的文件</p>
-<h4 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h4><p>&emsp;具体的语法规范这里不做描述,搜索引擎搜教程即可</p>
-<p>&emsp;这里我将列出学生team一个springboot项目合作时使用的.gitignore。对官方生成的git做了少许改动</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">HELP.md</span><br><span class="line">target/</span><br><span class="line">!.mvn/wrapper/maven-wrapper.jar</span><br><span class="line">!**/src/main/**</span><br><span class="line">!**/src/test/**</span><br><span class="line"></span><br><span class="line">###团队合作config###</span><br><span class="line">###由于团队合作时每个成员数据库账户密码不一样,所以每个成员都有个个人配置信息,在通用配置里面引入###</span><br><span class="line">person.properties</span><br><span class="line"></span><br><span class="line">###springboot###</span><br><span class="line">###此处表示忽略测试文件夹###</span><br><span class="line">/src/test/java</span><br><span class="line"></span><br><span class="line">### STS ###</span><br><span class="line">.apt_generated</span><br><span class="line">.classpath</span><br><span class="line">.factorypath</span><br><span class="line">.project</span><br><span class="line">.settings</span><br><span class="line">.springBeans</span><br><span class="line">.sts4-cache</span><br><span class="line"></span><br><span class="line">### IntelliJ IDEA ###</span><br><span class="line">.idea</span><br><span class="line">*.iws</span><br><span class="line">*.iml</span><br><span class="line">*.ipr</span><br><span class="line"></span><br><span class="line">### NetBeans ###</span><br><span class="line">/nbproject/private/</span><br><span class="line">/nbbuild/</span><br><span class="line">/dist/</span><br><span class="line">/nbdist/</span><br><span class="line">/.nb-gradle/</span><br><span class="line">build/</span><br><span class="line"></span><br><span class="line">### VS Code ###</span><br><span class="line">.vscode/</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># Log file</span><br><span class="line">*.log</span><br><span class="line"></span><br><span class="line"># Compiled class file</span><br><span class="line">*.class</span><br><span class="line"></span><br><span class="line"># BlueJ files</span><br><span class="line">*.ctxt</span><br><span class="line"></span><br><span class="line"># Mobile Tools for Java (J2ME)</span><br><span class="line">.mtj.tmp/</span><br><span class="line"></span><br><span class="line"># Package Files #</span><br><span class="line">*.jar</span><br><span class="line">*.war</span><br><span class="line">*.nar</span><br><span class="line">*.ear</span><br><span class="line">*.zip</span><br><span class="line">*.tar.gz</span><br><span class="line">*.rar</span><br><span class="line"></span><br><span class="line">hs_err_pid*</span><br></pre></td></tr></table></figure>
-
-<h4 id="常见问题"><a href="#常见问题" class="headerlink" title="常见问题"></a>常见问题</h4><p>配置了.gitignore仍然无法忽略</p>
-<p>&emsp;解决方式:git rm –cached filename<br>&emsp;&emsp;删除该filename文件的本地缓存,然后再进行add和commit等操作,等push到远端后,以后再就不会被追踪<br>&emsp;原因:这是由于在配置.gitignore之前该文件就已经被git追踪造成的,</p>
 
           
         
@@ -1617,7 +1784,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">7</span>
+                    <span class="site-state-item-count">8</span>
                     <span class="site-state-item-name">posts</span>
                   </a>
                 </div>
@@ -1671,7 +1838,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">7</span>
+                      
+                    
+                    <span class="site-state-item-count">8</span>
                     <span class="site-state-item-name">tags</span>
                   </a>
                 </div>
