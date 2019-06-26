@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title><![CDATA[hibernate查询(组合查询,多条件筛选查询,动态查询,条件查询,Criteria)]]></title>
+    <url>%2F2019%2F06%2F25%2Fhibernate%E6%9F%A5%E8%AF%A2(%E7%BB%84%E5%90%88%E6%9F%A5%E8%AF%A2%2C%E5%A4%9A%E6%9D%A1%E4%BB%B6%E7%AD%9B%E9%80%89%E6%9F%A5%E8%AF%A2%2C%E5%8A%A8%E6%80%81%E6%9F%A5%E8%AF%A2%2C%E6%9D%A1%E4%BB%B6%E6%9F%A5%E8%AF%A2)%2F</url>
+    <content type="text"><![CDATA[后续更新会解释原理(等我弄懂了以后),先临时贴一部分使用情况,这应该是最新hibernate5.3.9引入session和动态查询的方式,笔者尝试其他的各种方式均已提示过期123456789101112131415161718//下面这行代码是为了调用到session@PersistenceContextprivate EntityManager entityManger;public void test()&#123; //TODO 暂时不知道session需不需要关闭 Session session = entityManger.unwrap(Session.class); CriteriaBuilder crb = session.getCriteriaBuilder(); CriteriaQuery&lt;SupplierGood&gt; crq = crb.createQuery(你的实体类名.class); Root&lt;SupplierGood&gt; root = crq.from(你的实体类名.class); crq.select(root); //这里写你需要的查询条件,具体的语法搜索引擎查询CriteriaBuilder这个类 crq.where(crb.equal(root.get("数据库中该字段名"),查询的参数); session.createQuery(crq).getResultList();&#125;]]></content>
+      <categories>
+        <category>学习笔记</category>
+      </categories>
+      <tags>
+        <tag>hibernate</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[利用git完成服务器自动化部署解决方案]]></title>
+    <url>%2F2019%2F06%2F24%2F%E5%88%A9%E7%94%A8git%E5%AE%8C%E6%88%90%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%87%AA%E5%8A%A8%E5%8C%96%E9%83%A8%E7%BD%B2%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88%2F</url>
+    <content type="text"><![CDATA[2019.6.25更新昨天忘记了说一个重要的问题,如果你是在window环境下写的shell脚本到linux环境下运行,由于两者系统换行符不一致,需要在linux中执行vim 你的脚本名,进入脚本:set ff=unix,注意”:”这个符号需要带着,不明白的请去搜vim命令刚才看了些博客,有提到用hook触发,而不是自己去循环访问,思路待定 &emsp;介绍:本篇主要讲述在团队合作时,如何利用脚本和git在前后端分离模式下,测试时的服务器自动化部署问题(只是个人想法和实践,仅作参考。下方代码已经经过测试,保证做好适配后可用)&emsp;适用情况:团队合作,前后端分离,后端需根据前端需求持续变更代码并提供给前端测试&emsp;需要的环境:linux服务器,git,maven,java&emsp;首先讲成果,上代码,我会在其中伴随大量讲解1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465666768697071727374#!/bin/sh###本代码中的该项目特有名称均会用其他文本代替,例如我的项目名就用demo代替###该项目的git文件夹我们暂且称呼为demofunction updateAndRestart()&#123; #切换到online分支,这个地方需要根据自己的git分支做适配 git checkout online #git rev-parse online命令用于查看本地的online分支最后一次提交id LOCALONLINE=$(git rev-parse online) #用于这句话就是打印到控制台,没什么意义 echo "本地ONLINE为$&#123;LOCALONLINE&#125;" #从远程仓库fetch,这里选择fetch而不是pull也是为了性能考虑,如有偏差,请根据自己想法修改 git fetch echo "从远程仓库拉取结束" #获取已经fetch下来的远程仓库的HEAD,这里要做郑重说明,如果git rev-parse orgin/online虽然是获取远程仓库online分支的最后一次提交,但是他不会真的去连接远程仓库拉取信息,而是读取本地的远程仓库的缓存信息,所以之前需要git fetch也是为了刷新本地缓存的作用。 #关于如何直接去远程查看远程仓库最后一次提交这个问题,我找了一半天没有找到这个方法 REMOTEONLINE=$(git rev-parse origin/online) echo "远程HEAD为$&#123;REMOTEONLINE&#125;" #检查远程仓库是否与本地ONLINE一致,若不一致,则证明了远程已更新 if [[ $LOCALONLINE != $REMOTEONLINE ]]; then echo "进入重启-------------------------------------------" #将远程分支的更新合并到本地,由于git pull命令可以理解为git fetch+git merge,这一步的意义这里不做赘述 git merge $REMOTEONLINE #杀死所有名为下列的进程 #这里只讲一点,由于awk命令下文介绍过,那么此时可以想象文本状态是kill -9 进程pid,sh命令是把之前的输出当作脚本来执行,那么就成果实现了批量kill进程 jps | grep demo.jar|awk '&#123;print "kill -9 " $1&#125;'|sh #重新打包jar mvn clean package #给jar授权 #这里有必要作下说明,此脚本我是运行在root用户下(这点很重要,如果是其他用户,则在权限方面需要注意做适配) #chomd是赋权命令,后面参数则是其权限,参数每部分的具体意义请自行查询 #这条命令是授予demo.jar的root用户可执行权限(原本被mvn打包后默认为读写权限,没有执行权限) chmod 744 /你的目录/demo.jar #这个文件我不知道是什么,在window环境下尝试情况,删除了也不会有什么影响。有人说.jar是不带依赖的,original是带依赖的,但是观察文件大小,发现original文件只有几十k,明显不是带着依赖一起打包的样子 chmod 744 /你的目录/demo.jar.original #后台运行jar,具体意义可见后半部分文章 nohup java -jar /你的目录t/demo.jar &gt; /你的目录/xxx-`date +%Y-%m-%d-%H-%M-%S`.log 2&gt;&amp;1 &amp; sleep 15 fi&#125;###上面的是函数,只有调用时才会运行,首先运行的是下面代码#首先cd到你的demo存放目录,这一步可有可无,根据你的项目路径做好适配就行cd /xxx/xxx/demo#下面这行代码是脚本启动时用来检测是否demo程序正在运行#这里顺便讲解下shell和java的知识# jps该命令可以理解为和ps命令类似,只不过是用来显示java进程# |这个管道命令我无法解释,自己去搜索引擎# grep用来抓取出包含demo.jar字段的行# awk一种文本处理命令,将文本按照我们定义的规则处理# 这里'&#123;print $1&#125;'代表的是输出每行的第一个参数(在我的linux系统中,每行的第一个参数正好是java进程的pid,其他人需要根据情况适配,注意'引号一定要有)# wc -l是统计命令,由于之前都是一行一行打印的,所以此命令可以很轻松统计有多少在运行# 综上所述,该条命令的意义在于:统计名为demo.jar的java进程的数目,awk这段命令后来想了想属于冗余命令了,可视情况去除SUMMERTRAINPID=$(jps | grep demo.jar |awk '&#123;print $1&#125;' |wc -l)if [[ SUMMERTRAINPID!=0 ]]; then echo "脚本开始,检测到程序未启动,先启动程序------------------------" #summertrain-`date +%Y-%m-%d-%H-%M-%S` #下面这条命令是在后台启动demo.jar并且将输出重定向到指定的log文件,如果文件不存在会新建 #其实nohup java -jar /你的路径/demo.jar &gt; /你log日志的路径/文件名.log &amp;这条命令就可以做到这一点 #下面这条命令多出来的几个字段表示的是将error日志也重定向到log文件 #小提示,在自己的脚本,log日志太长不易于观看,所以可以文件名可以在后缀加上`date +%Y-%m-%d-%H-%M-%S`,参数可以在生成文件时自动加上当前实际后缀,例如demolog-`date +%Y-%m-%d-%H-%M-%S`.log nohup java -jar /你的路径/demo.jar &gt; /你log日志的路径/文件名.log 2&gt;&amp;1 &amp; #这里我令他休眠15秒等待java程序启动 sleep 15fi#接下来开始循环检测是否git有更新while truedo echo "自动循环中" updateAndRestart sleep 10done 后记:写该脚本时参考了git命令,shell语法,linux命令shell脚本中的空格一定要注意,少一个空格往往意义就会不同如果团队人数更多,那么该方法不再试用,每次程序启动都需一定时间。届时可以将程序分为一个个子项目,每个子项目单独作为一个jar包,利用分布式的方式来运行,可以采用zookeeper做分布式应用程序协调服务,这样就有点类似java中的分段加锁提高并法的思想,具体本次不再做探讨]]></content>
+      <categories>
+        <category>学习笔记</category>
+      </categories>
+      <tags>
+        <tag>git</tag>
+        <tag>shell</tag>
+        <tag>服务器部署</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[git中文目录变为八进制编码的解决方案]]></title>
+    <url>%2F2019%2F06%2F23%2Fgit%E4%B8%AD%E6%96%87%E7%9B%AE%E5%BD%95%E5%8F%98%E4%B8%BA%E5%85%AB%E8%BF%9B%E5%88%B6%E7%BC%96%E7%A0%81%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88%2F</url>
+    <content type="text"><![CDATA[现象:原本中文编码变成了/xxx/xxx之类的八进制码 解决:修改本地git仓库下的.git隐藏文件夹下config文件,在[core]部分新增quotepath = false字段保存即可]]></content>
+      <categories>
+        <category>BUG记录</category>
+      </categories>
+      <tags>
+        <tag>git</tag>
+        <tag>bug</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[mysql启动(无需添加到服务)]]></title>
+    <url>%2F2019%2F06%2F22%2Fmysql%E5%90%AF%E5%8A%A8(%E6%97%A0%E9%9C%80%E6%B7%BB%E5%8A%A0%E5%88%B0%E6%9C%8D%E5%8A%A1)%2F</url>
+    <content type="text"><![CDATA[ps:接下来的步骤仅限于已经安装配置好mysql,但不想将其添加到服务项中来启动的朋友1.打开cmd,通过cd到mysql安装/解压文件夹下 2.调用bin下的mysqld.exe文件(如果是linux则可能是.sh) 3.参数为my.ini/my.cnf 4.具体命令为&emsp;bin/mysqld –defaults-file=./my.ini 5.输入该命令后cmd应该会挂起,此时mysql已经启动成功。如果关闭cmd命令行那么mysql关闭]]></content>
+      <categories>
+        <category>学习笔记</category>
+      </categories>
+      <tags>
+        <tag>mysql</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[git使用笔记]]></title>
+    <url>%2F2019%2F06%2F21%2Fgit%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0%2F</url>
+    <content type="text"><![CDATA[什么是git? 首先我用通俗语言解释下,git是一种版本控制工具,你既可以在本地进行版本控制,也可以与搭建好git服务器的远端进行同步 如何使用? windows的可以官方下载安装包,linux可以命令行下载(对于window来说可能需配置环境变量,可有可无) 配置全局信息 随便找个地方右键打开git bash ps:这里配置的昵称和邮箱可以随便写,作用体现在,假如你提交了git,那么在git记录中会显示提交者昵称和邮箱,即为下面输入的 输入git config –global user.name “你的昵称” 输入git config –global user.name “你的邮箱” 创建git仓库 随便找个地方新建文件夹进去打开git bash(此处建议选一个父文件夹作为git仓库目录) 输入git init 该命令的作用是在当前文件夹下生成git仓库所需文件(注意,这里git仓库通常指的是一个项目,而不是管理多个项目的仓库,而且生成的文件为.git是个隐藏文件夹) 使用git 当我们在文件夹下做了操作以后(添加修改删除文件),可以git add . .代表暂存全部文件,当然也可以是其他写法或部分文件 此时我们已经add成功,接下来git commit -m”此次提交的注释” 此时,本地的使用基本就到这里(此外还有分支,冲突等各种概念,不在本篇讲) 关联github/码云(也可以是其他的或者自己搭建的git服务器) 首先我们在git bash中生成一对密钥,命令为:ssh-keygen -t rsa -C “你之前填写的邮箱” 其实一般码云或者github都要官方绑定密钥教程,基本都一样 生成密钥后我们把密钥配置到git服务器上 如果是github之类的你从个人setting可以找到配置密钥的地方,如果是个人git服务器则可能需要手动添加 刚才生成的密钥分为公钥和私钥,一般公钥以.pub结尾,这部分涉及到密码学,你只需要知道这是非对称密钥用来代替用户密码做身份验证就好了,具体内容请自行搜索 在window中默认保存在C://user/{你的用户名}/.ssh文件夹中 当我们配置到服务器公钥后,就可以正常的git clone 远程私有仓库等操作]]></content>
+      <categories>
+        <category>学习笔记</category>
+      </categories>
+      <tags>
+        <tag>git</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[git忽略规则.gitignore]]></title>
+    <url>%2F2019%2F06%2F21%2Fgit%E5%BF%BD%E7%95%A5%E8%A7%84%E5%88%99.gitignore%2F</url>
+    <content type="text"><![CDATA[作用&emsp;当我们同步到远程仓库时,配置了.gitignore可以令git按照我们定义的规则,选择性的跟踪本地仓库的文件 使用&emsp;具体的语法规范这里不做描述,搜索引擎搜教程即可 &emsp;这里我将列出学生team一个springboot项目合作时使用的.gitignore。对官方生成的git做了少许改动 12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364HELP.mdtarget/!.mvn/wrapper/maven-wrapper.jar!**/src/main/**!**/src/test/**###团队合作config######由于团队合作时每个成员数据库账户密码不一样,所以每个成员都有个个人配置信息,在通用配置里面引入###person.properties###springboot######此处表示忽略测试文件夹###/src/test/java### STS ###.apt_generated.classpath.factorypath.project.settings.springBeans.sts4-cache### IntelliJ IDEA ###.idea*.iws*.iml*.ipr### NetBeans ###/nbproject/private//nbbuild//dist//nbdist//.nb-gradle/build/### VS Code ###.vscode/# Log file*.log# Compiled class file*.class# BlueJ files*.ctxt# Mobile Tools for Java (J2ME).mtj.tmp/# Package Files #*.jar*.war*.nar*.ear*.zip*.tar.gz*.rarhs_err_pid* 常见问题配置了.gitignore仍然无法忽略 &emsp;解决方式:git rm –cached filename&emsp;&emsp;删除该filename文件的本地缓存,然后再进行add和commit等操作,等push到远端后,以后再就不会被追踪&emsp;原因:这是由于在配置.gitignore之前该文件就已经被git追踪造成的,]]></content>
+      <categories>
+        <category>学习笔记</category>
+      </categories>
+      <tags>
+        <tag>git</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[解决maven导入项目pom.xml报错unknown]]></title>
+    <url>%2F2019%2F06%2F21%2F%E8%A7%A3%E5%86%B3maven%E5%AF%BC%E5%85%A5%E9%A1%B9%E7%9B%AEpom-xml%E6%8A%A5%E9%94%99unknown%2F</url>
+    <content type="text"><![CDATA[2019.6.21 16:00更正虽然路径问题也是原因之一,但是并没有完全解决这次问题&emsp;&emsp;现象:重新git项目设置好路径以后,暂无报错现象,但是当pom中的jar包从maven仓库拉取完毕后,又出现了第一行报错的现象&emsp;&emsp;猜想:错误的根源可能是jar包版本问题,根据他人博客经验来看,往往是springboot版本过高,具体原因继续跟踪 原答案环境:eclipse,jdk8 情况:pom.xml文件内部没有错误,该项目在其他机器也可正常运行,在本机maven导入后提示unknown 解决:由于项目名和导入时的路径名不一致造成的&emsp;&emsp;例如项目名为test1,但是项目保存路径为e://githouse/code&emsp;&emsp;即test1与code名称不同导致找不到pom.xml&emsp;&emsp;ps:具体pom的路径方式暂未深究]]></content>
+      <categories>
+        <category>BUG记录</category>
+      </categories>
+      <tags>
+        <tag>bug</tag>
+        <tag>pom</tag>
+        <tag>maven</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[welcome]]></title>
+    <url>%2F2019%2F06%2F20%2Fwelcome%2F</url>
+    <content type="text"></content>
+  </entry>
+</search>
