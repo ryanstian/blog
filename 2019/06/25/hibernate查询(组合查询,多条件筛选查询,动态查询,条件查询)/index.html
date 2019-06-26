@@ -92,18 +92,18 @@
 
 
 
-  <meta name="description" content="后续更新会解释原理(等我弄懂了以后),先临时贴一部分使用情况,这应该是最新hibernate5.3.9引入session和动态查询的方式,笔者尝试其他的各种方式均已提示过期123456789101112131415161718//下面这行代码是为了调用到session@PersistenceContextprivate EntityManager entityManger;public void">
+  <meta name="description" content="后续更新会解释原理(等我弄懂了以后),先临时贴一部分使用情况,这应该是最新hibernate5.3.9引入session和动态查询的方式,笔者尝试其他的各种方式均已提示过期123456789101112131415161718//下面这行代码是为了调用到session@PersistenceContextprivate EntityManager entityManger;public voi">
 <meta name="keywords" content="hibernate">
 <meta property="og:type" content="article">
 <meta property="og:title" content="hibernate查询(组合查询,多条件筛选查询,动态查询,条件查询,Criteria)">
 <meta property="og:url" content="https://qq616023844.github.io/2019/06/25/hibernate查询(组合查询,多条件筛选查询,动态查询,条件查询)/index.html">
 <meta property="og:site_name" content="柠檬不酸的博客">
-<meta property="og:description" content="后续更新会解释原理(等我弄懂了以后),先临时贴一部分使用情况,这应该是最新hibernate5.3.9引入session和动态查询的方式,笔者尝试其他的各种方式均已提示过期123456789101112131415161718//下面这行代码是为了调用到session@PersistenceContextprivate EntityManager entityManger;public void">
+<meta property="og:description" content="后续更新会解释原理(等我弄懂了以后),先临时贴一部分使用情况,这应该是最新hibernate5.3.9引入session和动态查询的方式,笔者尝试其他的各种方式均已提示过期123456789101112131415161718//下面这行代码是为了调用到session@PersistenceContextprivate EntityManager entityManger;public voi">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-06-25T06:33:32.754Z">
+<meta property="og:updated_time" content="2019-06-26T03:15:19.984Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="hibernate查询(组合查询,多条件筛选查询,动态查询,条件查询,Criteria)">
-<meta name="twitter:description" content="后续更新会解释原理(等我弄懂了以后),先临时贴一部分使用情况,这应该是最新hibernate5.3.9引入session和动态查询的方式,笔者尝试其他的各种方式均已提示过期123456789101112131415161718//下面这行代码是为了调用到session@PersistenceContextprivate EntityManager entityManger;public void">
+<meta name="twitter:description" content="后续更新会解释原理(等我弄懂了以后),先临时贴一部分使用情况,这应该是最新hibernate5.3.9引入session和动态查询的方式,笔者尝试其他的各种方式均已提示过期123456789101112131415161718//下面这行代码是为了调用到session@PersistenceContextprivate EntityManager entityManger;public voi">
 
 
 
@@ -387,12 +387,24 @@
                 
               
 
-              <time title="Created: 2019-06-25 14:17:00 / Modified: 14:33:32" itemprop="dateCreated datePublished" datetime="2019-06-25T14:17:00+08:00">2019-06-25</time>
+              <time title="Created: 2019-06-25 14:17:00" itemprop="dateCreated datePublished" datetime="2019-06-25T14:17:00+08:00">2019-06-25</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2019-06-26 11:15:19" itemprop="dateModified" datetime="2019-06-26T11:15:19+08:00">2019-06-26</time>
               
             
           </span>
@@ -444,7 +456,9 @@
       
 
       
-        <h5 id="后续更新会解释原理-等我弄懂了以后-先临时贴一部分使用情况-这应该是最新hibernate5-3-9引入session和动态查询的方式-笔者尝试其他的各种方式均已提示过期"><a href="#后续更新会解释原理-等我弄懂了以后-先临时贴一部分使用情况-这应该是最新hibernate5-3-9引入session和动态查询的方式-笔者尝试其他的各种方式均已提示过期" class="headerlink" title="后续更新会解释原理(等我弄懂了以后),先临时贴一部分使用情况,这应该是最新hibernate5.3.9引入session和动态查询的方式,笔者尝试其他的各种方式均已提示过期"></a>后续更新会解释原理(等我弄懂了以后),先临时贴一部分使用情况,这应该是最新hibernate5.3.9引入session和动态查询的方式,笔者尝试其他的各种方式均已提示过期</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//下面这行代码是为了调用到session</span></span><br><span class="line"><span class="meta">@PersistenceContext</span></span><br><span class="line"><span class="keyword">private</span> EntityManager entityManger;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="comment">//TODO 暂时不知道session需不需要关闭</span></span><br><span class="line">    Session session = entityManger.unwrap(Session.class);</span><br><span class="line"></span><br><span class="line">    CriteriaBuilder crb = session.getCriteriaBuilder();</span><br><span class="line">    CriteriaQuery&lt;SupplierGood&gt; crq = crb.createQuery(你的实体类名.class);</span><br><span class="line"></span><br><span class="line">    Root&lt;SupplierGood&gt; root = crq.from(你的实体类名.class);</span><br><span class="line">    crq.select(root);</span><br><span class="line">    <span class="comment">//这里写你需要的查询条件,具体的语法搜索引擎查询CriteriaBuilder这个类</span></span><br><span class="line">    crq.where(crb.equal(root.get(<span class="string">"数据库中该字段名"</span>),查询的参数);</span><br><span class="line"></span><br><span class="line">    session.createQuery(crq).getResultList();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+        <a id="more"></a>
+
+<h5 id="后续更新会解释原理-等我弄懂了以后-先临时贴一部分使用情况-这应该是最新hibernate5-3-9引入session和动态查询的方式-笔者尝试其他的各种方式均已提示过期"><a href="#后续更新会解释原理-等我弄懂了以后-先临时贴一部分使用情况-这应该是最新hibernate5-3-9引入session和动态查询的方式-笔者尝试其他的各种方式均已提示过期" class="headerlink" title="后续更新会解释原理(等我弄懂了以后),先临时贴一部分使用情况,这应该是最新hibernate5.3.9引入session和动态查询的方式,笔者尝试其他的各种方式均已提示过期"></a>后续更新会解释原理(等我弄懂了以后),先临时贴一部分使用情况,这应该是最新hibernate5.3.9引入session和动态查询的方式,笔者尝试其他的各种方式均已提示过期</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//下面这行代码是为了调用到session</span></span><br><span class="line"><span class="meta">@PersistenceContext</span></span><br><span class="line"><span class="keyword">private</span> EntityManager entityManger;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="comment">//TODO 暂时不知道session需不需要关闭</span></span><br><span class="line">    Session session = entityManger.unwrap(Session.class);</span><br><span class="line"></span><br><span class="line">    CriteriaBuilder crb = session.getCriteriaBuilder();</span><br><span class="line">    CriteriaQuery&lt;SupplierGood&gt; crq = crb.createQuery(你的实体类名.class);</span><br><span class="line"></span><br><span class="line">    Root&lt;SupplierGood&gt; root = crq.from(你的实体类名.class);</span><br><span class="line">    crq.select(root);</span><br><span class="line">    <span class="comment">//这里写你需要的查询条件,具体的语法搜索引擎查询CriteriaBuilder这个类</span></span><br><span class="line">    crq.where(crb.equal(root.get(<span class="string">"数据库中该字段名"</span>),查询的参数);</span><br><span class="line"></span><br><span class="line">    session.createQuery(crq).getResultList();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 
       
