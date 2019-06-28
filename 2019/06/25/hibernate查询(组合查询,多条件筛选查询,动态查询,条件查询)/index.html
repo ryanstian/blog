@@ -92,18 +92,18 @@
 
 
 
-  <meta name="description" content="…">
-<meta name="keywords" content="hibernate">
+  <meta name="description" content="后续更新会解释原理(等我弄懂了以后),先临时贴一部分使用情况,这应该是最新hibernate5.3.9引入session和动态查询的方式,笔者尝试其他的各种方式均已提示过期">
+<meta name="keywords" content="hibernate,unfinished">
 <meta property="og:type" content="article">
 <meta property="og:title" content="hibernate查询(组合查询,多条件筛选查询,动态查询,条件查询,Criteria)">
 <meta property="og:url" content="https://qq616023844.github.io/2019/06/25/hibernate查询(组合查询,多条件筛选查询,动态查询,条件查询)/index.html">
 <meta property="og:site_name" content="柠檬不酸的博客">
-<meta property="og:description" content="…">
+<meta property="og:description" content="后续更新会解释原理(等我弄懂了以后),先临时贴一部分使用情况,这应该是最新hibernate5.3.9引入session和动态查询的方式,笔者尝试其他的各种方式均已提示过期">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-06-26T03:21:36.473Z">
+<meta property="og:updated_time" content="2019-06-28T07:06:34.090Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="hibernate查询(组合查询,多条件筛选查询,动态查询,条件查询,Criteria)">
-<meta name="twitter:description" content="…">
+<meta name="twitter:description" content="后续更新会解释原理(等我弄懂了以后),先临时贴一部分使用情况,这应该是最新hibernate5.3.9引入session和动态查询的方式,笔者尝试其他的各种方式均已提示过期">
 
 
 
@@ -404,7 +404,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2019-06-26 11:21:36" itemprop="dateModified" datetime="2019-06-26T11:21:36+08:00">2019-06-26</time>
+                <time title="Modified: 2019-06-28 15:06:34" itemprop="dateModified" datetime="2019-06-28T15:06:34+08:00">2019-06-28</time>
               
             
           </span>
@@ -456,9 +456,8 @@
       
 
       
-        <h4 id="…"><a href="#…" class="headerlink" title="…"></a>…</h4><a id="more"></a>
-
-<h5 id="后续更新会解释原理-等我弄懂了以后-先临时贴一部分使用情况-这应该是最新hibernate5-3-9引入session和动态查询的方式-笔者尝试其他的各种方式均已提示过期"><a href="#后续更新会解释原理-等我弄懂了以后-先临时贴一部分使用情况-这应该是最新hibernate5-3-9引入session和动态查询的方式-笔者尝试其他的各种方式均已提示过期" class="headerlink" title="后续更新会解释原理(等我弄懂了以后),先临时贴一部分使用情况,这应该是最新hibernate5.3.9引入session和动态查询的方式,笔者尝试其他的各种方式均已提示过期"></a>后续更新会解释原理(等我弄懂了以后),先临时贴一部分使用情况,这应该是最新hibernate5.3.9引入session和动态查询的方式,笔者尝试其他的各种方式均已提示过期</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//下面这行代码是为了调用到session</span></span><br><span class="line"><span class="meta">@PersistenceContext</span></span><br><span class="line"><span class="keyword">private</span> EntityManager entityManger;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="comment">//TODO 暂时不知道session需不需要关闭</span></span><br><span class="line">    Session session = entityManger.unwrap(Session.class);</span><br><span class="line"></span><br><span class="line">    CriteriaBuilder crb = session.getCriteriaBuilder();</span><br><span class="line">    CriteriaQuery&lt;SupplierGood&gt; crq = crb.createQuery(你的实体类名.class);</span><br><span class="line"></span><br><span class="line">    Root&lt;SupplierGood&gt; root = crq.from(你的实体类名.class);</span><br><span class="line">    crq.select(root);</span><br><span class="line">    <span class="comment">//这里写你需要的查询条件,具体的语法搜索引擎查询CriteriaBuilder这个类</span></span><br><span class="line">    crq.where(crb.equal(root.get(<span class="string">"数据库中该字段名"</span>),查询的参数);</span><br><span class="line"></span><br><span class="line">    session.createQuery(crq).getResultList();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+        <h5 id="后续更新会解释原理-等我弄懂了以后-先临时贴一部分使用情况-这应该是最新hibernate5-3-9引入session和动态查询的方式-笔者尝试其他的各种方式均已提示过期"><a href="#后续更新会解释原理-等我弄懂了以后-先临时贴一部分使用情况-这应该是最新hibernate5-3-9引入session和动态查询的方式-笔者尝试其他的各种方式均已提示过期" class="headerlink" title="后续更新会解释原理(等我弄懂了以后),先临时贴一部分使用情况,这应该是最新hibernate5.3.9引入session和动态查询的方式,笔者尝试其他的各种方式均已提示过期"></a>后续更新会解释原理(等我弄懂了以后),先临时贴一部分使用情况,这应该是最新hibernate5.3.9引入session和动态查询的方式,笔者尝试其他的各种方式均已提示过期</h5><a id="more"></a>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//下面这行代码是为了调用到session</span></span><br><span class="line"><span class="meta">@PersistenceContext</span></span><br><span class="line"><span class="keyword">private</span> EntityManager entityManger;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="comment">//TODO 暂时不知道session需不需要关闭</span></span><br><span class="line">    Session session = entityManger.unwrap(Session.class);</span><br><span class="line"></span><br><span class="line">    CriteriaBuilder crb = session.getCriteriaBuilder();</span><br><span class="line">    CriteriaQuery&lt;SupplierGood&gt; crq = crb.createQuery(你的实体类名.class);</span><br><span class="line"></span><br><span class="line">    Root&lt;SupplierGood&gt; root = crq.from(你的实体类名.class);</span><br><span class="line">    crq.select(root);</span><br><span class="line">    <span class="comment">//这里写你需要的查询条件,具体的语法搜索引擎查询CriteriaBuilder这个类</span></span><br><span class="line">    crq.where(crb.equal(root.get(<span class="string">"数据库中该字段名"</span>),查询的参数);</span><br><span class="line"></span><br><span class="line">    session.createQuery(crq).getResultList();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 
       
@@ -509,6 +508,8 @@
           
             <a href="/tags/hibernate/" rel="tag"># hibernate</a>
           
+            <a href="/tags/unfinished/" rel="tag"># unfinished</a>
+          
         </div>
       
 
@@ -529,6 +530,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/06/28/springboot-shiro-redis-restful整合笔记/" rel="prev" title="springboot-shiro-redis-restful整合笔记">
+                springboot-shiro-redis-restful整合笔记 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -597,7 +602,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">8</span>
+                    <span class="site-state-item-count">9</span>
                     <span class="site-state-item-name">posts</span>
                   </a>
                 </div>
@@ -651,7 +656,17 @@
                     
                       
                     
-                    <span class="site-state-item-count">8</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">13</span>
                     <span class="site-state-item-name">tags</span>
                   </a>
                 </div>
@@ -715,7 +730,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#…"><span class="nav-number">1.</span> <span class="nav-text">…</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#后续更新会解释原理-等我弄懂了以后-先临时贴一部分使用情况-这应该是最新hibernate5-3-9引入session和动态查询的方式-笔者尝试其他的各种方式均已提示过期"><span class="nav-number">1.1.</span> <span class="nav-text">后续更新会解释原理(等我弄懂了以后),先临时贴一部分使用情况,这应该是最新hibernate5.3.9引入session和动态查询的方式,笔者尝试其他的各种方式均已提示过期</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#后续更新会解释原理-等我弄懂了以后-先临时贴一部分使用情况-这应该是最新hibernate5-3-9引入session和动态查询的方式-笔者尝试其他的各种方式均已提示过期"><span class="nav-number">1.</span> <span class="nav-text">后续更新会解释原理(等我弄懂了以后),先临时贴一部分使用情况,这应该是最新hibernate5.3.9引入session和动态查询的方式,笔者尝试其他的各种方式均已提示过期</span></a></li></ol></div>
             
 
           </div>

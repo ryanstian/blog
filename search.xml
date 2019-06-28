@@ -1,14 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[springboot-shiro-redis-restful整合笔记]]></title>
+    <url>%2F2019%2F06%2F28%2Fspringboot-shiro-redis-restful%E6%95%B4%E5%90%88%E7%AC%94%E8%AE%B0%2F</url>
+    <content type="text"><![CDATA[代码目前还未整理,比较散乱,后续会整理,本篇内容后续也会重新进行整理,估计会过很久与shiro源码学习笔记和redis源码学习笔记一起发出来,先临时打个草稿github 介绍各个类的作用基础结构为:Web层:Control,ControlService层:MyServicedao层:MyDao 与redis有关的RedisConfig:配置类 与shiro有关的ShiroConfig:配置类MyShiroRealm:用来进行登陆验证和权限赋权MyCredentialsMatcher:代替了原本shiro提供的,用来对账户密码进行匹配MyFilter:代替了原本的拦截器,因为网上的教程都是MVC框架,返回的是error页面,这里后续将尝试使其返回自定义字符串(还未做)]]></content>
+      <categories>
+        <category>学习笔记</category>
+      </categories>
+      <tags>
+        <tag>shiro</tag>
+        <tag>redis</tag>
+        <tag>restful</tag>
+        <tag>springboot</tag>
+        <tag>unfinished</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[hibernate查询(组合查询,多条件筛选查询,动态查询,条件查询,Criteria)]]></title>
     <url>%2F2019%2F06%2F25%2Fhibernate%E6%9F%A5%E8%AF%A2(%E7%BB%84%E5%90%88%E6%9F%A5%E8%AF%A2%2C%E5%A4%9A%E6%9D%A1%E4%BB%B6%E7%AD%9B%E9%80%89%E6%9F%A5%E8%AF%A2%2C%E5%8A%A8%E6%80%81%E6%9F%A5%E8%AF%A2%2C%E6%9D%A1%E4%BB%B6%E6%9F%A5%E8%AF%A2)%2F</url>
-    <content type="text"><![CDATA[… 后续更新会解释原理(等我弄懂了以后),先临时贴一部分使用情况,这应该是最新hibernate5.3.9引入session和动态查询的方式,笔者尝试其他的各种方式均已提示过期123456789101112131415161718//下面这行代码是为了调用到session@PersistenceContextprivate EntityManager entityManger;public void test()&#123; //TODO 暂时不知道session需不需要关闭 Session session = entityManger.unwrap(Session.class); CriteriaBuilder crb = session.getCriteriaBuilder(); CriteriaQuery&lt;SupplierGood&gt; crq = crb.createQuery(你的实体类名.class); Root&lt;SupplierGood&gt; root = crq.from(你的实体类名.class); crq.select(root); //这里写你需要的查询条件,具体的语法搜索引擎查询CriteriaBuilder这个类 crq.where(crb.equal(root.get("数据库中该字段名"),查询的参数); session.createQuery(crq).getResultList();&#125;]]></content>
+    <content type="text"><![CDATA[后续更新会解释原理(等我弄懂了以后),先临时贴一部分使用情况,这应该是最新hibernate5.3.9引入session和动态查询的方式,笔者尝试其他的各种方式均已提示过期 123456789101112131415161718//下面这行代码是为了调用到session@PersistenceContextprivate EntityManager entityManger;public void test()&#123; //TODO 暂时不知道session需不需要关闭 Session session = entityManger.unwrap(Session.class); CriteriaBuilder crb = session.getCriteriaBuilder(); CriteriaQuery&lt;SupplierGood&gt; crq = crb.createQuery(你的实体类名.class); Root&lt;SupplierGood&gt; root = crq.from(你的实体类名.class); crq.select(root); //这里写你需要的查询条件,具体的语法搜索引擎查询CriteriaBuilder这个类 crq.where(crb.equal(root.get("数据库中该字段名"),查询的参数); session.createQuery(crq).getResultList();&#125;]]></content>
       <categories>
         <category>学习笔记</category>
       </categories>
       <tags>
         <tag>hibernate</tag>
+        <tag>unfinished</tag>
       </tags>
   </entry>
   <entry>
@@ -39,7 +55,7 @@
   <entry>
     <title><![CDATA[mysql启动(无需添加到服务)]]></title>
     <url>%2F2019%2F06%2F22%2Fmysql%E5%90%AF%E5%8A%A8(%E6%97%A0%E9%9C%80%E6%B7%BB%E5%8A%A0%E5%88%B0%E6%9C%8D%E5%8A%A1)%2F</url>
-    <content type="text"><![CDATA[无需将mysql添加到服务项中即可绿色启动 ps:接下来的步骤仅限于已经安装配置好mysql,但不想将其添加到服务项中来启动的朋友1.打开cmd,通过cd到mysql安装/解压文件夹下 2.调用bin下的mysqld.exe文件(如果是linux则可能是.sh) 3.参数为my.ini/my.cnf 4.具体命令为&emsp;bin/mysqld –defaults-file=./my.ini 5.输入该命令后cmd应该会挂起,此时mysql已经启动成功。如果关闭cmd命令行那么mysql关闭]]></content>
+    <content type="text"><![CDATA[无需将mysql添加到服务项中即可绿色启动ps:接下来的步骤仅限于已经安装配置好mysql,但不想将其添加到服务项中来启动的朋友1.打开cmd,通过cd到mysql安装/解压文件夹下 2.调用bin下的mysqld.exe文件(如果是linux则可能是.sh) 3.参数为my.ini/my.cnf 4.具体命令为&emsp;bin/mysqld –defaults-file=./my.ini 5.输入该命令后cmd应该会挂起,此时mysql已经启动成功。如果关闭cmd命令行那么mysql关闭]]></content>
       <categories>
         <category>学习笔记</category>
       </categories>
@@ -61,7 +77,7 @@
   <entry>
     <title><![CDATA[git忽略规则.gitignore]]></title>
     <url>%2F2019%2F06%2F21%2Fgit%E5%BF%BD%E7%95%A5%E8%A7%84%E5%88%99.gitignore%2F</url>
-    <content type="text"><![CDATA[提供.gitignore模板 作用&emsp;当我们同步到远程仓库时,配置了.gitignore可以令git按照我们定义的规则,选择性的跟踪本地仓库的文件 使用&emsp;具体的语法规范这里不做描述,搜索引擎搜教程即可 &emsp;这里我将列出学生team一个springboot项目合作时使用的.gitignore。对官方生成的git做了少许改动 12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364HELP.mdtarget/!.mvn/wrapper/maven-wrapper.jar!**/src/main/**!**/src/test/**###团队合作config######由于团队合作时每个成员数据库账户密码不一样,所以每个成员都有个个人配置信息,在通用配置里面引入###person.properties###springboot######此处表示忽略测试文件夹###/src/test/java### STS ###.apt_generated.classpath.factorypath.project.settings.springBeans.sts4-cache### IntelliJ IDEA ###.idea*.iws*.iml*.ipr### NetBeans ###/nbproject/private//nbbuild//dist//nbdist//.nb-gradle/build/### VS Code ###.vscode/# Log file*.log# Compiled class file*.class# BlueJ files*.ctxt# Mobile Tools for Java (J2ME).mtj.tmp/# Package Files #*.jar*.war*.nar*.ear*.zip*.tar.gz*.rarhs_err_pid* 常见问题配置了.gitignore仍然无法忽略 &emsp;解决方式:git rm –cached filename&emsp;&emsp;删除该filename文件的本地缓存,然后再进行add和commit等操作,等push到远端后,以后再就不会被追踪&emsp;原因:这是由于在配置.gitignore之前该文件就已经被git追踪造成的,]]></content>
+    <content type="text"><![CDATA[提供.gitignore模板作用&emsp;当我们同步到远程仓库时,配置了.gitignore可以令git按照我们定义的规则,选择性的跟踪本地仓库的文件 使用&emsp;具体的语法规范这里不做描述,搜索引擎搜教程即可 &emsp;这里我将列出学生team一个springboot项目合作时使用的.gitignore。对官方生成的git做了少许改动 12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364HELP.mdtarget/!.mvn/wrapper/maven-wrapper.jar!**/src/main/**!**/src/test/**###团队合作config######由于团队合作时每个成员数据库账户密码不一样,所以每个成员都有个个人配置信息,在通用配置里面引入###person.properties###springboot######此处表示忽略测试文件夹###/src/test/java### STS ###.apt_generated.classpath.factorypath.project.settings.springBeans.sts4-cache### IntelliJ IDEA ###.idea*.iws*.iml*.ipr### NetBeans ###/nbproject/private//nbbuild//dist//nbdist//.nb-gradle/build/### VS Code ###.vscode/# Log file*.log# Compiled class file*.class# BlueJ files*.ctxt# Mobile Tools for Java (J2ME).mtj.tmp/# Package Files #*.jar*.war*.nar*.ear*.zip*.tar.gz*.rarhs_err_pid* 常见问题配置了.gitignore仍然无法忽略 &emsp;解决方式:git rm –cached filename&emsp;&emsp;删除该filename文件的本地缓存,然后再进行add和commit等操作,等push到远端后,以后再就不会被追踪&emsp;原因:这是由于在配置.gitignore之前该文件就已经被git追踪造成的,]]></content>
       <categories>
         <category>学习笔记</category>
       </categories>
@@ -72,7 +88,7 @@
   <entry>
     <title><![CDATA[解决maven导入项目pom.xml报错unknown]]></title>
     <url>%2F2019%2F06%2F21%2F%E8%A7%A3%E5%86%B3maven%E5%AF%BC%E5%85%A5%E9%A1%B9%E7%9B%AEpom-xml%E6%8A%A5%E9%94%99unknown%2F</url>
-    <content type="text"><![CDATA[… 2019.6.21 16:00更正虽然路径问题也是原因之一,但是并没有完全解决这次问题&emsp;&emsp;现象:重新git项目设置好路径以后,暂无报错现象,但是当pom中的jar包从maven仓库拉取完毕后,又出现了第一行报错的现象&emsp;&emsp;猜想:错误的根源可能是jar包版本问题,根据他人博客经验来看,往往是springboot版本过高,具体原因继续跟踪 原答案环境:eclipse,jdk8 情况:pom.xml文件内部没有错误,该项目在其他机器也可正常运行,在本机maven导入后提示unknown 解决:由于项目名和导入时的路径名不一致造成的&emsp;&emsp;例如项目名为test1,但是项目保存路径为e://githouse/code&emsp;&emsp;即test1与code名称不同导致找不到pom.xml&emsp;&emsp;ps:具体pom的路径方式暂未深究]]></content>
+    <content type="text"><![CDATA[2019.6.21 16:00更正虽然路径问题也是原因之一,但是并没有完全解决这次问题&emsp;&emsp;现象:重新git项目设置好路径以后,暂无报错现象,但是当pom中的jar包从maven仓库拉取完毕后,又出现了第一行报错的现象&emsp;&emsp;猜想:错误的根源可能是jar包版本问题,根据他人博客经验来看,往往是springboot版本过高,具体原因继续跟踪 原答案环境:eclipse,jdk8 情况:pom.xml文件内部没有错误,该项目在其他机器也可正常运行,在本机maven导入后提示unknown 解决:由于项目名和导入时的路径名不一致造成的&emsp;&emsp;例如项目名为test1,但是项目保存路径为e://githouse/code&emsp;&emsp;即test1与code名称不同导致找不到pom.xml&emsp;&emsp;ps:具体pom的路径方式暂未深究]]></content>
       <categories>
         <category>BUG记录</category>
       </categories>
