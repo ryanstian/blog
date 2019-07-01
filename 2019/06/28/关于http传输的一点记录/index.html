@@ -92,18 +92,18 @@
 
 
 
-  <meta name="description" content="记录的草稿,请跳过暂勿浏览,后面会重写  code 1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950public class HelloWord extends HttpServlet &amp;#123;    @Override    protected void do">
+  <meta name="description" content="记录的草稿,请跳过暂勿浏览,后面会重写">
 <meta name="keywords" content="http,HttpServletRequest">
 <meta property="og:type" content="article">
 <meta property="og:title" content="关于http传输的一点记录">
 <meta property="og:url" content="https://qq616023844.github.io/2019/06/28/关于http传输的一点记录/index.html">
 <meta property="og:site_name" content="柠檬不酸的博客">
-<meta property="og:description" content="记录的草稿,请跳过暂勿浏览,后面会重写  code 1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950public class HelloWord extends HttpServlet &amp;#123;    @Override    protected void do">
+<meta property="og:description" content="记录的草稿,请跳过暂勿浏览,后面会重写">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-06-30T17:11:50.366Z">
+<meta property="og:updated_time" content="2019-07-01T15:51:42.808Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="关于http传输的一点记录">
-<meta name="twitter:description" content="记录的草稿,请跳过暂勿浏览,后面会重写  code 1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950public class HelloWord extends HttpServlet &amp;#123;    @Override    protected void do">
+<meta name="twitter:description" content="记录的草稿,请跳过暂勿浏览,后面会重写">
 
 
 
@@ -404,7 +404,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2019-07-01 01:11:50" itemprop="dateModified" datetime="2019-07-01T01:11:50+08:00">2019-07-01</time>
+                <time title="Modified: 2019-07-01 23:51:42" itemprop="dateModified" datetime="2019-07-01T23:51:42+08:00">2019-07-01</time>
               
             
           </span>
@@ -457,6 +457,7 @@
 
       
         <p>记录的草稿,请跳过暂勿浏览,后面会重写</p>
+<a id="more"></a>
 <hr>
 <p>code</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HelloWord</span> <span class="keyword">extends</span> <span class="title">HttpServlet</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">doGet</span><span class="params">(HttpServletRequest request, HttpServletResponse response)</span></span>&#123;</span><br><span class="line">        <span class="comment">//String username = request.getParameter("username");</span></span><br><span class="line">        <span class="comment">//String password = request.getParameter("password");</span></span><br><span class="line">        <span class="comment">//String bodyContent = binaryReader(request);</span></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            String bodyContent = charReader(request);</span><br><span class="line">            System.out.println(bodyContent);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">doPost</span><span class="params">(HttpServletRequest request, HttpServletResponse response)</span></span>&#123;</span><br><span class="line">        <span class="comment">//String username = request.getParameter("username");</span></span><br><span class="line">        <span class="comment">//String password = request.getParameter("password");</span></span><br><span class="line">        <span class="comment">//String bodyContent = binaryReader(request);</span></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            String bodyContent = binaryReader(request);</span><br><span class="line">            System.out.println(bodyContent);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function">String <span class="title">binaryReader</span><span class="params">(HttpServletRequest request)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = request.getContentLength();</span><br><span class="line">        ServletInputStream iii = request.getInputStream();</span><br><span class="line">        <span class="keyword">byte</span>[] buffer = <span class="keyword">new</span> <span class="keyword">byte</span>[len];</span><br><span class="line">        iii.read(buffer, <span class="number">0</span>, len);</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> String(buffer);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function">String  <span class="title">charReader</span><span class="params">(HttpServletRequest request)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        BufferedReader br = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            br = request.getReader();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">        String str, wholeStr = <span class="string">""</span>;</span><br><span class="line">        <span class="keyword">while</span>((str = br.readLine()) != <span class="keyword">null</span>)&#123;</span><br><span class="line">            wholeStr += str;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> wholeStr;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -543,8 +544,8 @@ POST-body-xwwwformurlencoded:sout:”username=admin&amp;password=123456”</p>
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/06/28/Servlet源码解析/" rel="next" title="Servlet源码解析">
-                <i class="fa fa-chevron-left"></i> Servlet源码解析
+              <a href="/2019/06/28/springboot-shiro-redis-restful整合笔记/" rel="next" title="springboot-shiro-redis-restful整合笔记">
+                <i class="fa fa-chevron-left"></i> springboot-shiro-redis-restful整合笔记
               </a>
             
           </div>
@@ -552,6 +553,10 @@ POST-body-xwwwformurlencoded:sout:”username=admin&amp;password=123456”</p>
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/06/28/Servlet源码解析/" rel="prev" title="Servlet源码解析">
+                Servlet源码解析 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -611,7 +616,7 @@ POST-body-xwwwformurlencoded:sout:”username=admin&amp;password=123456”</p>
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">11</span>
+                    <span class="site-state-item-count">15</span>
                     <span class="site-state-item-name">posts</span>
                   </a>
                 </div>
@@ -681,7 +686,19 @@ POST-body-xwwwformurlencoded:sout:”username=admin&amp;password=123456”</p>
                     
                       
                     
-                    <span class="site-state-item-count">16</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">22</span>
                     <span class="site-state-item-name">tags</span>
                   </a>
                 </div>

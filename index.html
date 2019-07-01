@@ -340,7 +340,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://qq616023844.github.io/2019/06/28/关于http传输的一点记录/">
+    <link itemprop="mainEntityOfPage" href="https://qq616023844.github.io/2019/07/01/分页查询/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Lemon Sour">
@@ -360,7 +360,7 @@
           <h1 class="post-title" itemprop="name headline">
                 
                 
-                <a href="/2019/06/28/关于http传输的一点记录/" class="post-title-link" itemprop="url">关于http传输的一点记录</a>
+                <a href="/2019/07/01/分页查询/" class="post-title-link" itemprop="url">分页查询</a>
               
             
           </h1>
@@ -385,24 +385,12 @@
                 
               
 
-              <time title="Created: 2019-06-28 16:16:00" itemprop="dateCreated datePublished" datetime="2019-06-28T16:16:00+08:00">2019-06-28</time>
+              <time title="Created: 2019-07-01 23:40:00 / Modified: 23:51:41" itemprop="dateCreated datePublished" datetime="2019-07-01T23:40:00+08:00">2019-07-01</time>
             
 
             
               
 
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">Edited on</span>
-                
-                <time title="Modified: 2019-07-01 01:11:50" itemprop="dateModified" datetime="2019-07-01T01:11:50+08:00">2019-07-01</time>
               
             
           </span>
@@ -455,34 +443,536 @@
 
       
         
+          <h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><p>关于分页查询这个问题,这里仅介绍通过sql语句进行分页查询,至于使用jpa来进行分页查询的暂时没有涉及</p>
+<p>代码已经放到github,test测试中的demo1是分页查询,demo2对应的是sql方式查询部分字段,demo3对应的是hql方式查询部分字段,,我另一篇文章会讲到<br><a href="https://github.com/qq616023844/springboot-jpa-paging" target="_blank" rel="noopener">github地址</a></p>
+          <!--noindex-->
           
-            <p>记录的草稿,请跳过暂勿浏览,后面会重写</p>
-<hr>
-<p>code</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HelloWord</span> <span class="keyword">extends</span> <span class="title">HttpServlet</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">doGet</span><span class="params">(HttpServletRequest request, HttpServletResponse response)</span></span>&#123;</span><br><span class="line">        <span class="comment">//String username = request.getParameter("username");</span></span><br><span class="line">        <span class="comment">//String password = request.getParameter("password");</span></span><br><span class="line">        <span class="comment">//String bodyContent = binaryReader(request);</span></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            String bodyContent = charReader(request);</span><br><span class="line">            System.out.println(bodyContent);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">doPost</span><span class="params">(HttpServletRequest request, HttpServletResponse response)</span></span>&#123;</span><br><span class="line">        <span class="comment">//String username = request.getParameter("username");</span></span><br><span class="line">        <span class="comment">//String password = request.getParameter("password");</span></span><br><span class="line">        <span class="comment">//String bodyContent = binaryReader(request);</span></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            String bodyContent = binaryReader(request);</span><br><span class="line">            System.out.println(bodyContent);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function">String <span class="title">binaryReader</span><span class="params">(HttpServletRequest request)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = request.getContentLength();</span><br><span class="line">        ServletInputStream iii = request.getInputStream();</span><br><span class="line">        <span class="keyword">byte</span>[] buffer = <span class="keyword">new</span> <span class="keyword">byte</span>[len];</span><br><span class="line">        iii.read(buffer, <span class="number">0</span>, len);</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> String(buffer);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function">String  <span class="title">charReader</span><span class="params">(HttpServletRequest request)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        BufferedReader br = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            br = request.getReader();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">        String str, wholeStr = <span class="string">""</span>;</span><br><span class="line">        <span class="keyword">while</span>((str = br.readLine()) != <span class="keyword">null</span>)&#123;</span><br><span class="line">            wholeStr += str;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> wholeStr;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+            <div class="post-button text-center">
+              <a class="btn" href="/2019/07/01/分页查询/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
 
-<p>result<br>GET-body-none:sout:””<br>GET-body-formdata:sout:”—————————-130695699130126180335395Content-Disposition: form-data; name=”username”admin—————————-130695699130126180335395Content-Disposition: form-data; name=”password”123456—————————-130695699130126180335395–”<br>GET-body-xwwwformurlencoded:sout:”username=admin&amp;password=123456”</p>
-<p>POST-body-none:sout:””<br>POST-body-formdata:sout:”—————————-666026373795318990654180<br>Content-Disposition: form-data; name=”username”</p>
-<p>admin<br>—————————-666026373795318990654180<br>Content-Disposition: form-data; name=”password”</p>
-<p>123456<br>—————————-666026373795318990654180–</p>
-<p>“
-POST-body-xwwwformurlencoded:sout:”username=admin&amp;password=123456”</p>
-<hr>
-<p>code</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HelloWord</span> <span class="keyword">extends</span> <span class="title">HttpServlet</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">doGet</span><span class="params">(HttpServletRequest request, HttpServletResponse response)</span></span>&#123;</span><br><span class="line">        String username = request.getParameter(<span class="string">"username"</span>);</span><br><span class="line">        String password = request.getParameter(<span class="string">"password"</span>);</span><br><span class="line">        <span class="comment">//String bodyContent = binaryReader(request);</span></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            String bodyContent = charReader(request);</span><br><span class="line">            System.out.println(bodyContent);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">doPost</span><span class="params">(HttpServletRequest request, HttpServletResponse response)</span></span>&#123;</span><br><span class="line">        String username = request.getParameter(<span class="string">"username"</span>);</span><br><span class="line">        String password = request.getParameter(<span class="string">"password"</span>);</span><br><span class="line">        <span class="comment">//String bodyContent = binaryReader(request);</span></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            String bodyContent = binaryReader(request);</span><br><span class="line">            System.out.println(bodyContent);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function">String <span class="title">binaryReader</span><span class="params">(HttpServletRequest request)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = request.getContentLength();</span><br><span class="line">        ServletInputStream iii = request.getInputStream();</span><br><span class="line">        <span class="keyword">byte</span>[] buffer = <span class="keyword">new</span> <span class="keyword">byte</span>[len];</span><br><span class="line">        iii.read(buffer, <span class="number">0</span>, len);</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> String(buffer);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function">String  <span class="title">charReader</span><span class="params">(HttpServletRequest request)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        BufferedReader br = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            br = request.getReader();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">        String str, wholeStr = <span class="string">""</span>;</span><br><span class="line">        <span class="keyword">while</span>((str = br.readLine()) != <span class="keyword">null</span>)&#123;</span><br><span class="line">            wholeStr += str;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> wholeStr;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+    
 
-<p>result</p>
-<p>GET-body-none:sout:””</p>
-<p>GET-body-formdata:<br>username:null<br>password:null<br>sout:”—————————-429092154783949982685256Content-Disposition: form-data; name=”username”admin—————————-429092154783949982685256Content-Disposition: form-data; name=”password”123456—————————-429092154783949982685256–”</p>
-<p>GET-body-xwwwformurlencoded:<br>username:null<br>password:null<br>sout:”username=admin&amp;password=123456”</p>
-<p>POST-body-none:<br>username:null<br>password:null<br>sout:””</p>
-<p>POST-body-formdata:<br>username:null<br>password:null<br>sout:”—————————-402983265220252246931068<br>Content-Disposition: form-data; name=”username”</p>
-<p>admin<br>—————————-402983265220252246931068<br>Content-Disposition: form-data; name=”password”</p>
-<p>123456<br>—————————-402983265220252246931068–</p>
-<p>“ </p>
-<p>POST-body-xwwwformurlencoded:<br>username:admin<br>password:123456<br>sout:””</p>
+    
+    <div>
+      
+    </div>
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://qq616023844.github.io/2019/07/01/jpa查询部分字段/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Lemon Sour">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="柠檬不酸的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2019/07/01/jpa查询部分字段/" class="post-title-link" itemprop="url">jpa查询部分字段</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2019-07-01 17:07:00 / Modified: 23:39:19" itemprop="dateCreated datePublished" datetime="2019-07-01T17:07:00+08:00">2019-07-01</time>
+            
+
+            
+              
+
+              
+            
+          </span>
 
           
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/学习笔记/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>代码已经放到github,test测试中的demo2对应的是sql方式,demo3对应的是hql方式,demo1是分页查询,我另一篇文章会讲到<br><a href="https://github.com/qq616023844/springboot-jpa-paging" target="_blank" rel="noopener">github地址</a></p>
+<h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><p>我们平时使用jpa查询时,有两种情况,一种是查询全部字段,另一种是查询部分字段,当我们按通常的sql语句写法查询部分字段时,会出现jpa无法自动解析类型的情况,例如这类报错</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">org.springframework.dao.InvalidDataAccessResourceUsageException: could not execute query; SQL [ SELECT sa.name FROM student sa ]; nested exception is org.hibernate.exception.SQLGrammarException: could not execute query</span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2019/07/01/jpa查询部分字段/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    <div>
+      
+    </div>
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://qq616023844.github.io/2019/07/01/linux安装jdk(非openjdk)/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Lemon Sour">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="柠檬不酸的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2019/07/01/linux安装jdk(非openjdk)/" class="post-title-link" itemprop="url">linux安装jdk(非openjdk)</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2019-07-01 08:56:00 / Modified: 23:51:42" itemprop="dateCreated datePublished" datetime="2019-07-01T08:56:00+08:00">2019-07-01</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/学习笔记/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>1.官网下载压缩包,这里我下载的是解压版不是rpm版本,现在可能需要你登陆才可以下载,自己去注册个账户吧,或者用其他方式得到压缩包<br><a href="https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html" target="_blank" rel="noopener">oracle下载jdk8的网址</a></p>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2019/07/01/linux安装jdk(非openjdk)/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    <div>
+      
+    </div>
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://qq616023844.github.io/2019/07/01/Linux下解压命令/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Lemon Sour">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="柠檬不酸的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2019/07/01/Linux下解压命令/" class="post-title-link" itemprop="url">Linux下解压命令</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2019-07-01 08:56:00 / Modified: 23:51:42" itemprop="dateCreated datePublished" datetime="2019-07-01T08:56:00+08:00">2019-07-01</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/学习笔记/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>会随日常使用逐渐补全</p>
+<p>tar.gz<br>&emsp;解压:tar -zxvf 你的文件名.tar.gz<br>&emsp;参数解释:<br>&emsp;&emsp;z:被gzip压缩过,要用gzip解压<br>&emsp;&emsp;x:解压<br>&emsp;&emsp;v:显示所有过程<br>&emsp;&emsp;f:指定文件名<br>如果想指定解压目录的话就这样写<br>tar -zxvf 你的文件名.tar.gz -C 你指定的目录</p>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2019/07/01/Linux下解压命令/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
         
       
     </div>
@@ -604,7 +1094,7 @@ POST-body-xwwwformurlencoded:sout:”username=admin&amp;password=123456”</p>
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2019-07-01 01:11:50" itemprop="dateModified" datetime="2019-07-01T01:11:50+08:00">2019-07-01</time>
+                <time title="Modified: 2019-07-01 23:51:42" itemprop="dateModified" datetime="2019-07-01T23:51:42+08:00">2019-07-01</time>
               
             
           </span>
@@ -657,40 +1147,200 @@ POST-body-xwwwformurlencoded:sout:”username=admin&amp;password=123456”</p>
 
       
         
+          <h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><p>目前写这篇文章的不是单纯的为了学习Servlet,而是在之前我在用Servlet解析前台发送的各种格式http数据时,后台出现了getParameter获取参数获取不到,而用流则可以接收到数据的情况<br>此属于阶段性记录,后面我会回来详细修改</p>
+          <!--noindex-->
           
-            <h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><p>目前写这篇文章的不是单纯的为了学习Servlet,而是在之前我在用Servlet解析前台发送的各种格式http数据时,后台出现了getParameter获取参数获取不到,而用流则可以接收到数据的情况<br>此属于阶段性记录,后面我会回来详细修改</p>
-<h4 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h4><p>首先类的主要结构关系需要提及一下</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">模块一</span><br><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">ServletRequest</span></span></span><br><span class="line"><span class="class"></span></span><br><span class="line"><span class="class"><span class="title">interface</span> <span class="title">HttpServletRequest</span> <span class="keyword">extends</span> <span class="title">ServletRequest</span></span></span><br><span class="line"><span class="class"></span></span><br><span class="line"><span class="class"><span class="title">class</span> <span class="title">ServletRequestWrapper</span> <span class="keyword">implements</span> <span class="title">ServletRequest</span></span></span><br><span class="line"><span class="class"></span></span><br><span class="line"><span class="class"><span class="title">class</span> <span class="title">HttpServletRequestWrapper</span> <span class="keyword">extends</span> <span class="title">ServletRequestWrapper</span> <span class="keyword">implements</span> <span class="title">HttpServletRequest</span></span></span><br><span class="line"><span class="class"></span></span><br><span class="line"><span class="class">模块二</span></span><br><span class="line"><span class="class"><span class="title">interface</span> <span class="title">ServletConfig</span></span></span><br><span class="line"><span class="class"></span></span><br><span class="line"><span class="class"><span class="title">interface</span> <span class="title">Servlet</span></span></span><br><span class="line"><span class="class"></span></span><br><span class="line"><span class="class"><span class="title">abstract</span> <span class="title">class</span> <span class="title">GenericServlet</span> <span class="keyword">implements</span> <span class="title">Servlet</span>, <span class="title">ServletConfig</span>, <span class="title">java</span>.<span class="title">io</span>.<span class="title">Serializable</span></span></span><br><span class="line"><span class="class"></span></span><br><span class="line"><span class="class"><span class="title">abstract</span> <span class="title">class</span> <span class="title">HttpServlet</span> <span class="keyword">extends</span> <span class="title">GenericServlet</span></span></span><br></pre></td></tr></table></figure>
+            <div class="post-button text-center">
+              <a class="btn" href="/2019/06/28/Servlet源码解析/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
 
-<p>看到上面的类继承关系可能会有点陌生,接下来我给出一段demo</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HelloWord</span> <span class="keyword">extends</span> <span class="title">HttpServlet</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">doGet</span><span class="params">(HttpServletRequest request, HttpServletResponse response)</span></span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">doPost</span><span class="params">(HttpServletRequest request, HttpServletResponse response)</span></span>&#123;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+    
 
-<p>好了,这下应该不陌生了,我们用Servlet写代码一般都是继承HttpServlet来进行,这属于第二模块,而我们代码中操作的request属于第一模块</p>
-<p>在具体分析代码之前,有必要先科普下Servlet的生命周期,平时我们在写Servlet服务端的时候,是没有main入口类的,仔细想想,没有入口类为何可以启动?<br>答案来了,是因为tomcat,如果将Servlet看作对象的话,那么tomcat就是Servlet的容器,tomcat负责操控Servlet的生命周期,tomcat从他自己的入口类启动,运行时调用Servlet从而进行一切操作。<br>我看了很多的博客教程,他们都是这么说的:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&amp;emsp;tomcat作为servlet容器,当http请求进来时,发现没有servlet,那么则初始化一个servlet,将http请求封装为Request交给servlet处理,且servlet为单例重复使用,若长时间未调用才会销毁</span><br></pre></td></tr></table></figure>
+    
+    <div>
+      
+    </div>
 
-<p>但是在tomcat8.5.28+servlet4.0环境下,在不调整任何参数时(默认),我的测试跟上述操作有点出入,servlet并不是在接到http请求时才初始化,而是在随tomcat启动时便已经初始化,这一点可以根据我对servlet初始化init方法打断点,并且以debug方式启动可以看出,各位尽可以自行尝试,当然这不是重点,大体流程了解即可。</p>
-<h4 id="首先我们从第二模块开始"><a href="#首先我们从第二模块开始" class="headerlink" title="首先我们从第二模块开始"></a>首先我们从第二模块开始</h4><ul>
-<li>Servlet这个接口类定义了一系列与servlet容器(这里我们可以粗略理解为tomcat,当然servlet容器只是tomcat的一部分,并不代表tomcat==servlet容器)相互交互的一系列接口</li>
-<li>ServletConfig看名字也知道是提供配置信息的一个接口</li>
-<li>GenericServlet这个是对Servlet和ServletConfig接口的一些实现,另外增加了一些log方法来传递异常</li>
-<li>HttpServlet这个类就定义了对GET,PUT,POST,HEAD,DELETE等各种HTTP方法的处理方式<br>那么问题来了,我们知道之前定义的Servlet接口类提供给tomcat一些交互接口,那么唯一涉及到各种操作的只有service方法,他是如何跟各种HTTP方法的处理结合起来的呢?<br>在源码面前的朋友可以追着service方法一路下来,最终在HttpServlet中可以看到service方法的实现<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">service</span><span class="params">(HttpServletRequest req, HttpServletResponse resp)</span></span></span><br><span class="line"><span class="function">        <span class="keyword">throws</span> ServletException, IOException</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        String method = req.getMethod();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (method.equals(METHOD_GET)) &#123;</span><br><span class="line">            <span class="keyword">long</span> lastModified = getLastModified(req);</span><br><span class="line">            <span class="keyword">if</span> (lastModified == -<span class="number">1</span>) &#123;</span><br><span class="line">                <span class="comment">// servlet doesn't support if-modified-since, no reason</span></span><br><span class="line">                <span class="comment">// to go through further expensive logic</span></span><br><span class="line">                doGet(req, resp);</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="keyword">long</span> ifModifiedSince = req.getDateHeader(HEADER_IFMODSINCE);</span><br><span class="line">                <span class="keyword">if</span> (ifModifiedSince &lt; lastModified) &#123;</span><br><span class="line">                    <span class="comment">// If the servlet mod time is later, call doGet()</span></span><br><span class="line">                    <span class="comment">// Round down to the nearest second for a proper compare</span></span><br><span class="line">                    <span class="comment">// A ifModifiedSince of -1 will always be less</span></span><br><span class="line">                    maybeSetLastModified(resp, lastModified);</span><br><span class="line">                    doGet(req, resp);</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    resp.setStatus(HttpServletResponse.SC_NOT_MODIFIED);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (method.equals(METHOD_HEAD)) &#123;</span><br><span class="line">            <span class="keyword">long</span> lastModified = getLastModified(req);</span><br><span class="line">            maybeSetLastModified(resp, lastModified);</span><br><span class="line">            doHead(req, resp);</span><br><span class="line"></span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (method.equals(METHOD_POST)) &#123;</span><br><span class="line">            doPost(req, resp);</span><br><span class="line">            </span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (method.equals(METHOD_PUT)) &#123;</span><br><span class="line">            doPut(req, resp);</span><br><span class="line">            </span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (method.equals(METHOD_DELETE)) &#123;</span><br><span class="line">            doDelete(req, resp);</span><br><span class="line">            </span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (method.equals(METHOD_OPTIONS)) &#123;</span><br><span class="line">            doOptions(req,resp);</span><br><span class="line">            </span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (method.equals(METHOD_TRACE)) &#123;</span><br><span class="line">            doTrace(req,resp);</span><br><span class="line">            </span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">//</span></span><br><span class="line">            <span class="comment">// Note that this means NO servlet supports whatever</span></span><br><span class="line">            <span class="comment">// method was requested, anywhere on this server.</span></span><br><span class="line">            <span class="comment">//</span></span><br><span class="line"></span><br><span class="line">            String errMsg = lStrings.getString(<span class="string">"http.method_not_implemented"</span>);</span><br><span class="line">            Object[] errArgs = <span class="keyword">new</span> Object[<span class="number">1</span>];</span><br><span class="line">            errArgs[<span class="number">0</span>] = method;</span><br><span class="line">            errMsg = MessageFormat.format(errMsg, errArgs);</span><br><span class="line">            </span><br><span class="line">            resp.sendError(HttpServletResponse.SC_NOT_IMPLEMENTED, errMsg);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+    
+    
+    
 
-</li>
-</ul>
-<p>从代码中可以看到,他是负责匹配头部信息来进行分发操作,不清楚http报文的朋友可以看下面,这是用firefox浏览器发送的一组请求,第一行的GET即为method.equals(…)中的method内容</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">GET / HTTP/1.1</span><br><span class="line">Host: localhost:8080</span><br><span class="line">User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:67.0) Gecko/20100101 Firefox/67.0</span><br><span class="line">Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8</span><br><span class="line">Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Connection: keep-alive</span><br><span class="line">Upgrade-Insecure-Requests: 1</span><br><span class="line">Pragma: no-cache</span><br><span class="line">Cache-Control: no-cache</span><br></pre></td></tr></table></figure>
+    
 
-<p>到此为止第二模块基本结束</p>
-<h4 id="接下来分析第一模块"><a href="#接下来分析第一模块" class="headerlink" title="接下来分析第一模块"></a>接下来分析第一模块</h4><ul>
-<li>ServletRequest主要用来获取被储存信息,例如储存被tomcat封装后的http信息</li>
-<li>HttpServletRequest特别针对http协议的各种参数在ServletRequest基础上进行了扩展</li>
-<li>ServletRequestWrapper也是个扩展,不过有个特殊的地方要注意,这个类的构造方法public ServletRequestWrapper(ServletRequest request)接收了一个ServletRequest对象,以后的参数就从这个对象里面拿取</li>
-<li>HttpServletRequestWrapper就是上面三个类的实现了,没什么意思</li>
-</ul>
-<h4 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h4><p>到此为止,Servlet源码主干分析到此结束,原本我是想找到HTTP被解析为HttpServletRequest的地方,从而找到为何我getParameter方法无法达到预期效果,结果发现,解析这部分是由tomcat负责的,接下来我要暂时先去分析tomcat代码,至于servlet中的seesion,filter这两个大模块,我随后会回来更新</p>
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://qq616023844.github.io/2019/06/28/关于http传输的一点记录/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Lemon Sour">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="柠檬不酸的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2019/06/28/关于http传输的一点记录/" class="post-title-link" itemprop="url">关于http传输的一点记录</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2019-06-28 16:16:00" itemprop="dateCreated datePublished" datetime="2019-06-28T16:16:00+08:00">2019-06-28</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2019-07-01 23:51:42" itemprop="dateModified" datetime="2019-07-01T23:51:42+08:00">2019-07-01</time>
+              
+            
+          </span>
 
           
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/学习笔记/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>记录的草稿,请跳过暂勿浏览,后面会重写</p>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2019/06/28/关于http传输的一点记录/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
         
       
     </div>
@@ -1454,745 +2104,6 @@ POST-body-xwwwformurlencoded:sout:”username=admin&amp;password=123456”</p>
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://qq616023844.github.io/2019/06/22/mysql启动(无需添加到服务)/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Lemon Sour">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="柠檬不酸的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2019/06/22/mysql启动(无需添加到服务)/" class="post-title-link" itemprop="url">mysql启动(无需添加到服务)</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-
-              
-                
-              
-
-              <time title="Created: 2019-06-22 16:02:51" itemprop="dateCreated datePublished" datetime="2019-06-22T16:02:51+08:00">2019-06-22</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">Edited on</span>
-                
-                <time title="Modified: 2019-06-28 00:04:50" itemprop="dateModified" datetime="2019-06-28T00:04:50+08:00">2019-06-28</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/学习笔记/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h4 id="无需将mysql添加到服务项中即可绿色启动"><a href="#无需将mysql添加到服务项中即可绿色启动" class="headerlink" title="无需将mysql添加到服务项中即可绿色启动"></a>无需将mysql添加到服务项中即可绿色启动</h4><h6 id="ps-接下来的步骤仅限于已经安装配置好mysql-但不想将其添加到服务项中来启动的朋友"><a href="#ps-接下来的步骤仅限于已经安装配置好mysql-但不想将其添加到服务项中来启动的朋友" class="headerlink" title="ps:接下来的步骤仅限于已经安装配置好mysql,但不想将其添加到服务项中来启动的朋友"></a>ps:接下来的步骤仅限于已经安装配置好mysql,但不想将其添加到服务项中来启动的朋友</h6><p>1.打开cmd,通过cd到mysql安装/解压文件夹下</p>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2019/06/22/mysql启动(无需添加到服务)/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    <div>
-      
-    </div>
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://qq616023844.github.io/2019/06/21/git使用笔记/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Lemon Sour">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="柠檬不酸的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2019/06/21/git使用笔记/" class="post-title-link" itemprop="url">git使用笔记</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-
-              
-                
-              
-
-              <time title="Created: 2019-06-21 13:02:51" itemprop="dateCreated datePublished" datetime="2019-06-21T13:02:51+08:00">2019-06-21</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">Edited on</span>
-                
-                <time title="Modified: 2019-06-28 00:04:50" itemprop="dateModified" datetime="2019-06-28T00:04:50+08:00">2019-06-28</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/学习笔记/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h4 id="详细介绍git使用和配置-不包括安装"><a href="#详细介绍git使用和配置-不包括安装" class="headerlink" title="详细介绍git使用和配置(不包括安装)"></a>详细介绍git使用和配置(不包括安装)</h4><ul>
-<li><h4 id="什么是git"><a href="#什么是git" class="headerlink" title="什么是git?"></a>什么是git?</h4><ul>
-<li>首先我用通俗语言解释下,git是一种版本控制工具,你既可以在本地进行版本控制,也可以与搭建好git服务器的远端进行同步
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2019/06/21/git使用笔记/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </li></ul></li></ul></div>
-
-    
-
-    
-    <div>
-      
-    </div>
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://qq616023844.github.io/2019/06/21/git忽略规则.gitignore/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Lemon Sour">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="柠檬不酸的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2019/06/21/git忽略规则.gitignore/" class="post-title-link" itemprop="url">git忽略规则.gitignore</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-
-              
-                
-              
-
-              <time title="Created: 2019-06-21 13:02:51" itemprop="dateCreated datePublished" datetime="2019-06-21T13:02:51+08:00">2019-06-21</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">Edited on</span>
-                
-                <time title="Modified: 2019-06-28 00:04:50" itemprop="dateModified" datetime="2019-06-28T00:04:50+08:00">2019-06-28</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/学习笔记/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h4 id="提供-gitignore模板"><a href="#提供-gitignore模板" class="headerlink" title="提供.gitignore模板"></a>提供.gitignore模板</h4><h4 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h4><p>&emsp;当我们同步到远程仓库时,配置了.gitignore可以令git按照我们定义的规则,选择性的跟踪本地仓库的文件</p>
-<h4 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h4><p>&emsp;具体的语法规范这里不做描述,搜索引擎搜教程即可</p>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2019/06/21/git忽略规则.gitignore/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    <div>
-      
-    </div>
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://qq616023844.github.io/2019/06/21/解决maven导入项目pom-xml报错unknown/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Lemon Sour">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="柠檬不酸的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2019/06/21/解决maven导入项目pom-xml报错unknown/" class="post-title-link" itemprop="url">解决maven导入项目pom.xml报错unknown</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-
-              
-                
-              
-
-              <time title="Created: 2019-06-21 13:02:51" itemprop="dateCreated datePublished" datetime="2019-06-21T13:02:51+08:00">2019-06-21</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">Edited on</span>
-                
-                <time title="Modified: 2019-06-28 00:04:50" itemprop="dateModified" datetime="2019-06-28T00:04:50+08:00">2019-06-28</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/BUG记录/" itemprop="url" rel="index"><span itemprop="name">BUG记录</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h4 id="2019-6-21-16-00更正"><a href="#2019-6-21-16-00更正" class="headerlink" title="2019.6.21 16:00更正"></a>2019.6.21 16:00更正</h4><p>虽然路径问题也是原因之一,但是并没有完全解决这次问题<br>&emsp;&emsp;现象:重新git项目设置好路径以后,暂无报错现象,但是当pom中的jar包从maven仓库拉取完毕后,又出现了第一行报错的现象<br>&emsp;&emsp;猜想:错误的根源可能是jar包版本问题,根据他人博客经验来看,往往是springboot版本过高,具体原因继续跟踪</p>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2019/06/21/解决maven导入项目pom-xml报错unknown/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    <div>
-      
-    </div>
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2239,7 +2150,7 @@ POST-body-xwwwformurlencoded:sout:”username=admin&amp;password=123456”</p>
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">11</span>
+                    <span class="site-state-item-count">15</span>
                     <span class="site-state-item-name">posts</span>
                   </a>
                 </div>
@@ -2309,7 +2220,19 @@ POST-body-xwwwformurlencoded:sout:”username=admin&amp;password=123456”</p>
                     
                       
                     
-                    <span class="site-state-item-count">16</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">22</span>
                     <span class="site-state-item-name">tags</span>
                   </a>
                 </div>

@@ -1,15 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title><![CDATA[关于http传输的一点记录]]></title>
-    <url>%2F2019%2F06%2F28%2F%E5%85%B3%E4%BA%8Ehttp%E4%BC%A0%E8%BE%93%E7%9A%84%E4%B8%80%E7%82%B9%E8%AE%B0%E5%BD%95%2F</url>
-    <content type="text"><![CDATA[记录的草稿,请跳过暂勿浏览,后面会重写 code 1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950public class HelloWord extends HttpServlet &#123; @Override protected void doGet(HttpServletRequest request, HttpServletResponse response)&#123; //String username = request.getParameter("username"); //String password = request.getParameter("password"); //String bodyContent = binaryReader(request); try &#123; String bodyContent = charReader(request); System.out.println(bodyContent); &#125; catch (IOException e) &#123; e.printStackTrace(); &#125; &#125; @Override protected void doPost(HttpServletRequest request, HttpServletResponse response)&#123; //String username = request.getParameter("username"); //String password = request.getParameter("password"); //String bodyContent = binaryReader(request); try &#123; String bodyContent = binaryReader(request); System.out.println(bodyContent); &#125; catch (IOException e) &#123; e.printStackTrace(); &#125; &#125; String binaryReader(HttpServletRequest request) throws IOException &#123; int len = request.getContentLength(); ServletInputStream iii = request.getInputStream(); byte[] buffer = new byte[len]; iii.read(buffer, 0, len); return new String(buffer); &#125; String charReader(HttpServletRequest request) throws IOException &#123; BufferedReader br = null; try &#123; br = request.getReader(); &#125; catch (IOException e) &#123; e.printStackTrace(); &#125; String str, wholeStr = ""; while((str = br.readLine()) != null)&#123; wholeStr += str; &#125; return wholeStr; &#125;&#125; resultGET-body-none:sout:””GET-body-formdata:sout:”—————————-130695699130126180335395Content-Disposition: form-data; name=”username”admin—————————-130695699130126180335395Content-Disposition: form-data; name=”password”123456—————————-130695699130126180335395–”GET-body-xwwwformurlencoded:sout:”username=admin&amp;password=123456” POST-body-none:sout:””POST-body-formdata:sout:”—————————-666026373795318990654180Content-Disposition: form-data; name=”username” admin—————————-666026373795318990654180Content-Disposition: form-data; name=”password” 123456—————————-666026373795318990654180– “ POST-body-xwwwformurlencoded:sout:”username=admin&amp;password=123456” code 1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950public class HelloWord extends HttpServlet &#123; @Override protected void doGet(HttpServletRequest request, HttpServletResponse response)&#123; String username = request.getParameter("username"); String password = request.getParameter("password"); //String bodyContent = binaryReader(request); try &#123; String bodyContent = charReader(request); System.out.println(bodyContent); &#125; catch (IOException e) &#123; e.printStackTrace(); &#125; &#125; @Override protected void doPost(HttpServletRequest request, HttpServletResponse response)&#123; String username = request.getParameter("username"); String password = request.getParameter("password"); //String bodyContent = binaryReader(request); try &#123; String bodyContent = binaryReader(request); System.out.println(bodyContent); &#125; catch (IOException e) &#123; e.printStackTrace(); &#125; &#125; String binaryReader(HttpServletRequest request) throws IOException &#123; int len = request.getContentLength(); ServletInputStream iii = request.getInputStream(); byte[] buffer = new byte[len]; iii.read(buffer, 0, len); return new String(buffer); &#125; String charReader(HttpServletRequest request) throws IOException &#123; BufferedReader br = null; try &#123; br = request.getReader(); &#125; catch (IOException e) &#123; e.printStackTrace(); &#125; String str, wholeStr = ""; while((str = br.readLine()) != null)&#123; wholeStr += str; &#125; return wholeStr; &#125;&#125; result GET-body-none:sout:”” GET-body-formdata:username:nullpassword:nullsout:”—————————-429092154783949982685256Content-Disposition: form-data; name=”username”admin—————————-429092154783949982685256Content-Disposition: form-data; name=”password”123456—————————-429092154783949982685256–” GET-body-xwwwformurlencoded:username:nullpassword:nullsout:”username=admin&amp;password=123456” POST-body-none:username:nullpassword:nullsout:”” POST-body-formdata:username:nullpassword:nullsout:”—————————-402983265220252246931068Content-Disposition: form-data; name=”username” admin—————————-402983265220252246931068Content-Disposition: form-data; name=”password” 123456—————————-402983265220252246931068– “ POST-body-xwwwformurlencoded:username:adminpassword:123456sout:””]]></content>
+    <title><![CDATA[分页查询]]></title>
+    <url>%2F2019%2F07%2F01%2F%E5%88%86%E9%A1%B5%E6%9F%A5%E8%AF%A2%2F</url>
+    <content type="text"><![CDATA[前言关于分页查询这个问题,这里仅介绍通过sql语句进行分页查询,至于使用jpa来进行分页查询的暂时没有涉及 代码已经放到github,test测试中的demo1是分页查询,demo2对应的是sql方式查询部分字段,demo3对应的是hql方式查询部分字段,,我另一篇文章会讲到github地址 解决问题基础知识LIMIT x,y是sql中limit的用法,x是偏移量,指的是从第几个数据开始读,y是长度,指读取几条数据 代码如下 12345//TODO 分页查询demo//TODO 注意ORDER BY id limit ?1,1 第一个参数是引用(是你传进来的顺序),第二个参数是1(这个1是固定的)@Query(value = " SELECT * FROM student sa WHERE sa.id &gt;= (SELECT sb.id FROM student sb ORDER BY sb.id LIMIT ?1,1) LIMIT ?2 ", nativeQuery = true)List&lt;Student&gt; temp(int pageOffset, int pageSize); 其实像这么写也可以,这两种方式的区别是,第一种比第二种速度快很多(数量级的差别),至于为什么快,我也是看了别人的博客,大致是因为索引的问题,具体的原因我还没真正实践过,这里不说了避免误导读者 1SELECT * FROM student sa ORDER BY sa.id LIMIT 3,1]]></content>
       <categories>
         <category>学习笔记</category>
       </categories>
       <tags>
-        <tag>http</tag>
-        <tag>HttpServletRequest</tag>
+        <tag>sql</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[jpa查询部分字段]]></title>
+    <url>%2F2019%2F07%2F01%2Fjpa%E6%9F%A5%E8%AF%A2%E9%83%A8%E5%88%86%E5%AD%97%E6%AE%B5%2F</url>
+    <content type="text"><![CDATA[代码已经放到github,test测试中的demo2对应的是sql方式,demo3对应的是hql方式,demo1是分页查询,我另一篇文章会讲到github地址 前言我们平时使用jpa查询时,有两种情况,一种是查询全部字段,另一种是查询部分字段,当我们按通常的sql语句写法查询部分字段时,会出现jpa无法自动解析类型的情况,例如这类报错 1org.springframework.dao.InvalidDataAccessResourceUsageException: could not execute query; SQL [ SELECT sa.name FROM student sa ]; nested exception is org.hibernate.exception.SQLGrammarException: could not execute query 解决方案针对hql和sql分别有两种解决方案 一. &emsp;hql情况下,我们可以用这种方式来解决,有必要注意的一点是,Student里面一定要有相应的构造类 123//TODO 查询部分字段的demo-hql@Query(value = " SELECT new Student(s.name) FROM Student s")List&lt;Student&gt; temp03(); 二. 在sql情况下,我们可以用这种方式解决,首先我们将查出来的数据领jpa解析为map,然后通过我们自己写的map转实体类方法来解决 1234//TODO 查询部分字段的demo-sql@Query(value = " SELECT sa.name FROM student sa ", nativeQuery = true)List&lt;Map&lt;String,Object&gt;&gt; temp02(); 下面是我自己写的一个map转实体类的工具方法 1234567891011121314151617181920212223242526272829303132333435/**将map转换为实体类,在jpa查询部分字段时会用到* 使用的时候注意,因为int类型会初始化的问题,无法被FASTJSON忽略掉,所以返回的json可能会带有额外的数字0*/public static &lt;T&gt;T mapToEntity(Map&lt;String,Object&gt; map,Class&lt;T&gt; targetClass) throws IllegalAccessException, InstantiationException &#123; Class superClass; Field[] fields; T target = targetClass.newInstance(); //接收targetClass的Field List&lt;Field&gt; targetfieldList = new LinkedList&lt;&gt;(); superClass = targetClass; while(superClass!=null&amp;&amp;superClass!=Object.class)&#123; //由于该方法只能获取superClass的参数(private,protect,public等任何声明),但无法获取父类的参数,这里我们迭代一波 fields = superClass.getDeclaredFields(); targetfieldList.addAll(Arrays.asList(fields)); superClass = superClass.getSuperclass(); &#125; //匹配并赋值 for (Field targetfield : targetfieldList) &#123; for (Map.Entry&lt;String, Object&gt; mapEntry : map.entrySet()) &#123; if (targetfield.getName().equals(mapEntry.getKey()))&#123; //暂时保存权限 boolean targetFlag = targetfield.isAccessible(); //赋予权限 targetfield.setAccessible(true); //赋值 targetfield.set(target,mapEntry.getValue()); //恢复原权限 targetfield.setAccessible(targetFlag); break; &#125; &#125; &#125; return target;&#125; 有一点需要注意,由于其底层用了反射,所以无论是通过该种方式取数据还是存数据,均需要setAccessible(true),否则会出现IllegalAccessException异常]]></content>
+      <categories>
+        <category>学习笔记</category>
+      </categories>
+      <tags>
+        <tag>jpa</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[linux安装jdk(非openjdk)]]></title>
+    <url>%2F2019%2F07%2F01%2Flinux%E5%AE%89%E8%A3%85jdk(%E9%9D%9Eopenjdk)%2F</url>
+    <content type="text"><![CDATA[1.官网下载压缩包,这里我下载的是解压版不是rpm版本,现在可能需要你登陆才可以下载,自己去注册个账户吧,或者用其他方式得到压缩包oracle下载jdk8的网址 2.解压压缩包tar -zxvf 你压缩包的名字.tar.gz 3.安装vim,这是个文本编辑器,你可以把它理解为记事本这种东西,至少我的ubuntu18.04是不自带vim的你可以使用sudo apt install vim这条命令安装,也可以在命令行输入vim按照他的提示安装 3.修改配置文件,原理跟window一样,只要将路径添加到配置文件中,操作系统就可以检测到我们想要安装的东西vim /etc/profile(这里需要注意了,要用root权限进行,前面加sudo) 4.打开配置文件后,我们在尾部追加如下内容,vim的操作方式请自行搜索 123export JAVA_HOME=你的jdk目录,注意是根目录,不是bin目录export CLASSPATH=$JAVA_HOME/lib/export PATH=$JAVA_HOME/bin:$PATH 5.使操作系统重新加载配置文件,注意需要root权限source /etc/profile 6.输入java -version出现java版本信息即我们配置成功了]]></content>
+      <categories>
+        <category>学习笔记</category>
+      </categories>
+      <tags>
+        <tag>linux</tag>
+        <tag>base</tag>
+        <tag>jdk</tag>
+        <tag>java</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Linux下解压命令]]></title>
+    <url>%2F2019%2F07%2F01%2FLinux%E4%B8%8B%E8%A7%A3%E5%8E%8B%E5%91%BD%E4%BB%A4%2F</url>
+    <content type="text"><![CDATA[会随日常使用逐渐补全 tar.gz&emsp;解压:tar -zxvf 你的文件名.tar.gz&emsp;参数解释:&emsp;&emsp;z:被gzip压缩过,要用gzip解压&emsp;&emsp;x:解压&emsp;&emsp;v:显示所有过程&emsp;&emsp;f:指定文件名如果想指定解压目录的话就这样写tar -zxvf 你的文件名.tar.gz -C 你指定的目录]]></content>
+      <categories>
+        <category>学习笔记</category>
+      </categories>
+      <tags>
+        <tag>linux</tag>
+        <tag>base</tag>
       </tags>
   </entry>
   <entry>
@@ -21,6 +57,18 @@
       </categories>
       <tags>
         <tag>Servlet</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[关于http传输的一点记录]]></title>
+    <url>%2F2019%2F06%2F28%2F%E5%85%B3%E4%BA%8Ehttp%E4%BC%A0%E8%BE%93%E7%9A%84%E4%B8%80%E7%82%B9%E8%AE%B0%E5%BD%95%2F</url>
+    <content type="text"><![CDATA[记录的草稿,请跳过暂勿浏览,后面会重写 code 1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950public class HelloWord extends HttpServlet &#123; @Override protected void doGet(HttpServletRequest request, HttpServletResponse response)&#123; //String username = request.getParameter("username"); //String password = request.getParameter("password"); //String bodyContent = binaryReader(request); try &#123; String bodyContent = charReader(request); System.out.println(bodyContent); &#125; catch (IOException e) &#123; e.printStackTrace(); &#125; &#125; @Override protected void doPost(HttpServletRequest request, HttpServletResponse response)&#123; //String username = request.getParameter("username"); //String password = request.getParameter("password"); //String bodyContent = binaryReader(request); try &#123; String bodyContent = binaryReader(request); System.out.println(bodyContent); &#125; catch (IOException e) &#123; e.printStackTrace(); &#125; &#125; String binaryReader(HttpServletRequest request) throws IOException &#123; int len = request.getContentLength(); ServletInputStream iii = request.getInputStream(); byte[] buffer = new byte[len]; iii.read(buffer, 0, len); return new String(buffer); &#125; String charReader(HttpServletRequest request) throws IOException &#123; BufferedReader br = null; try &#123; br = request.getReader(); &#125; catch (IOException e) &#123; e.printStackTrace(); &#125; String str, wholeStr = ""; while((str = br.readLine()) != null)&#123; wholeStr += str; &#125; return wholeStr; &#125;&#125; resultGET-body-none:sout:””GET-body-formdata:sout:”—————————-130695699130126180335395Content-Disposition: form-data; name=”username”admin—————————-130695699130126180335395Content-Disposition: form-data; name=”password”123456—————————-130695699130126180335395–”GET-body-xwwwformurlencoded:sout:”username=admin&amp;password=123456” POST-body-none:sout:””POST-body-formdata:sout:”—————————-666026373795318990654180Content-Disposition: form-data; name=”username” admin—————————-666026373795318990654180Content-Disposition: form-data; name=”password” 123456—————————-666026373795318990654180– “ POST-body-xwwwformurlencoded:sout:”username=admin&amp;password=123456” code 1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950public class HelloWord extends HttpServlet &#123; @Override protected void doGet(HttpServletRequest request, HttpServletResponse response)&#123; String username = request.getParameter("username"); String password = request.getParameter("password"); //String bodyContent = binaryReader(request); try &#123; String bodyContent = charReader(request); System.out.println(bodyContent); &#125; catch (IOException e) &#123; e.printStackTrace(); &#125; &#125; @Override protected void doPost(HttpServletRequest request, HttpServletResponse response)&#123; String username = request.getParameter("username"); String password = request.getParameter("password"); //String bodyContent = binaryReader(request); try &#123; String bodyContent = binaryReader(request); System.out.println(bodyContent); &#125; catch (IOException e) &#123; e.printStackTrace(); &#125; &#125; String binaryReader(HttpServletRequest request) throws IOException &#123; int len = request.getContentLength(); ServletInputStream iii = request.getInputStream(); byte[] buffer = new byte[len]; iii.read(buffer, 0, len); return new String(buffer); &#125; String charReader(HttpServletRequest request) throws IOException &#123; BufferedReader br = null; try &#123; br = request.getReader(); &#125; catch (IOException e) &#123; e.printStackTrace(); &#125; String str, wholeStr = ""; while((str = br.readLine()) != null)&#123; wholeStr += str; &#125; return wholeStr; &#125;&#125; result GET-body-none:sout:”” GET-body-formdata:username:nullpassword:nullsout:”—————————-429092154783949982685256Content-Disposition: form-data; name=”username”admin—————————-429092154783949982685256Content-Disposition: form-data; name=”password”123456—————————-429092154783949982685256–” GET-body-xwwwformurlencoded:username:nullpassword:nullsout:”username=admin&amp;password=123456” POST-body-none:username:nullpassword:nullsout:”” POST-body-formdata:username:nullpassword:nullsout:”—————————-402983265220252246931068Content-Disposition: form-data; name=”username” admin—————————-402983265220252246931068Content-Disposition: form-data; name=”password” 123456—————————-402983265220252246931068– “ POST-body-xwwwformurlencoded:username:adminpassword:123456sout:””]]></content>
+      <categories>
+        <category>学习笔记</category>
+      </categories>
+      <tags>
+        <tag>http</tag>
+        <tag>HttpServletRequest</tag>
       </tags>
   </entry>
   <entry>
@@ -87,17 +135,6 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[git使用笔记]]></title>
-    <url>%2F2019%2F06%2F21%2Fgit%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0%2F</url>
-    <content type="text"><![CDATA[详细介绍git使用和配置(不包括安装) 什么是git? 首先我用通俗语言解释下,git是一种版本控制工具,你既可以在本地进行版本控制,也可以与搭建好git服务器的远端进行同步 如何使用? windows的可以官方下载安装包,linux可以命令行下载(对于window来说可能需配置环境变量,可有可无) 配置全局信息 随便找个地方右键打开git bash ps:这里配置的昵称和邮箱可以随便写,作用体现在,假如你提交了git,那么在git记录中会显示提交者昵称和邮箱,即为下面输入的 输入git config –global user.name “你的昵称” 输入git config –global user.name “你的邮箱” 创建git仓库 随便找个地方新建文件夹进去打开git bash(此处建议选一个父文件夹作为git仓库目录) 输入git init 该命令的作用是在当前文件夹下生成git仓库所需文件(注意,这里git仓库通常指的是一个项目,而不是管理多个项目的仓库,而且生成的文件为.git是个隐藏文件夹) 使用git 当我们在文件夹下做了操作以后(添加修改删除文件),可以git add . .代表暂存全部文件,当然也可以是其他写法或部分文件 此时我们已经add成功,接下来git commit -m”此次提交的注释” 此时,本地的使用基本就到这里(此外还有分支,冲突等各种概念,不在本篇讲) 关联github/码云(也可以是其他的或者自己搭建的git服务器) 首先我们在git bash中生成一对密钥,命令为:ssh-keygen -t rsa -C “你之前填写的邮箱” 其实一般码云或者github都要官方绑定密钥教程,基本都一样 生成密钥后我们把密钥配置到git服务器上 如果是github之类的你从个人setting可以找到配置密钥的地方,如果是个人git服务器则可能需要手动添加 刚才生成的密钥分为公钥和私钥,一般公钥以.pub结尾,这部分涉及到密码学,你只需要知道这是非对称密钥用来代替用户密码做身份验证就好了,具体内容请自行搜索 在window中默认保存在C://user/{你的用户名}/.ssh文件夹中 当我们配置到服务器公钥后,就可以正常的git clone 远程私有仓库等操作 可视化界面SourceTree SourceTree需要注册啥的,可能被墙了,自己解决 这里要提到一点,它仅仅是个可视化界面,仍然需要你安装git 团队里有人出现了SourceTree没有权限的问题,打开密钥设置界面(不同版本打开位置有所不同,大概都是在工具-选项这一块),找到之前我们生成的密钥(上文提到过位置),将私钥添加进去即可]]></content>
-      <categories>
-        <category>学习笔记</category>
-      </categories>
-      <tags>
-        <tag>git</tag>
-      </tags>
-  </entry>
-  <entry>
     <title><![CDATA[git忽略规则.gitignore]]></title>
     <url>%2F2019%2F06%2F21%2Fgit%E5%BF%BD%E7%95%A5%E8%A7%84%E5%88%99.gitignore%2F</url>
     <content type="text"><![CDATA[提供.gitignore模板作用&emsp;当我们同步到远程仓库时,配置了.gitignore可以令git按照我们定义的规则,选择性的跟踪本地仓库的文件 使用&emsp;具体的语法规范这里不做描述,搜索引擎搜教程即可 &emsp;这里我将列出学生team一个springboot项目合作时使用的.gitignore。对官方生成的git做了少许改动 12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364HELP.mdtarget/!.mvn/wrapper/maven-wrapper.jar!**/src/main/**!**/src/test/**###团队合作config######由于团队合作时每个成员数据库账户密码不一样,所以每个成员都有个个人配置信息,在通用配置里面引入###person.properties###springboot######此处表示忽略测试文件夹###/src/test/java### STS ###.apt_generated.classpath.factorypath.project.settings.springBeans.sts4-cache### IntelliJ IDEA ###.idea*.iws*.iml*.ipr### NetBeans ###/nbproject/private//nbbuild//dist//nbdist//.nb-gradle/build/### VS Code ###.vscode/# Log file*.log# Compiled class file*.class# BlueJ files*.ctxt# Mobile Tools for Java (J2ME).mtj.tmp/# Package Files #*.jar*.war*.nar*.ear*.zip*.tar.gz*.rarhs_err_pid* 常见问题配置了.gitignore仍然无法忽略 &emsp;解决方式:git rm –cached filename&emsp;&emsp;删除该filename文件的本地缓存,然后再进行add和commit等操作,等push到远端后,以后再就不会被追踪&emsp;原因:这是由于在配置.gitignore之前该文件就已经被git追踪造成的,]]></content>
@@ -106,6 +143,18 @@
       </categories>
       <tags>
         <tag>git</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[git使用笔记]]></title>
+    <url>%2F2019%2F06%2F21%2Fgit%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0%2F</url>
+    <content type="text"><![CDATA[详细介绍git使用和配置(不包括安装) 什么是git? 首先我用通俗语言解释下,git是一种版本控制工具,你既可以在本地进行版本控制,也可以与搭建好git服务器的远端进行同步 如何使用? windows的可以官方下载安装包,linux可以命令行下载(对于window来说可能需配置环境变量,可有可无) 配置全局信息 随便找个地方右键打开git bash ps:这里配置的昵称和邮箱可以随便写,作用体现在,假如你提交了git,那么在git记录中会显示提交者昵称和邮箱,即为下面输入的 输入git config –global user.name “你的昵称” 输入git config –global user.name “你的邮箱” 创建git仓库 随便找个地方新建文件夹进去打开git bash(此处建议选一个父文件夹作为git仓库目录) 输入git init 该命令的作用是在当前文件夹下生成git仓库所需文件(注意,这里git仓库通常指的是一个项目,而不是管理多个项目的仓库,而且生成的文件为.git是个隐藏文件夹) 使用git 当我们在文件夹下做了操作以后(添加修改删除文件),可以git add . .代表暂存全部文件,当然也可以是其他写法或部分文件 此时我们已经add成功,接下来git commit -m”此次提交的注释” 此时,本地的使用基本就到这里(此外还有分支,冲突等各种概念,不在本篇讲) 关联github/码云(也可以是其他的或者自己搭建的git服务器) 首先我们在git bash中生成一对密钥,命令为:ssh-keygen -t rsa -C “你之前填写的邮箱” 其实一般码云或者github都要官方绑定密钥教程,基本都一样 生成密钥后我们把密钥配置到git服务器上 如果是github之类的你从个人setting可以找到配置密钥的地方,如果是个人git服务器则可能需要手动添加 刚才生成的密钥分为公钥和私钥,一般公钥以.pub结尾,这部分涉及到密码学,你只需要知道这是非对称密钥用来代替用户密码做身份验证就好了,具体内容请自行搜索 在window中默认保存在C://user/{你的用户名}/.ssh文件夹中 当我们配置到服务器公钥后,就可以正常的git clone 远程私有仓库等操作 可视化界面SourceTree SourceTree需要注册啥的,可能被墙了,自己解决 这里要提到一点,它仅仅是个可视化界面,仍然需要你安装git 团队里有人出现了SourceTree没有权限的问题,打开密钥设置界面(不同版本打开位置有所不同,大概都是在工具-选项这一块),找到之前我们生成的密钥(上文提到过位置),将私钥添加进去即可]]></content>
+      <categories>
+        <category>学习笔记</category>
+      </categories>
+      <tags>
+        <tag>git</tag>
+        <tag>base</tag>
       </tags>
   </entry>
   <entry>

@@ -92,18 +92,18 @@
 
 
 
-  <meta name="description" content="前言目前写这篇文章的不是单纯的为了学习Servlet,而是在之前我在用Servlet解析前台发送的各种格式http数据时,后台出现了getParameter获取参数获取不到,而用流则可以接收到数据的情况此属于阶段性记录,后面我会回来详细修改 介绍首先类的主要结构关系需要提及一下 1234567891011121314151617模块一interface ServletRequestinterfac">
+  <meta name="description" content="前言目前写这篇文章的不是单纯的为了学习Servlet,而是在之前我在用Servlet解析前台发送的各种格式http数据时,后台出现了getParameter获取参数获取不到,而用流则可以接收到数据的情况此属于阶段性记录,后面我会回来详细修改">
 <meta name="keywords" content="Servlet">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Servlet源码解析">
 <meta property="og:url" content="https://qq616023844.github.io/2019/06/28/Servlet源码解析/index.html">
 <meta property="og:site_name" content="柠檬不酸的博客">
-<meta property="og:description" content="前言目前写这篇文章的不是单纯的为了学习Servlet,而是在之前我在用Servlet解析前台发送的各种格式http数据时,后台出现了getParameter获取参数获取不到,而用流则可以接收到数据的情况此属于阶段性记录,后面我会回来详细修改 介绍首先类的主要结构关系需要提及一下 1234567891011121314151617模块一interface ServletRequestinterfac">
+<meta property="og:description" content="前言目前写这篇文章的不是单纯的为了学习Servlet,而是在之前我在用Servlet解析前台发送的各种格式http数据时,后台出现了getParameter获取参数获取不到,而用流则可以接收到数据的情况此属于阶段性记录,后面我会回来详细修改">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-06-30T17:11:50.366Z">
+<meta property="og:updated_time" content="2019-07-01T15:51:42.808Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Servlet源码解析">
-<meta name="twitter:description" content="前言目前写这篇文章的不是单纯的为了学习Servlet,而是在之前我在用Servlet解析前台发送的各种格式http数据时,后台出现了getParameter获取参数获取不到,而用流则可以接收到数据的情况此属于阶段性记录,后面我会回来详细修改 介绍首先类的主要结构关系需要提及一下 1234567891011121314151617模块一interface ServletRequestinterfac">
+<meta name="twitter:description" content="前言目前写这篇文章的不是单纯的为了学习Servlet,而是在之前我在用Servlet解析前台发送的各种格式http数据时,后台出现了getParameter获取参数获取不到,而用流则可以接收到数据的情况此属于阶段性记录,后面我会回来详细修改">
 
 
 
@@ -404,7 +404,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2019-07-01 01:11:50" itemprop="dateModified" datetime="2019-07-01T01:11:50+08:00">2019-07-01</time>
+                <time title="Modified: 2019-07-01 23:51:42" itemprop="dateModified" datetime="2019-07-01T23:51:42+08:00">2019-07-01</time>
               
             
           </span>
@@ -457,6 +457,7 @@
 
       
         <h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><p>目前写这篇文章的不是单纯的为了学习Servlet,而是在之前我在用Servlet解析前台发送的各种格式http数据时,后台出现了getParameter获取参数获取不到,而用流则可以接收到数据的情况<br>此属于阶段性记录,后面我会回来详细修改</p>
+<a id="more"></a>
 <h4 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h4><p>首先类的主要结构关系需要提及一下</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">模块一</span><br><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">ServletRequest</span></span></span><br><span class="line"><span class="class"></span></span><br><span class="line"><span class="class"><span class="title">interface</span> <span class="title">HttpServletRequest</span> <span class="keyword">extends</span> <span class="title">ServletRequest</span></span></span><br><span class="line"><span class="class"></span></span><br><span class="line"><span class="class"><span class="title">class</span> <span class="title">ServletRequestWrapper</span> <span class="keyword">implements</span> <span class="title">ServletRequest</span></span></span><br><span class="line"><span class="class"></span></span><br><span class="line"><span class="class"><span class="title">class</span> <span class="title">HttpServletRequestWrapper</span> <span class="keyword">extends</span> <span class="title">ServletRequestWrapper</span> <span class="keyword">implements</span> <span class="title">HttpServletRequest</span></span></span><br><span class="line"><span class="class"></span></span><br><span class="line"><span class="class">模块二</span></span><br><span class="line"><span class="class"><span class="title">interface</span> <span class="title">ServletConfig</span></span></span><br><span class="line"><span class="class"></span></span><br><span class="line"><span class="class"><span class="title">interface</span> <span class="title">Servlet</span></span></span><br><span class="line"><span class="class"></span></span><br><span class="line"><span class="class"><span class="title">abstract</span> <span class="title">class</span> <span class="title">GenericServlet</span> <span class="keyword">implements</span> <span class="title">Servlet</span>, <span class="title">ServletConfig</span>, <span class="title">java</span>.<span class="title">io</span>.<span class="title">Serializable</span></span></span><br><span class="line"><span class="class"></span></span><br><span class="line"><span class="class"><span class="title">abstract</span> <span class="title">class</span> <span class="title">HttpServlet</span> <span class="keyword">extends</span> <span class="title">GenericServlet</span></span></span><br></pre></td></tr></table></figure>
 
@@ -547,8 +548,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/06/28/springboot-shiro-redis-restful整合笔记/" rel="next" title="springboot-shiro-redis-restful整合笔记">
-                <i class="fa fa-chevron-left"></i> springboot-shiro-redis-restful整合笔记
+              <a href="/2019/06/28/关于http传输的一点记录/" rel="next" title="关于http传输的一点记录">
+                <i class="fa fa-chevron-left"></i> 关于http传输的一点记录
               </a>
             
           </div>
@@ -557,8 +558,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/06/28/关于http传输的一点记录/" rel="prev" title="关于http传输的一点记录">
-                关于http传输的一点记录 <i class="fa fa-chevron-right"></i>
+              <a href="/2019/07/01/Linux下解压命令/" rel="prev" title="Linux下解压命令">
+                Linux下解压命令 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -628,7 +629,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">11</span>
+                    <span class="site-state-item-count">15</span>
                     <span class="site-state-item-name">posts</span>
                   </a>
                 </div>
@@ -698,7 +699,19 @@
                     
                       
                     
-                    <span class="site-state-item-count">16</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">22</span>
                     <span class="site-state-item-name">tags</span>
                   </a>
                 </div>
