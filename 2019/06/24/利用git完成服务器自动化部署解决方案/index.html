@@ -92,18 +92,18 @@
 
 
 
-  <meta name="description" content="&amp;emsp;介绍:本篇主要讲述在团队合作时,如何利用脚本和git在前后端分离模式下,测试时的服务器自动化部署问题(只是个人想法和实践,仅作参考。下方代码已经经过测试,保证做好适配后可用)&amp;emsp;适用情况:团队合作,前后端分离,后端需根据前端需求持续变更代码并提供给前端测试&amp;emsp;需要的环境:linux服务器,git,maven,java">
+  <meta name="description" content="前言本篇主要讲述在团队合作时,如何利用脚本和git在前后端分离模式下,测试时的服务器自动化部署问题(只是个人想法和实践,仅作参考。下方代码已经经过测试,保证做好适配后可用) 适用情况:团队合作,前后端分离,后端需根据前端需求持续变更代码并提供给前端测试 需要的环境:linux服务器,git,maven,java">
 <meta name="keywords" content="git,shell,服务器部署">
 <meta property="og:type" content="article">
 <meta property="og:title" content="利用git完成服务器自动化部署解决方案">
 <meta property="og:url" content="https://qq616023844.github.io/2019/06/24/利用git完成服务器自动化部署解决方案/index.html">
 <meta property="og:site_name" content="柠檬不酸的博客">
-<meta property="og:description" content="&amp;emsp;介绍:本篇主要讲述在团队合作时,如何利用脚本和git在前后端分离模式下,测试时的服务器自动化部署问题(只是个人想法和实践,仅作参考。下方代码已经经过测试,保证做好适配后可用)&amp;emsp;适用情况:团队合作,前后端分离,后端需根据前端需求持续变更代码并提供给前端测试&amp;emsp;需要的环境:linux服务器,git,maven,java">
+<meta property="og:description" content="前言本篇主要讲述在团队合作时,如何利用脚本和git在前后端分离模式下,测试时的服务器自动化部署问题(只是个人想法和实践,仅作参考。下方代码已经经过测试,保证做好适配后可用) 适用情况:团队合作,前后端分离,后端需根据前端需求持续变更代码并提供给前端测试 需要的环境:linux服务器,git,maven,java">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-06-26T03:15:18.706Z">
+<meta property="og:updated_time" content="2019-07-01T15:54:25.425Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="利用git完成服务器自动化部署解决方案">
-<meta name="twitter:description" content="&amp;emsp;介绍:本篇主要讲述在团队合作时,如何利用脚本和git在前后端分离模式下,测试时的服务器自动化部署问题(只是个人想法和实践,仅作参考。下方代码已经经过测试,保证做好适配后可用)&amp;emsp;适用情况:团队合作,前后端分离,后端需根据前端需求持续变更代码并提供给前端测试&amp;emsp;需要的环境:linux服务器,git,maven,java">
+<meta name="twitter:description" content="前言本篇主要讲述在团队合作时,如何利用脚本和git在前后端分离模式下,测试时的服务器自动化部署问题(只是个人想法和实践,仅作参考。下方代码已经经过测试,保证做好适配后可用) 适用情况:团队合作,前后端分离,后端需根据前端需求持续变更代码并提供给前端测试 需要的环境:linux服务器,git,maven,java">
 
 
 
@@ -404,7 +404,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2019-06-26 11:15:18" itemprop="dateModified" datetime="2019-06-26T11:15:18+08:00">2019-06-26</time>
+                <time title="Modified: 2019-07-01 23:54:25" itemprop="dateModified" datetime="2019-07-01T23:54:25+08:00">2019-07-01</time>
               
             
           </span>
@@ -456,7 +456,10 @@
       
 
       
-        <h4 id="emsp-介绍-本篇主要讲述在团队合作时-如何利用脚本和git在前后端分离模式下-测试时的服务器自动化部署问题-只是个人想法和实践-仅作参考。下方代码已经经过测试-保证做好适配后可用"><a href="#emsp-介绍-本篇主要讲述在团队合作时-如何利用脚本和git在前后端分离模式下-测试时的服务器自动化部署问题-只是个人想法和实践-仅作参考。下方代码已经经过测试-保证做好适配后可用" class="headerlink" title="&emsp;介绍:本篇主要讲述在团队合作时,如何利用脚本和git在前后端分离模式下,测试时的服务器自动化部署问题(只是个人想法和实践,仅作参考。下方代码已经经过测试,保证做好适配后可用)"></a>&emsp;介绍:本篇主要讲述在团队合作时,如何利用脚本和git在前后端分离模式下,测试时的服务器自动化部署问题(只是个人想法和实践,仅作参考。下方代码已经经过测试,保证做好适配后可用)</h4><h4 id="emsp-适用情况-团队合作-前后端分离-后端需根据前端需求持续变更代码并提供给前端测试"><a href="#emsp-适用情况-团队合作-前后端分离-后端需根据前端需求持续变更代码并提供给前端测试" class="headerlink" title="&emsp;适用情况:团队合作,前后端分离,后端需根据前端需求持续变更代码并提供给前端测试"></a>&emsp;适用情况:团队合作,前后端分离,后端需根据前端需求持续变更代码并提供给前端测试</h4><h4 id="emsp-需要的环境-linux服务器-git-maven-java"><a href="#emsp-需要的环境-linux服务器-git-maven-java" class="headerlink" title="&emsp;需要的环境:linux服务器,git,maven,java"></a>&emsp;需要的环境:linux服务器,git,maven,java</h4><a id="more"></a>
+        <h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><p>本篇主要讲述在团队合作时,如何利用脚本和git在前后端分离模式下,测试时的服务器自动化部署问题(只是个人想法和实践,仅作参考。下方代码已经经过测试,保证做好适配后可用)</p>
+<p>适用情况:团队合作,前后端分离,后端需根据前端需求持续变更代码并提供给前端测试</p>
+<p>需要的环境:linux服务器,git,maven,java</p>
+<a id="more"></a>
 
 <h4 id="2019-6-25更新"><a href="#2019-6-25更新" class="headerlink" title="2019.6.25更新"></a>2019.6.25更新</h4><p>昨天忘记了说一个重要的问题,如果你是在window环境下写的shell脚本到linux环境下运行,由于两者系统换行符不一致,需要在linux中执行vim你的脚本名,进入脚本:set ff=unix,注意”:”这个符号需要带着,不明白的请去搜vim命令<br><strong>一定要赋予脚本可执行权限</strong>,赋权具体命令下文sh代码有提及<br>刚才看了些博客,有提到用hook触发,而不是自己去循环访问,思路待定</p>
 <hr>
@@ -608,7 +611,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">15</span>
+                    <span class="site-state-item-count">18</span>
                     <span class="site-state-item-name">posts</span>
                   </a>
                 </div>
@@ -754,7 +757,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#emsp-介绍-本篇主要讲述在团队合作时-如何利用脚本和git在前后端分离模式下-测试时的服务器自动化部署问题-只是个人想法和实践-仅作参考。下方代码已经经过测试-保证做好适配后可用"><span class="nav-number">1.</span> <span class="nav-text"> 介绍:本篇主要讲述在团队合作时,如何利用脚本和git在前后端分离模式下,测试时的服务器自动化部署问题(只是个人想法和实践,仅作参考。下方代码已经经过测试,保证做好适配后可用)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#emsp-适用情况-团队合作-前后端分离-后端需根据前端需求持续变更代码并提供给前端测试"><span class="nav-number">2.</span> <span class="nav-text"> 适用情况:团队合作,前后端分离,后端需根据前端需求持续变更代码并提供给前端测试</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#emsp-需要的环境-linux服务器-git-maven-java"><span class="nav-number">3.</span> <span class="nav-text"> 需要的环境:linux服务器,git,maven,java</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2019-6-25更新"><span class="nav-number">4.</span> <span class="nav-text">2019.6.25更新</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#原答案"><span class="nav-number">5.</span> <span class="nav-text">原答案</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#emsp-首先讲成果-上代码-我会在其中伴随大量讲解"><span class="nav-number">6.</span> <span class="nav-text"> 首先讲成果,上代码,我会在其中伴随大量讲解</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2019-6-25更新"><span class="nav-number">2.</span> <span class="nav-text">2019.6.25更新</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#原答案"><span class="nav-number">3.</span> <span class="nav-text">原答案</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#emsp-首先讲成果-上代码-我会在其中伴随大量讲解"><span class="nav-number">4.</span> <span class="nav-text"> 首先讲成果,上代码,我会在其中伴随大量讲解</span></a></li></ol></div>
             
 
           </div>
