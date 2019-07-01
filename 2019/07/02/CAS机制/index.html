@@ -93,14 +93,14 @@
 
 
   <meta name="description" content="前言这篇是从我以前csdn博客上搬运过来的,属于原创 正文一.什么是CAS机制CAS机制的全名叫做compare and swap让我们来看一行代码 1public final native boolean compareAndSwapLong(Object var1, long var2, long var4, long var6);  这行代码源于Unsafe类(待补充),参数var1和var">
-<meta name="keywords" content="base,java">
+<meta name="keywords" content="java,base">
 <meta property="og:type" content="article">
 <meta property="og:title" content="CAS机制">
 <meta property="og:url" content="https://qq616023844.github.io/2019/07/02/CAS机制/index.html">
 <meta property="og:site_name" content="柠檬不酸的博客">
 <meta property="og:description" content="前言这篇是从我以前csdn博客上搬运过来的,属于原创 正文一.什么是CAS机制CAS机制的全名叫做compare and swap让我们来看一行代码 1public final native boolean compareAndSwapLong(Object var1, long var2, long var4, long var6);  这行代码源于Unsafe类(待补充),参数var1和var">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-07-01T16:07:51.568Z">
+<meta property="og:updated_time" content="2019-07-01T16:10:24.011Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CAS机制">
 <meta name="twitter:description" content="前言这篇是从我以前csdn博客上搬运过来的,属于原创 正文一.什么是CAS机制CAS机制的全名叫做compare and swap让我们来看一行代码 1public final native boolean compareAndSwapLong(Object var1, long var2, long var4, long var6);  这行代码源于Unsafe类(待补充),参数var1和var">
@@ -387,7 +387,7 @@
                 
               
 
-              <time title="Created: 2019-07-02 00:02:00 / Modified: 00:07:51" itemprop="dateCreated datePublished" datetime="2019-07-02T00:02:00+08:00">2019-07-02</time>
+              <time title="Created: 2019-07-02 00:02:00 / Modified: 00:10:24" itemprop="dateCreated datePublished" datetime="2019-07-02T00:02:00+08:00">2019-07-02</time>
             
 
             
@@ -453,7 +453,7 @@
 <p>三.CAS机制存在哪些问题<br>1.ABA问题<br>先看一段代码,代码源于Unsafe类<br>①这一步的意义是得到内存中的现有值(参数可忽略)</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">long</span> <span class="title">getAndAddLong</span><span class="params">(Object var1, <span class="keyword">long</span> var2, <span class="keyword">long</span> var4)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">long</span> var6;</span><br><span class="line">        <span class="keyword">do</span> &#123;</span><br><span class="line">            var6 = <span class="keyword">this</span>.getLongVolatile(var1, var2);①</span><br><span class="line">        &#125; <span class="keyword">while</span>(!<span class="keyword">this</span>.compareAndSwapLong(var1, var2, var6, var6 + var4));</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> var6;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
 
-<p>ABA问题简述:<br>如代码所示,假设存在线程1,2。线程1运行了①之后等待,线程2开始运行,线程2将A改变为B,再将B改变为A,线程2结束,线程1继续运行,此时,线程1会认为A依旧是原来他读取到的A,期间并没有改变,并且将他按照正常流程改变为B。<br>当然,在正常情况下,变量加减方面这并不会造成什么影响,但是若将CAS用在堆栈或者链表上(网上搜索一下有很多这种ABA问题的例子),或由于业务错误,同时发出了两次修改金钱100为50的操作,但是此时又加入了一个修改金钱50为100的操作(参考自漫画：<a href="https://mp.weixin.qq.com/s?__biz=MzIxMjE5MTE1Nw==&mid=2653192736&idx=1&sn=24d4054b062e28db9e54c735aafe2407&chksm=8c99f0fabbee79ecfd9198aa89bc78084e9b7db056078982975d8910c12b5d3dd1d16c2509c3&mpshare=1&scene=23&srcid=020903SQqmtv0yiUHSI1DuGd#rd" target="_blank" rel="noopener">什么是CAS机制？（进阶篇）</a>),那么就会出现严重的问题<br>解决方案:<br>最常见的ABA问题的解决方案就是诸如java并发包中的AtomicStampedReference类,其内部实现类似于<a href>AtomicLong使用</a>。不同点是,其内部维护了一个内部类Pair,采用记录版本号的方式来避免ABA问题,不过每次在更改时都会new一个新的Pair来进行CAS,如果对性能有极高的要求,那么需要谨慎选择</p>
+<p>ABA问题简述:<br>如代码所示,假设存在线程1,2。线程1运行了①之后等待,线程2开始运行,线程2将A改变为B,再将B改变为A,线程2结束,线程1继续运行,此时,线程1会认为A依旧是原来他读取到的A,期间并没有改变,并且将他按照正常流程改变为B。<br>当然,在正常情况下,变量加减方面这并不会造成什么影响,但是若将CAS用在堆栈或者链表上(网上搜索一下有很多这种ABA问题的例子),或由于业务错误,同时发出了两次修改金钱100为50的操作,但是此时又加入了一个修改金钱50为100的操作(参考自漫画：<a href="https://mp.weixin.qq.com/s?__biz=MzIxMjE5MTE1Nw==&mid=2653192736&idx=1&sn=24d4054b062e28db9e54c735aafe2407&chksm=8c99f0fabbee79ecfd9198aa89bc78084e9b7db056078982975d8910c12b5d3dd1d16c2509c3&mpshare=1&scene=23&srcid=020903SQqmtv0yiUHSI1DuGd#rd" target="_blank" rel="noopener">什么是CAS机制？（进阶篇）</a>),那么就会出现严重的问题<br>解决方案:<br>最常见的ABA问题的解决方案就是诸如java并发包中的AtomicStampedReference类,其内部实现类似于<a href="/2019/07/02/AtomicLong使用/" title="AtomicLong使用">AtomicLong使用</a>。不同点是,其内部维护了一个内部类Pair,采用记录版本号的方式来避免ABA问题,不过每次在更改时都会new一个新的Pair来进行CAS,如果对性能有极高的要求,那么需要谨慎选择</p>
 <p>2.在极高并发情况下,CAS的失败率将增大,会导致严重的性能问题</p>
 
       
@@ -502,9 +502,9 @@
         
         <div class="post-tags">
           
-            <a href="/tags/base/" rel="tag"># base</a>
-          
             <a href="/tags/java/" rel="tag"># java</a>
+          
+            <a href="/tags/base/" rel="tag"># base</a>
           
         </div>
       
@@ -517,8 +517,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/07/01/分页查询/" rel="next" title="分页查询">
-                <i class="fa fa-chevron-left"></i> 分页查询
+              <a href="/2019/07/02/AtomicLong使用/" rel="next" title="AtomicLong使用">
+                <i class="fa fa-chevron-left"></i> AtomicLong使用
               </a>
             
           </div>
@@ -527,8 +527,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/07/02/AtomicLong使用/" rel="prev" title="AtomicLong使用">
-                AtomicLong使用 <i class="fa fa-chevron-right"></i>
+              <a href="/2019/07/02/i++不是原子性操作/" rel="prev" title="i++不是原子性操作">
+                i++不是原子性操作 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
