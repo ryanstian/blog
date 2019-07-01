@@ -15,7 +15,7 @@
   <entry>
     <title><![CDATA[AtomicLong使用]]></title>
     <url>%2F2019%2F07%2F02%2FAtomicLong%E4%BD%BF%E7%94%A8%2F</url>
-    <content type="text"><![CDATA[前言这篇是从我以前csdn博客上搬运过来的,属于原创 正文一.AtomicLong是做什么用的首先我们可以先看一下我的另一篇文章i++不是原子性操作此时,我们通常选择会是进行这样的操作 123456789101112131415161718192021public class CasStudy01 &#123; private static int count = 0; private synchronized static void add()&#123; count++; &#125; public static void main(String[] args) throws InterruptedException &#123; Runnable runnable = new Runnable() &#123; @Override public void run() &#123; add(); &#125; &#125;; for (int i = 0; i &lt; 10000; i++) &#123; new Thread(runnable).start(); &#125; Thread.sleep(1000); System.out.println(count); &#125;&#125; 我们将count++操作放在了一个带锁的方法里面,来保证其线程安全性。然而,我们知道,加锁解锁操作会造成性能的消耗,在并发量不算太高的情况下,我们可以考虑采用AtomicLong(无锁的方式,采用CAS机制,CAS机制)来保证线程安全性 二.AtomicLong的实现AtomicLong在源码中持有Unsafe类的实例,其大部分操作都是交付给Unsafe类来完成的(Unsafe中大多是本地方法,虽然我们可以通过反射来调用,但是官方强烈不建议我们这么做) AtomicLong里面持有一个long类型的valueOffset变量,这个变量表示的是其value值的内存偏移量(详见JVM内存模型),当我们调用incrementAndGet时,会交付Unsafe类来进行操作 123public final long incrementAndGet() &#123; return unsafe.getAndAddLong(this, valueOffset, 1L) + 1L;&#125; 我们传入本类的实例,value的偏移量,以及增加量 12345678public final long getAndAddLong(Object var1, long var2, long var4) &#123; long var6; do &#123; var6 = this.getLongVolatile(var1, var2); &#125; while(!this.compareAndSwapLong(var1, var2, var6, var6 + var4)); return var6;&#125; 在Unsafe中就会进行CAS操作,使得value增加1,这是线程安全的 三.AtomicLong的缺点当并发量极大的时候,由于CAS机制本身的原因,导致CAS失败率极高,从而拖慢性能。此时,我们可以考虑使用LongAdder(待补充)]]></content>
+    <content type="text"><![CDATA[前言这篇是从我以前csdn博客上搬运过来的,属于原创 正文一.AtomicLong是做什么用的首先我们可以先看一下我的另一篇文章/2019/07/02/i++不是原子性操作/此时,我们通常选择会是进行这样的操作 123456789101112131415161718192021public class CasStudy01 &#123; private static int count = 0; private synchronized static void add()&#123; count++; &#125; public static void main(String[] args) throws InterruptedException &#123; Runnable runnable = new Runnable() &#123; @Override public void run() &#123; add(); &#125; &#125;; for (int i = 0; i &lt; 10000; i++) &#123; new Thread(runnable).start(); &#125; Thread.sleep(1000); System.out.println(count); &#125;&#125; 我们将count++操作放在了一个带锁的方法里面,来保证其线程安全性。然而,我们知道,加锁解锁操作会造成性能的消耗,在并发量不算太高的情况下,我们可以考虑采用AtomicLong(无锁的方式,采用CAS机制,CAS机制)来保证线程安全性 二.AtomicLong的实现AtomicLong在源码中持有Unsafe类的实例,其大部分操作都是交付给Unsafe类来完成的(Unsafe中大多是本地方法,虽然我们可以通过反射来调用,但是官方强烈不建议我们这么做) AtomicLong里面持有一个long类型的valueOffset变量,这个变量表示的是其value值的内存偏移量(详见JVM内存模型),当我们调用incrementAndGet时,会交付Unsafe类来进行操作 123public final long incrementAndGet() &#123; return unsafe.getAndAddLong(this, valueOffset, 1L) + 1L;&#125; 我们传入本类的实例,value的偏移量,以及增加量 12345678public final long getAndAddLong(Object var1, long var2, long var4) &#123; long var6; do &#123; var6 = this.getLongVolatile(var1, var2); &#125; while(!this.compareAndSwapLong(var1, var2, var6, var6 + var4)); return var6;&#125; 在Unsafe中就会进行CAS操作,使得value增加1,这是线程安全的 三.AtomicLong的缺点当并发量极大的时候,由于CAS机制本身的原因,导致CAS失败率极高,从而拖慢性能。此时,我们可以考虑使用LongAdder(待补充)]]></content>
       <categories>
         <category>学习笔记</category>
       </categories>
@@ -59,18 +59,6 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[Linux下解压命令]]></title>
-    <url>%2F2019%2F07%2F01%2FLinux%E4%B8%8B%E8%A7%A3%E5%8E%8B%E5%91%BD%E4%BB%A4%2F</url>
-    <content type="text"><![CDATA[会随日常使用逐渐补全 tar.gz&emsp;解压:tar -zxvf 你的文件名.tar.gz&emsp;参数解释:&emsp;&emsp;z:被gzip压缩过,要用gzip解压&emsp;&emsp;x:解压&emsp;&emsp;v:显示所有过程&emsp;&emsp;f:指定文件名如果想指定解压目录的话就这样写tar -zxvf 你的文件名.tar.gz -C 你指定的目录]]></content>
-      <categories>
-        <category>学习笔记</category>
-      </categories>
-      <tags>
-        <tag>base</tag>
-        <tag>linux</tag>
-      </tags>
-  </entry>
-  <entry>
     <title><![CDATA[linux安装jdk(非openjdk)]]></title>
     <url>%2F2019%2F07%2F01%2Flinux%E5%AE%89%E8%A3%85jdk(%E9%9D%9Eopenjdk)%2F</url>
     <content type="text"><![CDATA[1.官网下载压缩包,这里我下载的是解压版不是rpm版本,现在可能需要你登陆才可以下载,自己去注册个账户吧,或者用其他方式得到压缩包oracle下载jdk8的网址 2.解压压缩包tar -zxvf 你压缩包的名字.tar.gz 3.安装vim,这是个文本编辑器,你可以把它理解为记事本这种东西,至少我的ubuntu18.04是不自带vim的你可以使用sudo apt install vim这条命令安装,也可以在命令行输入vim按照他的提示安装 3.修改配置文件,原理跟window一样,只要将路径添加到配置文件中,操作系统就可以检测到我们想要安装的东西vim /etc/profile(这里需要注意了,要用root权限进行,前面加sudo) 4.打开配置文件后,我们在尾部追加如下内容,vim的操作方式请自行搜索 123export JAVA_HOME=你的jdk目录,注意是根目录,不是bin目录export CLASSPATH=$JAVA_HOME/lib/export PATH=$JAVA_HOME/bin:$PATH 5.使操作系统重新加载配置文件,注意需要root权限source /etc/profile 6.输入java -version出现java版本信息即我们配置成功了]]></content>
@@ -82,6 +70,18 @@
         <tag>base</tag>
         <tag>linux</tag>
         <tag>jdk</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Linux下解压命令]]></title>
+    <url>%2F2019%2F07%2F01%2FLinux%E4%B8%8B%E8%A7%A3%E5%8E%8B%E5%91%BD%E4%BB%A4%2F</url>
+    <content type="text"><![CDATA[会随日常使用逐渐补全 tar.gz&emsp;解压:tar -zxvf 你的文件名.tar.gz&emsp;参数解释:&emsp;&emsp;z:被gzip压缩过,要用gzip解压&emsp;&emsp;x:解压&emsp;&emsp;v:显示所有过程&emsp;&emsp;f:指定文件名如果想指定解压目录的话就这样写tar -zxvf 你的文件名.tar.gz -C 你指定的目录]]></content>
+      <categories>
+        <category>学习笔记</category>
+      </categories>
+      <tags>
+        <tag>base</tag>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
@@ -171,15 +171,16 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[git使用笔记]]></title>
-    <url>%2F2019%2F06%2F21%2Fgit%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0%2F</url>
-    <content type="text"><![CDATA[详细介绍git使用和配置(不包括安装) 什么是git? 首先我用通俗语言解释下,git是一种版本控制工具,你既可以在本地进行版本控制,也可以与搭建好git服务器的远端进行同步 如何使用? windows的可以官方下载安装包,linux可以命令行下载(对于window来说可能需配置环境变量,可有可无) 配置全局信息 随便找个地方右键打开git bash ps:这里配置的昵称和邮箱可以随便写,作用体现在,假如你提交了git,那么在git记录中会显示提交者昵称和邮箱,即为下面输入的 输入git config –global user.name “你的昵称” 输入git config –global user.name “你的邮箱” 创建git仓库 随便找个地方新建文件夹进去打开git bash(此处建议选一个父文件夹作为git仓库目录) 输入git init 该命令的作用是在当前文件夹下生成git仓库所需文件(注意,这里git仓库通常指的是一个项目,而不是管理多个项目的仓库,而且生成的文件为.git是个隐藏文件夹) 使用git 当我们在文件夹下做了操作以后(添加修改删除文件),可以git add . .代表暂存全部文件,当然也可以是其他写法或部分文件 此时我们已经add成功,接下来git commit -m”此次提交的注释” 此时,本地的使用基本就到这里(此外还有分支,冲突等各种概念,不在本篇讲) 关联github/码云(也可以是其他的或者自己搭建的git服务器) 首先我们在git bash中生成一对密钥,命令为:ssh-keygen -t rsa -C “你之前填写的邮箱” 其实一般码云或者github都要官方绑定密钥教程,基本都一样 生成密钥后我们把密钥配置到git服务器上 如果是github之类的你从个人setting可以找到配置密钥的地方,如果是个人git服务器则可能需要手动添加 刚才生成的密钥分为公钥和私钥,一般公钥以.pub结尾,这部分涉及到密码学,你只需要知道这是非对称密钥用来代替用户密码做身份验证就好了,具体内容请自行搜索 在window中默认保存在C://user/{你的用户名}/.ssh文件夹中 当我们配置到服务器公钥后,就可以正常的git clone 远程私有仓库等操作 可视化界面SourceTree SourceTree需要注册啥的,可能被墙了,自己解决 这里要提到一点,它仅仅是个可视化界面,仍然需要你安装git 团队里有人出现了SourceTree没有权限的问题,打开密钥设置界面(不同版本打开位置有所不同,大概都是在工具-选项这一块),找到之前我们生成的密钥(上文提到过位置),将私钥添加进去即可]]></content>
+    <title><![CDATA[解决maven导入项目pom.xml报错unknown]]></title>
+    <url>%2F2019%2F06%2F21%2F%E8%A7%A3%E5%86%B3maven%E5%AF%BC%E5%85%A5%E9%A1%B9%E7%9B%AEpom-xml%E6%8A%A5%E9%94%99unknown%2F</url>
+    <content type="text"><![CDATA[2019.6.21 16:00更正虽然路径问题也是原因之一,但是并没有完全解决这次问题&emsp;&emsp;现象:重新git项目设置好路径以后,暂无报错现象,但是当pom中的jar包从maven仓库拉取完毕后,又出现了第一行报错的现象&emsp;&emsp;猜想:错误的根源可能是jar包版本问题,根据他人博客经验来看,往往是springboot版本过高,具体原因继续跟踪 原答案环境:eclipse,jdk8 情况:pom.xml文件内部没有错误,该项目在其他机器也可正常运行,在本机maven导入后提示unknown 解决:由于项目名和导入时的路径名不一致造成的&emsp;&emsp;例如项目名为test1,但是项目保存路径为e://githouse/code&emsp;&emsp;即test1与code名称不同导致找不到pom.xml&emsp;&emsp;ps:具体pom的路径方式暂未深究]]></content>
       <categories>
-        <category>学习笔记</category>
+        <category>BUG记录</category>
       </categories>
       <tags>
-        <tag>base</tag>
-        <tag>git</tag>
+        <tag>bug</tag>
+        <tag>pom</tag>
+        <tag>maven</tag>
       </tags>
   </entry>
   <entry>
@@ -194,16 +195,15 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[解决maven导入项目pom.xml报错unknown]]></title>
-    <url>%2F2019%2F06%2F21%2F%E8%A7%A3%E5%86%B3maven%E5%AF%BC%E5%85%A5%E9%A1%B9%E7%9B%AEpom-xml%E6%8A%A5%E9%94%99unknown%2F</url>
-    <content type="text"><![CDATA[2019.6.21 16:00更正虽然路径问题也是原因之一,但是并没有完全解决这次问题&emsp;&emsp;现象:重新git项目设置好路径以后,暂无报错现象,但是当pom中的jar包从maven仓库拉取完毕后,又出现了第一行报错的现象&emsp;&emsp;猜想:错误的根源可能是jar包版本问题,根据他人博客经验来看,往往是springboot版本过高,具体原因继续跟踪 原答案环境:eclipse,jdk8 情况:pom.xml文件内部没有错误,该项目在其他机器也可正常运行,在本机maven导入后提示unknown 解决:由于项目名和导入时的路径名不一致造成的&emsp;&emsp;例如项目名为test1,但是项目保存路径为e://githouse/code&emsp;&emsp;即test1与code名称不同导致找不到pom.xml&emsp;&emsp;ps:具体pom的路径方式暂未深究]]></content>
+    <title><![CDATA[git使用笔记]]></title>
+    <url>%2F2019%2F06%2F21%2Fgit%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0%2F</url>
+    <content type="text"><![CDATA[详细介绍git使用和配置(不包括安装) 什么是git? 首先我用通俗语言解释下,git是一种版本控制工具,你既可以在本地进行版本控制,也可以与搭建好git服务器的远端进行同步 如何使用? windows的可以官方下载安装包,linux可以命令行下载(对于window来说可能需配置环境变量,可有可无) 配置全局信息 随便找个地方右键打开git bash ps:这里配置的昵称和邮箱可以随便写,作用体现在,假如你提交了git,那么在git记录中会显示提交者昵称和邮箱,即为下面输入的 输入git config –global user.name “你的昵称” 输入git config –global user.name “你的邮箱” 创建git仓库 随便找个地方新建文件夹进去打开git bash(此处建议选一个父文件夹作为git仓库目录) 输入git init 该命令的作用是在当前文件夹下生成git仓库所需文件(注意,这里git仓库通常指的是一个项目,而不是管理多个项目的仓库,而且生成的文件为.git是个隐藏文件夹) 使用git 当我们在文件夹下做了操作以后(添加修改删除文件),可以git add . .代表暂存全部文件,当然也可以是其他写法或部分文件 此时我们已经add成功,接下来git commit -m”此次提交的注释” 此时,本地的使用基本就到这里(此外还有分支,冲突等各种概念,不在本篇讲) 关联github/码云(也可以是其他的或者自己搭建的git服务器) 首先我们在git bash中生成一对密钥,命令为:ssh-keygen -t rsa -C “你之前填写的邮箱” 其实一般码云或者github都要官方绑定密钥教程,基本都一样 生成密钥后我们把密钥配置到git服务器上 如果是github之类的你从个人setting可以找到配置密钥的地方,如果是个人git服务器则可能需要手动添加 刚才生成的密钥分为公钥和私钥,一般公钥以.pub结尾,这部分涉及到密码学,你只需要知道这是非对称密钥用来代替用户密码做身份验证就好了,具体内容请自行搜索 在window中默认保存在C://user/{你的用户名}/.ssh文件夹中 当我们配置到服务器公钥后,就可以正常的git clone 远程私有仓库等操作 可视化界面SourceTree SourceTree需要注册啥的,可能被墙了,自己解决 这里要提到一点,它仅仅是个可视化界面,仍然需要你安装git 团队里有人出现了SourceTree没有权限的问题,打开密钥设置界面(不同版本打开位置有所不同,大概都是在工具-选项这一块),找到之前我们生成的密钥(上文提到过位置),将私钥添加进去即可]]></content>
       <categories>
-        <category>BUG记录</category>
+        <category>学习笔记</category>
       </categories>
       <tags>
-        <tag>bug</tag>
-        <tag>pom</tag>
-        <tag>maven</tag>
+        <tag>base</tag>
+        <tag>git</tag>
       </tags>
   </entry>
   <entry>
