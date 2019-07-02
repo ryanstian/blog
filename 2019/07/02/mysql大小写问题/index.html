@@ -92,18 +92,18 @@
 
 
 
-  <meta name="description" content="问题描述直接上报错,简单来讲就是报错说表没找到 123456782019-07-02 12:26:48.782  WARN 16022 --- [nio-8080-exec-2] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Error: 1146, SQLState: 42S022019-07-02 12:26:48.782 ERROR 16022">
+  <meta name="description" content="问题描述直接上报错,简单来讲就是报错说表没找到">
 <meta name="keywords" content="base,mysql">
 <meta property="og:type" content="article">
 <meta property="og:title" content="mysql大小写问题">
 <meta property="og:url" content="https://qq616023844.github.io/2019/07/02/mysql大小写问题/index.html">
 <meta property="og:site_name" content="柠檬不酸的博客">
-<meta property="og:description" content="问题描述直接上报错,简单来讲就是报错说表没找到 123456782019-07-02 12:26:48.782  WARN 16022 --- [nio-8080-exec-2] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Error: 1146, SQLState: 42S022019-07-02 12:26:48.782 ERROR 16022">
+<meta property="og:description" content="问题描述直接上报错,简单来讲就是报错说表没找到">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-07-02T04:39:20.557Z">
+<meta property="og:updated_time" content="2019-07-02T07:41:16.451Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="mysql大小写问题">
-<meta name="twitter:description" content="问题描述直接上报错,简单来讲就是报错说表没找到 123456782019-07-02 12:26:48.782  WARN 16022 --- [nio-8080-exec-2] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Error: 1146, SQLState: 42S022019-07-02 12:26:48.782 ERROR 16022">
+<meta name="twitter:description" content="问题描述直接上报错,简单来讲就是报错说表没找到">
 
 
 
@@ -387,7 +387,7 @@
                 
               
 
-              <time title="Created: 2019-07-02 12:31:00 / Modified: 12:39:20" itemprop="dateCreated datePublished" datetime="2019-07-02T12:31:00+08:00">2019-07-02</time>
+              <time title="Created: 2019-07-02 12:31:00 / Modified: 15:41:16" itemprop="dateCreated datePublished" datetime="2019-07-02T12:31:00+08:00">2019-07-02</time>
             
 
             
@@ -445,6 +445,7 @@
 
       
         <h4 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h4><p>直接上报错,简单来讲就是报错说表没找到</p>
+<a id="more"></a>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">2019-07-02 12:26:48.782  WARN 16022 --- [nio-8080-exec-2] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Error: 1146, SQLState: 42S02</span><br><span class="line">2019-07-02 12:26:48.782 ERROR 16022 --- [nio-8080-exec-2] o.h.engine.jdbc.spi.SqlExceptionHelper   : Table &apos;summertrain.Market_good&apos; doesn&apos;t exist</span><br><span class="line">org.springframework.dao.InvalidDataAccessResourceUsageException: could not execute statement; SQL [n/a]; nested exception is org.hibernate.exception.SQLGrammarException: could not execute statement</span><br><span class="line">        ...</span><br><span class="line">Caused by: org.hibernate.exception.SQLGrammarException: could not execute statement</span><br><span class="line">        ... 74 more</span><br><span class="line">Caused by: java.sql.SQLSyntaxErrorException: Table &apos;summertrain.Market_good&apos; doesn&apos;t exist</span><br><span class="line">        ... 92 more</span><br></pre></td></tr></table></figure>
 
 <h4 id="发生情况"><a href="#发生情况" class="headerlink" title="发生情况"></a>发生情况</h4><p>由于团队成员都会先从本地进行调试,本地调试成功就会推送到远程服务器让其自动部署<br>本次情况发生时,成员本地调试通过,远程确报错如上内容</p>
