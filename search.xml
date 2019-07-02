@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title><![CDATA[i++不是原子性操作]]></title>
-    <url>%2F2019%2F07%2F02%2Fi%2B%2B%E4%B8%8D%E6%98%AF%E5%8E%9F%E5%AD%90%E6%80%A7%E6%93%8D%E4%BD%9C%2F</url>
-    <content type="text"><![CDATA[前言这篇是从我以前csdn博客上搬运过来的,属于原创 正文1234567891011121314151617public class CasStudy01 &#123; private static int count = 0; public static void main(String[] args) &#123; Runnable runnable = new Runnable() &#123; @Override public void run() &#123; count++; &#125; &#125;; for (int i = 0; i &lt; 10000; i++) &#123; new Thread(runnable).start(); &#125; Thread.sleep(1000);//为了等子线程全部运行结束 System.out.println(count); &#125;&#125; 输出:9945 Process finished with exit code 0 刚才的代码,照我们的设想,他应该是输出10000,然而每次我们run这段demo,输出结果各不相同这是因为count++这一行代码并不是原子操作,这一行代码实际在运行时,被分为取值,修改,存储三步操作,所以1,2两个线程同时取出值a,并且自增1修改为a+1,再存储的话,两次自增实际上只自增了1]]></content>
+    <title><![CDATA[mysql大小写问题]]></title>
+    <url>%2F2019%2F07%2F02%2Fmysql%E5%A4%A7%E5%B0%8F%E5%86%99%E9%97%AE%E9%A2%98%2F</url>
+    <content type="text"><![CDATA[问题描述直接上报错,简单来讲就是报错说表没找到 123456782019-07-02 12:26:48.782 WARN 16022 --- [nio-8080-exec-2] o.h.engine.jdbc.spi.SqlExceptionHelper : SQL Error: 1146, SQLState: 42S022019-07-02 12:26:48.782 ERROR 16022 --- [nio-8080-exec-2] o.h.engine.jdbc.spi.SqlExceptionHelper : Table &apos;summertrain.Market_good&apos; doesn&apos;t existorg.springframework.dao.InvalidDataAccessResourceUsageException: could not execute statement; SQL [n/a]; nested exception is org.hibernate.exception.SQLGrammarException: could not execute statement ...Caused by: org.hibernate.exception.SQLGrammarException: could not execute statement ... 74 moreCaused by: java.sql.SQLSyntaxErrorException: Table &apos;summertrain.Market_good&apos; doesn&apos;t exist ... 92 more 发生情况由于团队成员都会先从本地进行调试,本地调试成功就会推送到远程服务器让其自动部署本次情况发生时,成员本地调试通过,远程确报错如上内容 原因分析这是由于大小写问题引起的,写这个错误的成员,其本地数据库大小写不敏感,而我们远程服务器使用的mysql大小写敏感,从而summertrain.Market_good,M大写导致出现异常 在我更改其所有大写M为小写m后,推送到服务器,测试了可以正常使用]]></content>
       <categories>
-        <category>学习笔记</category>
+        <category>BUG记录</category>
       </categories>
       <tags>
-        <tag>java</tag>
         <tag>base</tag>
+        <tag>mysql</tag>
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[AtomicLong使用]]></title>
-    <url>%2F2019%2F07%2F02%2FAtomicLong%E4%BD%BF%E7%94%A8%2F</url>
-    <content type="text"><![CDATA[前言这篇是从我以前csdn博客上搬运过来的,属于原创 正文一.AtomicLong是做什么用的首先我们可以先看一下我的另一篇文章i++不是原子性操作 此时,我们通常选择会是进行这样的操作 123456789101112131415161718192021public class CasStudy01 &#123; private static int count = 0; private synchronized static void add()&#123; count++; &#125; public static void main(String[] args) throws InterruptedException &#123; Runnable runnable = new Runnable() &#123; @Override public void run() &#123; add(); &#125; &#125;; for (int i = 0; i &lt; 10000; i++) &#123; new Thread(runnable).start(); &#125; Thread.sleep(1000); System.out.println(count); &#125;&#125; 我们将count++操作放在了一个带锁的方法里面,来保证其线程安全性。然而,我们知道,加锁解锁操作会造成性能的消耗,在并发量不算太高的情况下,我们可以考虑采用AtomicLong(无锁的方式,采用/2019/07/02/CAS机制/)来保证线程安全性 二.AtomicLong的实现AtomicLong在源码中持有Unsafe类的实例,其大部分操作都是交付给Unsafe类来完成的(Unsafe中大多是本地方法,虽然我们可以通过反射来调用,但是官方强烈不建议我们这么做) AtomicLong里面持有一个long类型的valueOffset变量,这个变量表示的是其value值的内存偏移量(详见JVM内存模型),当我们调用incrementAndGet时,会交付Unsafe类来进行操作 123public final long incrementAndGet() &#123; return unsafe.getAndAddLong(this, valueOffset, 1L) + 1L;&#125; 我们传入本类的实例,value的偏移量,以及增加量 12345678public final long getAndAddLong(Object var1, long var2, long var4) &#123; long var6; do &#123; var6 = this.getLongVolatile(var1, var2); &#125; while(!this.compareAndSwapLong(var1, var2, var6, var6 + var4)); return var6;&#125; 在Unsafe中就会进行CAS操作,使得value增加1,这是线程安全的 三.AtomicLong的缺点当并发量极大的时候,由于CAS机制本身的原因,导致CAS失败率极高,从而拖慢性能。此时,我们可以考虑使用LongAdder(待补充)]]></content>
+    <title><![CDATA[i++不是原子性操作]]></title>
+    <url>%2F2019%2F07%2F02%2Fi%2B%2B%E4%B8%8D%E6%98%AF%E5%8E%9F%E5%AD%90%E6%80%A7%E6%93%8D%E4%BD%9C%2F</url>
+    <content type="text"><![CDATA[前言这篇是从我以前csdn博客上搬运过来的,属于原创 正文 1234567891011121314151617public class CasStudy01 &#123; private static int count = 0; public static void main(String[] args) &#123; Runnable runnable = new Runnable() &#123; @Override public void run() &#123; count++; &#125; &#125;; for (int i = 0; i &lt; 10000; i++) &#123; new Thread(runnable).start(); &#125; Thread.sleep(1000);//为了等子线程全部运行结束 System.out.println(count); &#125;&#125; 输出:9945 Process finished with exit code 0 刚才的代码,照我们的设想,他应该是输出10000,然而每次我们run这段demo,输出结果各不相同这是因为count++这一行代码并不是原子操作,这一行代码实际在运行时,被分为取值,修改,存储三步操作,所以1,2两个线程同时取出值a,并且自增1修改为a+1,再存储的话,两次自增实际上只自增了1]]></content>
       <categories>
         <category>学习笔记</category>
       </categories>
@@ -28,6 +28,18 @@
     <title><![CDATA[CAS机制]]></title>
     <url>%2F2019%2F07%2F02%2FCAS%E6%9C%BA%E5%88%B6%2F</url>
     <content type="text"><![CDATA[前言这篇是从我以前csdn博客上搬运过来的,属于原创 正文一.什么是CAS机制CAS机制的全名叫做compare and swap让我们来看一行代码 1public final native boolean compareAndSwapLong(Object var1, long var2, long var4, long var6); 这行代码源于Unsafe类(待补充),参数var1和var2我们先不考虑,var4表示旧值,var6表示新值,这行代码的作用是,如果var4的值等于内存中的现有值,那么将内存中的值替换为var6同时返回true,否则返回false。这就是CAS机制,同时也是其在Java中的体现 二.为什么要使用CAS/有哪些好处一般情况下,当我们并发访问同一个int变量时,我们往往需要加锁操作,但每次加锁会造成大量的开销,影响性能,所以就有了CAS机制,可以让我们在不加锁的情况下做到线程安全 三.CAS机制存在哪些问题1.ABA问题先看一段代码,代码源于Unsafe类①这一步的意义是得到内存中的现有值(参数可忽略) 12345678public final long getAndAddLong(Object var1, long var2, long var4) &#123; long var6; do &#123; var6 = this.getLongVolatile(var1, var2);① &#125; while(!this.compareAndSwapLong(var1, var2, var6, var6 + var4)); return var6; &#125; ABA问题简述:如代码所示,假设存在线程1,2。线程1运行了①之后等待,线程2开始运行,线程2将A改变为B,再将B改变为A,线程2结束,线程1继续运行,此时,线程1会认为A依旧是原来他读取到的A,期间并没有改变,并且将他按照正常流程改变为B。当然,在正常情况下,变量加减方面这并不会造成什么影响,但是若将CAS用在堆栈或者链表上(网上搜索一下有很多这种ABA问题的例子),或由于业务错误,同时发出了两次修改金钱100为50的操作,但是此时又加入了一个修改金钱50为100的操作(参考自漫画：什么是CAS机制？（进阶篇）),那么就会出现严重的问题解决方案:最常见的ABA问题的解决方案就是诸如java并发包中的AtomicStampedReference类,其内部实现类似于AtomicLong使用。不同点是,其内部维护了一个内部类Pair,采用记录版本号的方式来避免ABA问题,不过每次在更改时都会new一个新的Pair来进行CAS,如果对性能有极高的要求,那么需要谨慎选择 2.在极高并发情况下,CAS的失败率将增大,会导致严重的性能问题]]></content>
+      <categories>
+        <category>学习笔记</category>
+      </categories>
+      <tags>
+        <tag>java</tag>
+        <tag>base</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[AtomicLong使用]]></title>
+    <url>%2F2019%2F07%2F02%2FAtomicLong%E4%BD%BF%E7%94%A8%2F</url>
+    <content type="text"><![CDATA[前言这篇是从我以前csdn博客上搬运过来的,属于原创 正文一.AtomicLong是做什么用的首先我们可以先看一下我的另一篇文章i++不是原子性操作 此时,我们通常选择会是进行这样的操作 123456789101112131415161718192021public class CasStudy01 &#123; private static int count = 0; private synchronized static void add()&#123; count++; &#125; public static void main(String[] args) throws InterruptedException &#123; Runnable runnable = new Runnable() &#123; @Override public void run() &#123; add(); &#125; &#125;; for (int i = 0; i &lt; 10000; i++) &#123; new Thread(runnable).start(); &#125; Thread.sleep(1000); System.out.println(count); &#125;&#125; 我们将count++操作放在了一个带锁的方法里面,来保证其线程安全性。然而,我们知道,加锁解锁操作会造成性能的消耗,在并发量不算太高的情况下,我们可以考虑采用AtomicLong(无锁的方式,采用/2019/07/02/CAS机制/)来保证线程安全性 二.AtomicLong的实现AtomicLong在源码中持有Unsafe类的实例,其大部分操作都是交付给Unsafe类来完成的(Unsafe中大多是本地方法,虽然我们可以通过反射来调用,但是官方强烈不建议我们这么做) AtomicLong里面持有一个long类型的valueOffset变量,这个变量表示的是其value值的内存偏移量(详见JVM内存模型),当我们调用incrementAndGet时,会交付Unsafe类来进行操作 123public final long incrementAndGet() &#123; return unsafe.getAndAddLong(this, valueOffset, 1L) + 1L;&#125; 我们传入本类的实例,value的偏移量,以及增加量 12345678public final long getAndAddLong(Object var1, long var2, long var4) &#123; long var6; do &#123; var6 = this.getLongVolatile(var1, var2); &#125; while(!this.compareAndSwapLong(var1, var2, var6, var6 + var4)); return var6;&#125; 在Unsafe中就会进行CAS操作,使得value增加1,这是线程安全的 三.AtomicLong的缺点当并发量极大的时候,由于CAS机制本身的原因,导致CAS失败率极高,从而拖慢性能。此时,我们可以考虑使用LongAdder(待补充)]]></content>
       <categories>
         <category>学习笔记</category>
       </categories>
@@ -59,18 +71,6 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[Linux下解压命令]]></title>
-    <url>%2F2019%2F07%2F01%2FLinux%E4%B8%8B%E8%A7%A3%E5%8E%8B%E5%91%BD%E4%BB%A4%2F</url>
-    <content type="text"><![CDATA[会随日常使用逐渐补全 tar.gz&emsp;解压:tar -zxvf 你的文件名.tar.gz&emsp;参数解释:&emsp;&emsp;z:被gzip压缩过,要用gzip解压&emsp;&emsp;x:解压&emsp;&emsp;v:显示所有过程&emsp;&emsp;f:指定文件名如果想指定解压目录的话就这样写tar -zxvf 你的文件名.tar.gz -C 你指定的目录]]></content>
-      <categories>
-        <category>学习笔记</category>
-      </categories>
-      <tags>
-        <tag>base</tag>
-        <tag>linux</tag>
-      </tags>
-  </entry>
-  <entry>
     <title><![CDATA[linux安装jdk(非openjdk)]]></title>
     <url>%2F2019%2F07%2F01%2Flinux%E5%AE%89%E8%A3%85jdk(%E9%9D%9Eopenjdk)%2F</url>
     <content type="text"><![CDATA[1.官网下载压缩包,这里我下载的是解压版不是rpm版本,现在可能需要你登陆才可以下载,自己去注册个账户吧,或者用其他方式得到压缩包oracle下载jdk8的网址 2.解压压缩包tar -zxvf 你压缩包的名字.tar.gz 3.安装vim,这是个文本编辑器,你可以把它理解为记事本这种东西,至少我的ubuntu18.04是不自带vim的你可以使用sudo apt install vim这条命令安装,也可以在命令行输入vim按照他的提示安装 3.修改配置文件,原理跟window一样,只要将路径添加到配置文件中,操作系统就可以检测到我们想要安装的东西vim /etc/profile(这里需要注意了,要用root权限进行,前面加sudo) 4.打开配置文件后,我们在尾部追加如下内容,vim的操作方式请自行搜索 123export JAVA_HOME=你的jdk目录,注意是根目录,不是bin目录export CLASSPATH=$JAVA_HOME/lib/export PATH=$JAVA_HOME/bin:$PATH 5.使操作系统重新加载配置文件,注意需要root权限source /etc/profile 6.输入java -version出现java版本信息即我们配置成功了]]></content>
@@ -82,6 +82,18 @@
         <tag>base</tag>
         <tag>linux</tag>
         <tag>jdk</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Linux下命令]]></title>
+    <url>%2F2019%2F07%2F01%2FLinux%E4%B8%8B%E5%91%BD%E4%BB%A4%2F</url>
+    <content type="text"><![CDATA[会随日常使用逐渐补全 查看log日志tail -n 20 -f /home/log/summertrain-2019-07-02-11-12-23.log-n 20指的显示20行内容-f 监控文件,这个会实时显示新增内容 压缩/解压tar.gz&emsp;解压:tar -zxvf 你的文件名.tar.gz&emsp;参数解释:&emsp;&emsp;z:被gzip压缩过,要用gzip解压&emsp;&emsp;x:解压&emsp;&emsp;v:显示所有过程&emsp;&emsp;f:指定文件名如果想指定解压目录的话就这样写tar -zxvf 你的文件名.tar.gz -C 你指定的目录]]></content>
+      <categories>
+        <category>学习笔记</category>
+      </categories>
+      <tags>
+        <tag>base</tag>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
