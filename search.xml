@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[VM options And Program arguments]]></title>
+    <url>%2F2019%2F07%2F03%2FVM%20options%20And%20Program%20arguments%2F</url>
+    <content type="text"><![CDATA[介绍下虚拟机参数和main函数参数区别 在IDEA中,VM options选项设置的是要传递给JVM虚拟机的参数,例如-X,-XX设置堆大小等,还有一种-D则是设置JVM虚拟机系统变量,-D设置的遍历是可以覆盖 虚拟机本身系统变量的,优先级很高在代码中System.getProperty(“你的key”);便可以获取-D设置的key:value参数 而Program arguments则是main函数运行时传入的args[]]]></content>
+      <categories>
+        <category>学习笔记</category>
+      </categories>
+      <tags>
+        <tag>jvm</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[mysql大小写问题]]></title>
     <url>%2F2019%2F07%2F02%2Fmysql%E5%A4%A7%E5%B0%8F%E5%86%99%E9%97%AE%E9%A2%98%2F</url>
     <content type="text"><![CDATA[问题描述直接上报错,简单来讲就是报错说表没找到 123456782019-07-02 12:26:48.782 WARN 16022 --- [nio-8080-exec-2] o.h.engine.jdbc.spi.SqlExceptionHelper : SQL Error: 1146, SQLState: 42S022019-07-02 12:26:48.782 ERROR 16022 --- [nio-8080-exec-2] o.h.engine.jdbc.spi.SqlExceptionHelper : Table &apos;summertrain.Market_good&apos; doesn&apos;t existorg.springframework.dao.InvalidDataAccessResourceUsageException: could not execute statement; SQL [n/a]; nested exception is org.hibernate.exception.SQLGrammarException: could not execute statement ...Caused by: org.hibernate.exception.SQLGrammarException: could not execute statement ... 74 moreCaused by: java.sql.SQLSyntaxErrorException: Table &apos;summertrain.Market_good&apos; doesn&apos;t exist ... 92 more 发生情况由于团队成员都会先从本地进行调试,本地调试成功就会推送到远程服务器让其自动部署本次情况发生时,成员本地调试通过,远程确报错如上内容 原因分析这是由于大小写问题引起的,写这个错误的成员,其本地数据库大小写不敏感,而我们远程服务器使用的mysql大小写敏感,从而summertrain.Market_good,M大写导致出现异常 在我更改其所有大写M为小写m后,推送到服务器,测试了可以正常使用]]></content>
@@ -20,8 +31,8 @@
         <category>学习笔记</category>
       </categories>
       <tags>
-        <tag>base</tag>
         <tag>java</tag>
+        <tag>base</tag>
       </tags>
   </entry>
   <entry>
@@ -32,8 +43,8 @@
         <category>学习笔记</category>
       </categories>
       <tags>
-        <tag>base</tag>
         <tag>java</tag>
+        <tag>base</tag>
       </tags>
   </entry>
   <entry>
@@ -44,8 +55,8 @@
         <category>学习笔记</category>
       </categories>
       <tags>
-        <tag>base</tag>
         <tag>java</tag>
+        <tag>base</tag>
       </tags>
   </entry>
   <entry>
@@ -78,9 +89,9 @@
         <category>学习笔记</category>
       </categories>
       <tags>
-        <tag>linux</tag>
-        <tag>base</tag>
         <tag>java</tag>
+        <tag>base</tag>
+        <tag>linux</tag>
         <tag>jdk</tag>
       </tags>
   </entry>
@@ -92,8 +103,8 @@
         <category>学习笔记</category>
       </categories>
       <tags>
-        <tag>linux</tag>
         <tag>base</tag>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
@@ -105,21 +116,6 @@
       </categories>
       <tags>
         <tag>Servlet</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[springboot-shiro-redis-restful整合笔记]]></title>
-    <url>%2F2019%2F06%2F28%2Fspringboot-shiro-redis-restful%E6%95%B4%E5%90%88%E7%AC%94%E8%AE%B0%2F</url>
-    <content type="text"><![CDATA[代码目前还未整理,比较散乱,后续会整理,本篇内容后续也会重新进行整理,估计会过很久与shiro源码学习笔记和redis源码学习笔记一起发出来,先临时打个草稿github地址 介绍各个类的作用基础结构为:Web层:Control,ControlService层:MyServicedao层:MyDao 与redis有关的RedisConfig:配置类 与shiro有关的ShiroConfig:配置类MyShiroRealm:用来进行登陆验证和权限赋权MyCredentialsMatcher:代替了原本shiro提供的,用来对账户密码进行匹配MyFilter:代替了原本的拦截器,因为网上的教程都是MVC框架,返回的是error页面,这里后续将尝试使其返回自定义字符串(还未做)]]></content>
-      <categories>
-        <category>学习笔记</category>
-      </categories>
-      <tags>
-        <tag>unfinished</tag>
-        <tag>shiro</tag>
-        <tag>redis</tag>
-        <tag>restful</tag>
-        <tag>springboot</tag>
       </tags>
   </entry>
   <entry>
@@ -171,17 +167,6 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[git忽略规则.gitignore]]></title>
-    <url>%2F2019%2F06%2F21%2Fgit%E5%BF%BD%E7%95%A5%E8%A7%84%E5%88%99.gitignore%2F</url>
-    <content type="text"><![CDATA[提供.gitignore模板作用&emsp;当我们同步到远程仓库时,配置了.gitignore可以令git按照我们定义的规则,选择性的跟踪本地仓库的文件 使用&emsp;具体的语法规范这里不做描述,搜索引擎搜教程即可 &emsp;这里我将列出学生team一个springboot项目合作时使用的.gitignore。对官方生成的git做了少许改动 12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364HELP.mdtarget/!.mvn/wrapper/maven-wrapper.jar!**/src/main/**!**/src/test/**###团队合作config######由于团队合作时每个成员数据库账户密码不一样,所以每个成员都有个个人配置信息,在通用配置里面引入###person.properties###springboot######此处表示忽略测试文件夹###/src/test/java### STS ###.apt_generated.classpath.factorypath.project.settings.springBeans.sts4-cache### IntelliJ IDEA ###.idea*.iws*.iml*.ipr### NetBeans ###/nbproject/private//nbbuild//dist//nbdist//.nb-gradle/build/### VS Code ###.vscode/# Log file*.log# Compiled class file*.class# BlueJ files*.ctxt# Mobile Tools for Java (J2ME).mtj.tmp/# Package Files #*.jar*.war*.nar*.ear*.zip*.tar.gz*.rarhs_err_pid* 常见问题配置了.gitignore仍然无法忽略 &emsp;解决方式:git rm –cached filename&emsp;&emsp;删除该filename文件的本地缓存,然后再进行add和commit等操作,等push到远端后,以后再就不会被追踪&emsp;原因:这是由于在配置.gitignore之前该文件就已经被git追踪造成的,]]></content>
-      <categories>
-        <category>学习笔记</category>
-      </categories>
-      <tags>
-        <tag>git</tag>
-      </tags>
-  </entry>
-  <entry>
     <title><![CDATA[git使用笔记]]></title>
     <url>%2F2019%2F06%2F21%2Fgit%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0%2F</url>
     <content type="text"><![CDATA[详细介绍git使用和配置(不包括安装) 什么是git? 首先我用通俗语言解释下,git是一种版本控制工具,你既可以在本地进行版本控制,也可以与搭建好git服务器的远端进行同步 如何使用? windows的可以官方下载安装包,linux可以命令行下载(对于window来说可能需配置环境变量,可有可无) 配置全局信息 随便找个地方右键打开git bash ps:这里配置的昵称和邮箱可以随便写,作用体现在,假如你提交了git,那么在git记录中会显示提交者昵称和邮箱,即为下面输入的 输入git config –global user.name “你的昵称” 输入git config –global user.name “你的邮箱” 创建git仓库 随便找个地方新建文件夹进去打开git bash(此处建议选一个父文件夹作为git仓库目录) 输入git init 该命令的作用是在当前文件夹下生成git仓库所需文件(注意,这里git仓库通常指的是一个项目,而不是管理多个项目的仓库,而且生成的文件为.git是个隐藏文件夹) 使用git 当我们在文件夹下做了操作以后(添加修改删除文件),可以git add . .代表暂存全部文件,当然也可以是其他写法或部分文件 此时我们已经add成功,接下来git commit -m”此次提交的注释” 此时,本地的使用基本就到这里(此外还有分支,冲突等各种概念,不在本篇讲) 关联github/码云(也可以是其他的或者自己搭建的git服务器) 首先我们在git bash中生成一对密钥,命令为:ssh-keygen -t rsa -C “你之前填写的邮箱” 其实一般码云或者github都要官方绑定密钥教程,基本都一样 生成密钥后我们把密钥配置到git服务器上 如果是github之类的你从个人setting可以找到配置密钥的地方,如果是个人git服务器则可能需要手动添加 刚才生成的密钥分为公钥和私钥,一般公钥以.pub结尾,这部分涉及到密码学,你只需要知道这是非对称密钥用来代替用户密码做身份验证就好了,具体内容请自行搜索 在window中默认保存在C://user/{你的用户名}/.ssh文件夹中 当我们配置到服务器公钥后,就可以正常的git clone 远程私有仓库等操作 可视化界面SourceTree SourceTree需要注册啥的,可能被墙了,自己解决 这里要提到一点,它仅仅是个可视化界面,仍然需要你安装git 团队里有人出现了SourceTree没有权限的问题,打开密钥设置界面(不同版本打开位置有所不同,大概都是在工具-选项这一块),找到之前我们生成的密钥(上文提到过位置),将私钥添加进去即可]]></content>
@@ -190,6 +175,17 @@
       </categories>
       <tags>
         <tag>base</tag>
+        <tag>git</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[git忽略规则.gitignore]]></title>
+    <url>%2F2019%2F06%2F21%2Fgit%E5%BF%BD%E7%95%A5%E8%A7%84%E5%88%99.gitignore%2F</url>
+    <content type="text"><![CDATA[提供.gitignore模板作用&emsp;当我们同步到远程仓库时,配置了.gitignore可以令git按照我们定义的规则,选择性的跟踪本地仓库的文件 使用&emsp;具体的语法规范这里不做描述,搜索引擎搜教程即可 &emsp;这里我将列出学生team一个springboot项目合作时使用的.gitignore。对官方生成的git做了少许改动 12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364HELP.mdtarget/!.mvn/wrapper/maven-wrapper.jar!**/src/main/**!**/src/test/**###团队合作config######由于团队合作时每个成员数据库账户密码不一样,所以每个成员都有个个人配置信息,在通用配置里面引入###person.properties###springboot######此处表示忽略测试文件夹###/src/test/java### STS ###.apt_generated.classpath.factorypath.project.settings.springBeans.sts4-cache### IntelliJ IDEA ###.idea*.iws*.iml*.ipr### NetBeans ###/nbproject/private//nbbuild//dist//nbdist//.nb-gradle/build/### VS Code ###.vscode/# Log file*.log# Compiled class file*.class# BlueJ files*.ctxt# Mobile Tools for Java (J2ME).mtj.tmp/# Package Files #*.jar*.war*.nar*.ear*.zip*.tar.gz*.rarhs_err_pid* 常见问题配置了.gitignore仍然无法忽略 &emsp;解决方式:git rm –cached filename&emsp;&emsp;删除该filename文件的本地缓存,然后再进行add和commit等操作,等push到远端后,以后再就不会被追踪&emsp;原因:这是由于在配置.gitignore之前该文件就已经被git追踪造成的,]]></content>
+      <categories>
+        <category>学习笔记</category>
+      </categories>
+      <tags>
         <tag>git</tag>
       </tags>
   </entry>
