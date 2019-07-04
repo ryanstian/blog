@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[File相对路径绝对路径抽象路径]]></title>
+    <url>%2F2019%2F07%2F03%2FFile%E7%9B%B8%E5%AF%B9%E8%B7%AF%E5%BE%84%E7%BB%9D%E5%AF%B9%E8%B7%AF%E5%BE%84%E6%8A%BD%E8%B1%A1%E8%B7%AF%E5%BE%84%2F</url>
+    <content type="text"><![CDATA[123456789101112@Testpublic void File() throws IOException, InterruptedException &#123; File file = new File("catalina-home"); //相对路径 System.out.println(file.getPath()); //绝对路径 System.out.println(file.getAbsolutePath()); //抽象路径 System.out.println(file.getCanonicalPath()); //是否是真实路径 System.out.println(file.isFile());&#125; 输出 1234catalina-homeE:\git-house\Study\TestJava\catalina-homeE:\git-house\Study\TestJava\catalina-homefalse File不仅可以代表一个真实的文件,它也可以代表一个抽象的存在于内存中的文件]]></content>
+      <categories>
+        <category>学习笔记</category>
+      </categories>
+      <tags>
+        <tag>java</tag>
+        <tag>base</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[VM options And Program arguments]]></title>
     <url>%2F2019%2F07%2F03%2FVM%20options%20And%20Program%20arguments%2F</url>
     <content type="text"><![CDATA[介绍下虚拟机参数和main函数参数区别 在IDEA中,VM options选项设置的是要传递给JVM虚拟机的参数,例如-X,-XX设置堆大小等,还有一种-D则是设置JVM虚拟机系统变量,-D设置的遍历是可以覆盖 虚拟机本身系统变量的,优先级很高在代码中System.getProperty(“你的key”);便可以获取-D设置的key:value参数 而Program arguments则是main函数运行时传入的args[]]]></content>
@@ -82,6 +94,18 @@
       </tags>
   </entry>
   <entry>
+    <title><![CDATA[Linux下命令]]></title>
+    <url>%2F2019%2F07%2F01%2FLinux%E4%B8%8B%E5%91%BD%E4%BB%A4%2F</url>
+    <content type="text"><![CDATA[会随日常使用逐渐补全 查看log日志tail -n 20 -f /home/log/summertrain-2019-07-02-11-12-23.log-n 20指的显示20行内容-f 监控文件,这个会实时显示新增内容 压缩/解压tar.gz&emsp;解压:tar -zxvf 你的文件名.tar.gz&emsp;参数解释:&emsp;&emsp;z:被gzip压缩过,要用gzip解压&emsp;&emsp;x:解压&emsp;&emsp;v:显示所有过程&emsp;&emsp;f:指定文件名如果想指定解压目录的话就这样写tar -zxvf 你的文件名.tar.gz -C 你指定的目录]]></content>
+      <categories>
+        <category>学习笔记</category>
+      </categories>
+      <tags>
+        <tag>base</tag>
+        <tag>linux</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[linux安装jdk(非openjdk)]]></title>
     <url>%2F2019%2F07%2F01%2Flinux%E5%AE%89%E8%A3%85jdk(%E9%9D%9Eopenjdk)%2F</url>
     <content type="text"><![CDATA[1.官网下载压缩包,这里我下载的是解压版不是rpm版本,现在可能需要你登陆才可以下载,自己去注册个账户吧,或者用其他方式得到压缩包oracle下载jdk8的网址 2.解压压缩包tar -zxvf 你压缩包的名字.tar.gz 3.安装vim,这是个文本编辑器,你可以把它理解为记事本这种东西,至少我的ubuntu18.04是不自带vim的你可以使用sudo apt install vim这条命令安装,也可以在命令行输入vim按照他的提示安装 3.修改配置文件,原理跟window一样,只要将路径添加到配置文件中,操作系统就可以检测到我们想要安装的东西vim /etc/profile(这里需要注意了,要用root权限进行,前面加sudo) 4.打开配置文件后,我们在尾部追加如下内容,vim的操作方式请自行搜索 123export JAVA_HOME=你的jdk目录,注意是根目录,不是bin目录export CLASSPATH=$JAVA_HOME/lib/export PATH=$JAVA_HOME/bin:$PATH 5.使操作系统重新加载配置文件,注意需要root权限source /etc/profile 6.输入java -version出现java版本信息即我们配置成功了]]></content>
@@ -93,18 +117,6 @@
         <tag>base</tag>
         <tag>linux</tag>
         <tag>jdk</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[Linux下命令]]></title>
-    <url>%2F2019%2F07%2F01%2FLinux%E4%B8%8B%E5%91%BD%E4%BB%A4%2F</url>
-    <content type="text"><![CDATA[会随日常使用逐渐补全 查看log日志tail -n 20 -f /home/log/summertrain-2019-07-02-11-12-23.log-n 20指的显示20行内容-f 监控文件,这个会实时显示新增内容 压缩/解压tar.gz&emsp;解压:tar -zxvf 你的文件名.tar.gz&emsp;参数解释:&emsp;&emsp;z:被gzip压缩过,要用gzip解压&emsp;&emsp;x:解压&emsp;&emsp;v:显示所有过程&emsp;&emsp;f:指定文件名如果想指定解压目录的话就这样写tar -zxvf 你的文件名.tar.gz -C 你指定的目录]]></content>
-      <categories>
-        <category>学习笔记</category>
-      </categories>
-      <tags>
-        <tag>base</tag>
-        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
@@ -179,17 +191,6 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[git忽略规则.gitignore]]></title>
-    <url>%2F2019%2F06%2F21%2Fgit%E5%BF%BD%E7%95%A5%E8%A7%84%E5%88%99.gitignore%2F</url>
-    <content type="text"><![CDATA[提供.gitignore模板作用&emsp;当我们同步到远程仓库时,配置了.gitignore可以令git按照我们定义的规则,选择性的跟踪本地仓库的文件 使用&emsp;具体的语法规范这里不做描述,搜索引擎搜教程即可 &emsp;这里我将列出学生team一个springboot项目合作时使用的.gitignore。对官方生成的git做了少许改动 12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364HELP.mdtarget/!.mvn/wrapper/maven-wrapper.jar!**/src/main/**!**/src/test/**###团队合作config######由于团队合作时每个成员数据库账户密码不一样,所以每个成员都有个个人配置信息,在通用配置里面引入###person.properties###springboot######此处表示忽略测试文件夹###/src/test/java### STS ###.apt_generated.classpath.factorypath.project.settings.springBeans.sts4-cache### IntelliJ IDEA ###.idea*.iws*.iml*.ipr### NetBeans ###/nbproject/private//nbbuild//dist//nbdist//.nb-gradle/build/### VS Code ###.vscode/# Log file*.log# Compiled class file*.class# BlueJ files*.ctxt# Mobile Tools for Java (J2ME).mtj.tmp/# Package Files #*.jar*.war*.nar*.ear*.zip*.tar.gz*.rarhs_err_pid* 常见问题配置了.gitignore仍然无法忽略 &emsp;解决方式:git rm –cached filename&emsp;&emsp;删除该filename文件的本地缓存,然后再进行add和commit等操作,等push到远端后,以后再就不会被追踪&emsp;原因:这是由于在配置.gitignore之前该文件就已经被git追踪造成的,]]></content>
-      <categories>
-        <category>学习笔记</category>
-      </categories>
-      <tags>
-        <tag>git</tag>
-      </tags>
-  </entry>
-  <entry>
     <title><![CDATA[解决maven导入项目pom.xml报错unknown]]></title>
     <url>%2F2019%2F06%2F21%2F%E8%A7%A3%E5%86%B3maven%E5%AF%BC%E5%85%A5%E9%A1%B9%E7%9B%AEpom-xml%E6%8A%A5%E9%94%99unknown%2F</url>
     <content type="text"><![CDATA[2019.6.21 16:00更正虽然路径问题也是原因之一,但是并没有完全解决这次问题&emsp;&emsp;现象:重新git项目设置好路径以后,暂无报错现象,但是当pom中的jar包从maven仓库拉取完毕后,又出现了第一行报错的现象&emsp;&emsp;猜想:错误的根源可能是jar包版本问题,根据他人博客经验来看,往往是springboot版本过高,具体原因继续跟踪 原答案环境:eclipse,jdk8 情况:pom.xml文件内部没有错误,该项目在其他机器也可正常运行,在本机maven导入后提示unknown 解决:由于项目名和导入时的路径名不一致造成的&emsp;&emsp;例如项目名为test1,但是项目保存路径为e://githouse/code&emsp;&emsp;即test1与code名称不同导致找不到pom.xml&emsp;&emsp;ps:具体pom的路径方式暂未深究]]></content>
@@ -200,6 +201,17 @@
         <tag>bug</tag>
         <tag>pom</tag>
         <tag>maven</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[git忽略规则.gitignore]]></title>
+    <url>%2F2019%2F06%2F21%2Fgit%E5%BF%BD%E7%95%A5%E8%A7%84%E5%88%99.gitignore%2F</url>
+    <content type="text"><![CDATA[提供.gitignore模板作用&emsp;当我们同步到远程仓库时,配置了.gitignore可以令git按照我们定义的规则,选择性的跟踪本地仓库的文件 使用&emsp;具体的语法规范这里不做描述,搜索引擎搜教程即可 &emsp;这里我将列出学生team一个springboot项目合作时使用的.gitignore。对官方生成的git做了少许改动 12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364HELP.mdtarget/!.mvn/wrapper/maven-wrapper.jar!**/src/main/**!**/src/test/**###团队合作config######由于团队合作时每个成员数据库账户密码不一样,所以每个成员都有个个人配置信息,在通用配置里面引入###person.properties###springboot######此处表示忽略测试文件夹###/src/test/java### STS ###.apt_generated.classpath.factorypath.project.settings.springBeans.sts4-cache### IntelliJ IDEA ###.idea*.iws*.iml*.ipr### NetBeans ###/nbproject/private//nbbuild//dist//nbdist//.nb-gradle/build/### VS Code ###.vscode/# Log file*.log# Compiled class file*.class# BlueJ files*.ctxt# Mobile Tools for Java (J2ME).mtj.tmp/# Package Files #*.jar*.war*.nar*.ear*.zip*.tar.gz*.rarhs_err_pid* 常见问题配置了.gitignore仍然无法忽略 &emsp;解决方式:git rm –cached filename&emsp;&emsp;删除该filename文件的本地缓存,然后再进行add和commit等操作,等push到远端后,以后再就不会被追踪&emsp;原因:这是由于在配置.gitignore之前该文件就已经被git追踪造成的,]]></content>
+      <categories>
+        <category>学习笔记</category>
+      </categories>
+      <tags>
+        <tag>git</tag>
       </tags>
   </entry>
   <entry>
