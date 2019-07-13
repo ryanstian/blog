@@ -100,7 +100,7 @@
 <meta property="og:site_name" content="柠檬不酸的博客">
 <meta property="og:description" content="详细介绍git使用和配置(不包括安装) 什么是git? 首先我用通俗语言解释下,git是一种版本控制工具,你既可以在本地进行版本控制,也可以与搭建好git服务器的远端进行同步">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-07-03T15:28:26.112Z">
+<meta property="og:updated_time" content="2019-07-05T07:46:19.673Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="git使用笔记">
 <meta name="twitter:description" content="详细介绍git使用和配置(不包括安装) 什么是git? 首先我用通俗语言解释下,git是一种版本控制工具,你既可以在本地进行版本控制,也可以与搭建好git服务器的远端进行同步">
@@ -404,7 +404,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2019-07-03 23:28:26" itemprop="dateModified" datetime="2019-07-03T23:28:26+08:00">2019-07-03</time>
+                <time title="Modified: 2019-07-05 15:46:19" itemprop="dateModified" datetime="2019-07-05T15:46:19+08:00">2019-07-05</time>
               
             
           </span>
@@ -511,6 +511,29 @@
 <li>团队里有人出现了SourceTree没有权限的问题,打开密钥设置界面(不同版本打开位置有所不同,大概都是在工具-选项这一块),找到之前我们生成的密钥(上文提到过位置),将私钥添加进去即可</li>
 </ul>
 </li>
+<li><h4 id="解决冲突"><a href="#解决冲突" class="headerlink" title="解决冲突"></a>解决冲突</h4><ul>
+<li><p>这里我不建议大家团队合作时在采用pull来拉代码,这样的话如果有冲突,文件会被标记为冲突,建议用fetch先检测一下</p>
+</li>
+<li><p>如果是在commit之前拉取,产生了冲突,那么可以针对冲突的文件,抛弃自己的修改(等fetch+merge之后在手动增加回来)</p>
+</li>
+<li><p>如果是在commit之后拉取产生了冲突,就会出现无法拉取也无法推送的情况,这时候我们可以撤销commit操作,使其返回到上一种情况</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">git reset [--参数] 提交id</span><br><span class="line">参数有:</span><br><span class="line">    mixed:不删除改动的代码,撤销commit和add</span><br><span class="line">    soft:不删除改动代码,撤销commit</span><br><span class="line">    hard:删除改动代码,撤销commit和add(这种是用指定的提交id强行覆盖掉现有代码)</span><br><span class="line">示例:</span><br><span class="line">    git reset --soft xxxxxxxxx</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>这里我们说的是命令行的操作,如果是sourceTree,那么对应的就是”重置当前分支到此次提交”</p>
+</li>
+<li><p>如果想要抛弃对方的提交,使自己本次提交强行覆盖掉对方,那么可以见下方代码。如果是sourceTree的话,则需要取选项里面允许强制提交。此外,如果用的github之类的这种托管远程仓库,那么对方可能还会设置了权限,只有拥有者有权限强制推送,项目所属人去github里面设置一下就好(这一点笔者没有实践)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git push --force origin</span><br></pre></td></tr></table></figure>
+
+
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><h4 id="一些其他的诸如merge-rebase的用法"><a href="#一些其他的诸如merge-rebase的用法" class="headerlink" title="一些其他的诸如merge,rebase的用法"></a>一些其他的诸如merge,rebase的用法</h4><ul>
+<li>这些用法笔者的理解有限,这里附一个知乎的提问,大家可以参考下<a href="https://www.zhihu.com/question/36509119" target="_blank" rel="noopener">在开发过程中使用git rebase还是git merge，优缺点分别是什么？</a></li>
+</ul>
+</li>
 </ul>
 
       
@@ -584,8 +607,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/06/22/mysql启动(无需添加到服务)/" rel="prev" title="mysql启动(无需添加到服务)">
-                mysql启动(无需添加到服务) <i class="fa fa-chevron-right"></i>
+              <a href="/2019/06/21/git忽略规则.gitignore/" rel="prev" title="git忽略规则.gitignore">
+                git忽略规则.gitignore <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -655,7 +678,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">19</span>
+                    <span class="site-state-item-count">21</span>
                     <span class="site-state-item-name">posts</span>
                   </a>
                 </div>
@@ -676,7 +699,13 @@
                     
                       
                     
-                    <span class="site-state-item-count">2</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">5</span>
                     <span class="site-state-item-name">categories</span>
                   </a>
                 </div>
@@ -727,7 +756,11 @@
                     
                       
                     
-                    <span class="site-state-item-count">17</span>
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">19</span>
                     <span class="site-state-item-name">tags</span>
                   </a>
                 </div>
@@ -791,7 +824,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#详细介绍git使用和配置-不包括安装"><span class="nav-number">1.</span> <span class="nav-text">详细介绍git使用和配置(不包括安装)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#什么是git"><span class="nav-number">2.</span> <span class="nav-text">什么是git?</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#如何使用"><span class="nav-number">3.</span> <span class="nav-text">如何使用?</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#可视化界面SourceTree"><span class="nav-number">4.</span> <span class="nav-text">可视化界面SourceTree</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#详细介绍git使用和配置-不包括安装"><span class="nav-number">1.</span> <span class="nav-text">详细介绍git使用和配置(不包括安装)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#什么是git"><span class="nav-number">2.</span> <span class="nav-text">什么是git?</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#如何使用"><span class="nav-number">3.</span> <span class="nav-text">如何使用?</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#可视化界面SourceTree"><span class="nav-number">4.</span> <span class="nav-text">可视化界面SourceTree</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#解决冲突"><span class="nav-number">5.</span> <span class="nav-text">解决冲突</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#一些其他的诸如merge-rebase的用法"><span class="nav-number">6.</span> <span class="nav-text">一些其他的诸如merge,rebase的用法</span></a></li></ol></div>
             
 
           </div>
