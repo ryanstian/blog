@@ -340,7 +340,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://qq616023844.github.io/2019/08/14/简记20190814/">
+    <link itemprop="mainEntityOfPage" href="https://qq616023844.github.io/2019/08/27/简记20190927/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Lemon Sour">
@@ -360,7 +360,7 @@
           <h1 class="post-title" itemprop="name headline">
                 
                 
-                <a href="/2019/08/14/简记20190814/" class="post-title-link" itemprop="url">简记20190814</a>
+                <a href="/2019/08/27/简记20190927/" class="post-title-link" itemprop="url">简记20190927</a>
               
             
           </h1>
@@ -385,7 +385,7 @@
                 
               
 
-              <time title="Created: 2019-08-14 23:40:00" itemprop="dateCreated datePublished" datetime="2019-08-14T23:40:00+08:00">2019-08-14</time>
+              <time title="Created: 2019-08-27 23:24:00" itemprop="dateCreated datePublished" datetime="2019-08-27T23:24:00+08:00">2019-08-27</time>
             
 
             
@@ -402,7 +402,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2019-08-17 15:53:29" itemprop="dateModified" datetime="2019-08-17T15:53:29+08:00">2019-08-17</time>
+                <time title="Modified: 2019-08-28 00:24:51" itemprop="dateModified" datetime="2019-08-28T00:24:51+08:00">2019-08-28</time>
               
             
           </span>
@@ -419,7 +419,7 @@
                 <span class="post-meta-item-text">In</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/diary/" itemprop="url" rel="index"><span itemprop="name">diary</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/简记/" itemprop="url" rel="index"><span itemprop="name">简记</span></a></span>
 
                 
                 
@@ -456,7 +456,7 @@
       
         
           
-            <p>####一些想说的话<br>&emsp;这一断更就持续了一个月,期间因为实习入职找房子和期末各种原因耽搁了。而且自己在这期间也想了一下自己写的内容确实有些杂乱。毕竟,一篇博客,要么是教程似的介绍使用方式,要么是追根究底的深入剖析,夹在中间不上不下的实属恶心,今后我会逐渐的将以前的博客整理下,做到简约而极致</p>
+            <p>今天用到了metricbeat组件diskio.iostat部分,突然看到一个比较在意的点,对于system.diskio.iostat.read.request.per_sec这个字段,有的描述是每秒读取的扇区数,有的被描述成每秒访问磁盘数。<br>一开始以为是翻译问题,突然联想到磁盘访问原理,我们对磁盘访问的最小单位是扇区,也就是每秒访问扇区数在这个场景下是可以等同理解为每秒访问磁盘次数的</p>
 
           
         
@@ -518,7 +518,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://qq616023844.github.io/2019/06/20/welcome/">
+    <link itemprop="mainEntityOfPage" href="https://qq616023844.github.io/2019/08/25/BUG_kafka_01/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Lemon Sour">
@@ -538,7 +538,7 @@
           <h1 class="post-title" itemprop="name headline">
                 
                 
-                <a href="/2019/06/20/welcome/" class="post-title-link" itemprop="url">welcome</a>
+                <a href="/2019/08/25/BUG_kafka_01/" class="post-title-link" itemprop="url">Exception thrown when sending a message with key='null'</a>
               
             
           </h1>
@@ -563,7 +563,179 @@
                 
               
 
-              <time title="Created: 2019-06-20 23:53:00" itemprop="dateCreated datePublished" datetime="2019-06-20T23:53:00+08:00">2019-06-20</time>
+              <time title="Created: 2019-08-25 22:16:00 / Modified: 22:19:07" itemprop="dateCreated datePublished" datetime="2019-08-25T22:16:00+08:00">2019-08-25</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/BUG/" itemprop="url" rel="index"><span itemprop="name">BUG</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h4 id="报错"><a href="#报错" class="headerlink" title="报错"></a>报错</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">2019-08-20 18:45:09 [nioEventLoopGroup-3-15] ERROR o.s.k.s.LoggingProducerListener - Exception thrown when sending a message with key=&apos;null&apos; and payload=&apos;xxxxxxxxxxxxxx&apos; to topic abc-event:</span><br><span class="line">org.apache.kafka.common.errors.TimeoutException: Failed to update metadata after 60000 ms.</span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2019/08/25/BUG_kafka_01/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    <div>
+      
+    </div>
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://qq616023844.github.io/2019/07/23/关于在上海生活六个月提前要做的准备/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Lemon Sour">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="柠檬不酸的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2019/07/23/关于在上海生活六个月提前要做的准备/" class="post-title-link" itemprop="url">关于在上海生活六个月提前要做的准备</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2019-07-23 22:40:00" itemprop="dateCreated datePublished" datetime="2019-07-23T22:40:00+08:00">2019-07-23</time>
             
 
             
@@ -580,11 +752,29 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2019-08-17 22:27:46" itemprop="dateModified" datetime="2019-08-17T22:27:46+08:00">2019-08-17</time>
+                <time title="Modified: 2019-08-17 23:19:08" itemprop="dateModified" datetime="2019-08-17T23:19:08+08:00">2019-08-17</time>
               
             
           </span>
 
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/vlog/" itemprop="url" rel="index"><span itemprop="name">vlog</span></a></span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -616,10 +806,1293 @@
       
         
           
-            <p>####测试图片<br><img src width="175" height="175" alt></p>
-<center>这是被居中的的文本</center>
-下一行文本
+            <a id="more"></a>
+<p>&emsp;首先不得不提到的一点就是气候差异(夏天)。不下雨的情况下,北方空气湿度40%左右,上海长期80%偶尔60%,导致的就是,在北方糙汉子还可以2天洗一次澡,到了上海恨不得一天洗两次,而且晚上睡觉会感觉床单特别潮湿(这里楼主用了150多块左右吸湿垫和粗布床单,感觉比一开始带来的学生宿舍用床单好了不少)。晾衣服有风还好说,床单在高层楼的穿堂风下一天就干了,然而不开窗户即使3天也晾不干一条内裤</p>
+<p>&emsp;接下来,我要说一下去上海租房我做了哪些准备。首先,我提前先浏览了各大租房app,发现价格和质量实在是无法承受,于是去了豆瓣小组蹲点,蹲了一个月终于蹲到了一个不错的合租房(建议先问下公司有没有配宿舍或者折扣房,还有尽量错过实习高峰找房)。<strong>非常重要的一点</strong>:一定要靠近地铁。对于没做过地铁的小伙伴来说,是体会不到的(当时租了离地铁两公里的房子,哭晕),地铁有点类似高铁的感觉,每一站都是卡着时间到站,而且速度非常的快,5公里的距离基本可以无视时间成本。对于资金的话,上海这边个人转租半年的话押一付二,押一付三的居多,各种app上一般是押一付一,<strong>租房子一定要提前蹲消息,一个处得来的室友和房东可以让你不用花精力在生活琐事上,一个好的室友往往比一个性价比高的房子更重要</strong></p>
+<p>&emsp;当我去上海的时候,我只带了钱包(现在都是支付宝了,不过上海有的地铁只能用他的app或者投币,没法直接支付宝,前排提醒),电脑,手机,各种证件,还有3套夏装1套秋装,一条宿舍用床单(因为没订酒店直接去的出租房,临时凑活一晚),还有一些小物件,轻装上阵。</p>
+<p>&emsp;到了之后这是我的采购清单</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">网购:</span><br><span class="line">	1 床单(大床,尽量防潮吧),最后买了防潮垫和粗布床单</span><br><span class="line">	1 椅子</span><br><span class="line">	1 瑜伽垫</span><br><span class="line">	1 枕头</span><br><span class="line">	1 墙纸,墙胶(墙皮有些开裂,还有地板是那种简装修的,有的地方还露着水泥,风一吹就飘灰)</span><br><span class="line">	1 烧水器,大水杯,小水杯,暖壶</span><br><span class="line">	1 指甲刀,镊子,螺丝刀(因为楼主的门锁坏了,自力更生)</span><br><span class="line">	1 垃圾桶(多个,垃圾分类)</span><br><span class="line">	1 洗手台</span><br><span class="line">	1 电脑支架</span><br><span class="line">	1 垃圾袋</span><br><span class="line">	1 除潮剂</span><br><span class="line">    1 洗衣液(大份)</span><br><span class="line">	1 卫生纸(批发)</span><br><span class="line">	1 衣架</span><br><span class="line">    1 枕巾</span><br><span class="line">	1 鞋(一定要有换洗的鞋,不然太难晾干了洗完了)</span><br><span class="line">	1 洗面奶(北方的油皮肤,一直是用的硫磺皂洗脸,到了上海发现洗脸太频繁了硫磺皂对皮肤伤害太大了,真的,到了上海,脸上出油量*n,原地爆炸)</span><br><span class="line">实体店:</span><br><span class="line">    1 洗衣液(临时)</span><br><span class="line">	1 卫生纸(临时)</span><br><span class="line">	1 拖把</span><br><span class="line">	1 多块抹布,毛巾</span><br><span class="line">	1 网线(临时应急)</span><br><span class="line">	1 拖鞋(凉拖两用的那种)</span><br><span class="line">	1 垃圾袋(临时)</span><br><span class="line">	1 脸盆(大中小各一个)</span><br><span class="line">	1 洗发膏</span><br><span class="line">	1 扫把,簸箕</span><br></pre></td></tr></table></figure>
+
+<p>&emsp;ps:垃圾分类小提示:瓜果之类可以用微生物腐化之后做能源的属于湿垃圾(坚果壳核太难分解的的除外)。报纸,快递盒子(胶带要撕下来),泡沫塑料属于可回收。各种电池杀虫剂等有毒的属于有害垃圾,其他模棱两可的扔干垃圾</p>
+
           
+        
+      
+    </div>
+
+    
+
+    
+    <div>
+      
+    </div>
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://qq616023844.github.io/2019/07/14/关于全面屏手机app点击无效问题/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Lemon Sour">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="柠檬不酸的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2019/07/14/关于全面屏手机app点击无效问题/" class="post-title-link" itemprop="url">关于全面屏手机app点击无效问题</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2019-07-14 01:35:00" itemprop="dateCreated datePublished" datetime="2019-07-14T01:35:00+08:00">2019-07-14</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2019-08-25 22:14:53" itemprop="dateModified" datetime="2019-08-25T22:14:53+08:00">2019-08-25</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/BUG/" itemprop="url" rel="index"><span itemprop="name">BUG</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h4 id="概要"><a href="#概要" class="headerlink" title="概要"></a>概要</h4><p>&emsp;最近使用红手指(云手机)时触摸频繁失效,不被响应</p>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2019/07/14/关于全面屏手机app点击无效问题/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    <div>
+      
+    </div>
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://qq616023844.github.io/2019/07/05/前端添加数据后动态刷新时获取获取后端数据是旧的/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Lemon Sour">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="柠檬不酸的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2019/07/05/前端添加数据后动态刷新时获取获取后端数据是旧的/" class="post-title-link" itemprop="url">前端添加数据后动态刷新时获取获取后端数据是旧的</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2019-07-05 14:47:00" itemprop="dateCreated datePublished" datetime="2019-07-05T14:47:00+08:00">2019-07-05</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2019-08-28 00:24:48" itemprop="dateModified" datetime="2019-08-28T00:24:48+08:00">2019-08-28</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/BUG/" itemprop="url" rel="index"><span itemprop="name">BUG</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <a id="more"></a>
+<h4 id="情况一-后端缓存"><a href="#情况一-后端缓存" class="headerlink" title="情况一(后端缓存)"></a>情况一(后端缓存)</h4><p>第一种情况是由于后端使用了缓存,且添加数据后由于后端代码问题导致缓存刷新不及时产生的</p>
+<h4 id="情况二-前端异步请求"><a href="#情况二-前端异步请求" class="headerlink" title="情况二(前端异步请求)"></a>情况二(前端异步请求)</h4><p>由于服务器响应请求总会有延迟,前端前后相差几毫秒发出了修改请求和查询请求。这种情况下由于网络问题,前端会出现有时可以刷新成功,有时旧数据的情况。解决方法就是前端同步下请求,收到第一个请求的返回后再发送下一个请求</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    <div>
+      
+    </div>
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://qq616023844.github.io/2019/07/02/i++不是原子性操作/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Lemon Sour">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="柠檬不酸的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2019/07/02/i++不是原子性操作/" class="post-title-link" itemprop="url">i++不是原子性操作</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2019-07-02 00:05:00 / Modified: 00:31:12" itemprop="dateCreated datePublished" datetime="2019-07-02T00:05:00+08:00">2019-07-02</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/学习笔记/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><p>这篇是从我以前csdn博客上搬运过来的,属于原创</p>
+<h4 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h4>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2019/07/02/i++不是原子性操作/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    <div>
+      
+    </div>
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://qq616023844.github.io/2019/07/02/AtomicLong/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Lemon Sour">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="柠檬不酸的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2019/07/02/AtomicLong/" class="post-title-link" itemprop="url">AtomicLong</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2019-07-02 00:02:00" itemprop="dateCreated datePublished" datetime="2019-07-02T00:02:00+08:00">2019-07-02</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2019-08-17 23:02:45" itemprop="dateModified" datetime="2019-08-17T23:02:45+08:00">2019-08-17</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/学习笔记/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><p>这篇是从我以前csdn博客上搬运过来的,属于原创</p>
+<h4 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h4><p>一.AtomicLong是做什么用的<br>首先我们可以先看一下我的另一篇文章<a href="/2019/07/02/i++不是原子性操作/" title="i++不是原子性操作">i++不是原子性操作</a></p>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2019/07/02/AtomicLong/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    <div>
+      
+    </div>
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://qq616023844.github.io/2019/07/02/CAS机制/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Lemon Sour">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="柠檬不酸的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2019/07/02/CAS机制/" class="post-title-link" itemprop="url">CAS机制</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2019-07-02 00:02:00" itemprop="dateCreated datePublished" datetime="2019-07-02T00:02:00+08:00">2019-07-02</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2019-08-17 22:59:49" itemprop="dateModified" datetime="2019-08-17T22:59:49+08:00">2019-08-17</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/学习笔记/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><p>这篇是从我以前csdn博客上搬运过来的,属于原创</p>
+<h4 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h4><p>一.什么是CAS机制<br>CAS机制的全名叫做compare and swap<br>让我们来看一行代码</p>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2019/07/02/CAS机制/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    <div>
+      
+    </div>
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://qq616023844.github.io/2019/07/01/jpa查询部分字段获取实体类/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Lemon Sour">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="柠檬不酸的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2019/07/01/jpa查询部分字段获取实体类/" class="post-title-link" itemprop="url">jpa查询部分字段获取实体类</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2019-07-01 17:07:00" itemprop="dateCreated datePublished" datetime="2019-07-01T17:07:00+08:00">2019-07-01</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2019-08-17 22:53:47" itemprop="dateModified" datetime="2019-08-17T22:53:47+08:00">2019-08-17</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/学习笔记/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>代码已经放到github,test测试中的demo2对应的是sql方式,demo3对应的是hql方式,demo1是分页查询,我另一篇文章会讲到<br><a href="https://github.com/qq616023844/springboot-jpa-paging" target="_blank" rel="noopener">github地址</a></p>
+<h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><p>我们平时使用jpa查询时,有两种情况,一种是查询全部字段,另一种是查询部分字段,当我们按通常的sql语句写法查询部分字段时,会出现jpa无法自动解析类型的情况,例如这类报错</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">org.springframework.dao.InvalidDataAccessResourceUsageException: could not execute query; SQL [ SELECT sa.name FROM student sa ]; nested exception is org.hibernate.exception.SQLGrammarException: could not execute query</span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2019/07/01/jpa查询部分字段获取实体类/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    <div>
+      
+    </div>
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://qq616023844.github.io/2019/07/01/linux安装jdk(非openjdk)/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Lemon Sour">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="柠檬不酸的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2019/07/01/linux安装jdk(非openjdk)/" class="post-title-link" itemprop="url">linux安装jdk(非openjdk)</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2019-07-01 08:56:00" itemprop="dateCreated datePublished" datetime="2019-07-01T08:56:00+08:00">2019-07-01</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2019-08-17 22:48:37" itemprop="dateModified" datetime="2019-08-17T22:48:37+08:00">2019-08-17</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/工具笔记/" itemprop="url" rel="index"><span itemprop="name">工具笔记</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>1.官网下载压缩包,这里我下载的是解压版不是rpm版本,现在可能需要你登陆才可以下载,自己去注册个账户吧,或者用其他方式得到压缩包<br><a href="https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html" target="_blank" rel="noopener">oracle下载jdk8的网址</a></p>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2019/07/01/linux安装jdk(非openjdk)/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
         
       
     </div>
@@ -667,6 +2140,10 @@
   </section>
 
   
+  <nav class="pagination">
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+  </nav>
+
 
 
           </div>
@@ -706,7 +2183,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">2</span>
+                    <span class="site-state-item-count">16</span>
                     <span class="site-state-item-name">posts</span>
                   </a>
                 </div>
@@ -725,7 +2202,17 @@
                     
                       
                     
-                    <span class="site-state-item-count">1</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">6</span>
                     <span class="site-state-item-name">categories</span>
                   </a>
                 </div>
@@ -744,7 +2231,27 @@
                     
                       
                     
-                    <span class="site-state-item-count">1</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">11</span>
                     <span class="site-state-item-name">tags</span>
                   </a>
                 </div>

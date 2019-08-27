@@ -1,19 +1,172 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title><![CDATA[简记20190814]]></title>
-    <url>%2F2019%2F08%2F14%2F%E7%AE%80%E8%AE%B020190814%2F</url>
-    <content type="text"><![CDATA[####一些想说的话&emsp;这一断更就持续了一个月,期间因为实习入职找房子和期末各种原因耽搁了。而且自己在这期间也想了一下自己写的内容确实有些杂乱。毕竟,一篇博客,要么是教程似的介绍使用方式,要么是追根究底的深入剖析,夹在中间不上不下的实属恶心,今后我会逐渐的将以前的博客整理下,做到简约而极致]]></content>
+    <title><![CDATA[简记20190927]]></title>
+    <url>%2F2019%2F08%2F27%2F%E7%AE%80%E8%AE%B020190927%2F</url>
+    <content type="text"><![CDATA[今天用到了metricbeat组件diskio.iostat部分,突然看到一个比较在意的点,对于system.diskio.iostat.read.request.per_sec这个字段,有的描述是每秒读取的扇区数,有的被描述成每秒访问磁盘数。一开始以为是翻译问题,突然联想到磁盘访问原理,我们对磁盘访问的最小单位是扇区,也就是每秒访问扇区数在这个场景下是可以等同理解为每秒访问磁盘次数的]]></content>
       <categories>
-        <category>diary</category>
+        <category>简记</category>
+      </categories>
+  </entry>
+  <entry>
+    <title><![CDATA[Exception thrown when sending a message with key='null']]></title>
+    <url>%2F2019%2F08%2F25%2FBUG_kafka_01%2F</url>
+    <content type="text"><![CDATA[报错122019-08-20 18:45:09 [nioEventLoopGroup-3-15] ERROR o.s.k.s.LoggingProducerListener - Exception thrown when sending a message with key=&apos;null&apos; and payload=&apos;xxxxxxxxxxxxxx&apos; to topic abc-event:org.apache.kafka.common.errors.TimeoutException: Failed to update metadata after 60000 ms. 原因&emsp;连接的远程kafka,服务器防火墙没开]]></content>
+      <categories>
+        <category>BUG</category>
       </categories>
       <tags>
-        <tag>diary</tag>
+        <tag>kafka</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[关于在上海生活六个月提前要做的准备]]></title>
+    <url>%2F2019%2F07%2F23%2F%E5%85%B3%E4%BA%8E%E5%9C%A8%E4%B8%8A%E6%B5%B7%E7%94%9F%E6%B4%BB%E5%85%AD%E4%B8%AA%E6%9C%88%E6%8F%90%E5%89%8D%E8%A6%81%E5%81%9A%E7%9A%84%E5%87%86%E5%A4%87%2F</url>
+    <content type="text"><![CDATA[&emsp;首先不得不提到的一点就是气候差异(夏天)。不下雨的情况下,北方空气湿度40%左右,上海长期80%偶尔60%,导致的就是,在北方糙汉子还可以2天洗一次澡,到了上海恨不得一天洗两次,而且晚上睡觉会感觉床单特别潮湿(这里楼主用了150多块左右吸湿垫和粗布床单,感觉比一开始带来的学生宿舍用床单好了不少)。晾衣服有风还好说,床单在高层楼的穿堂风下一天就干了,然而不开窗户即使3天也晾不干一条内裤 &emsp;接下来,我要说一下去上海租房我做了哪些准备。首先,我提前先浏览了各大租房app,发现价格和质量实在是无法承受,于是去了豆瓣小组蹲点,蹲了一个月终于蹲到了一个不错的合租房(建议先问下公司有没有配宿舍或者折扣房,还有尽量错过实习高峰找房)。非常重要的一点:一定要靠近地铁。对于没做过地铁的小伙伴来说,是体会不到的(当时租了离地铁两公里的房子,哭晕),地铁有点类似高铁的感觉,每一站都是卡着时间到站,而且速度非常的快,5公里的距离基本可以无视时间成本。对于资金的话,上海这边个人转租半年的话押一付二,押一付三的居多,各种app上一般是押一付一,租房子一定要提前蹲消息,一个处得来的室友和房东可以让你不用花精力在生活琐事上,一个好的室友往往比一个性价比高的房子更重要 &emsp;当我去上海的时候,我只带了钱包(现在都是支付宝了,不过上海有的地铁只能用他的app或者投币,没法直接支付宝,前排提醒),电脑,手机,各种证件,还有3套夏装1套秋装,一条宿舍用床单(因为没订酒店直接去的出租房,临时凑活一晚),还有一些小物件,轻装上阵。 &emsp;到了之后这是我的采购清单 123456789101112131415161718192021222324252627282930网购: 1 床单(大床,尽量防潮吧),最后买了防潮垫和粗布床单 1 椅子 1 瑜伽垫 1 枕头 1 墙纸,墙胶(墙皮有些开裂,还有地板是那种简装修的,有的地方还露着水泥,风一吹就飘灰) 1 烧水器,大水杯,小水杯,暖壶 1 指甲刀,镊子,螺丝刀(因为楼主的门锁坏了,自力更生) 1 垃圾桶(多个,垃圾分类) 1 洗手台 1 电脑支架 1 垃圾袋 1 除潮剂 1 洗衣液(大份) 1 卫生纸(批发) 1 衣架 1 枕巾 1 鞋(一定要有换洗的鞋,不然太难晾干了洗完了) 1 洗面奶(北方的油皮肤,一直是用的硫磺皂洗脸,到了上海发现洗脸太频繁了硫磺皂对皮肤伤害太大了,真的,到了上海,脸上出油量*n,原地爆炸)实体店: 1 洗衣液(临时) 1 卫生纸(临时) 1 拖把 1 多块抹布,毛巾 1 网线(临时应急) 1 拖鞋(凉拖两用的那种) 1 垃圾袋(临时) 1 脸盆(大中小各一个) 1 洗发膏 1 扫把,簸箕 &emsp;ps:垃圾分类小提示:瓜果之类可以用微生物腐化之后做能源的属于湿垃圾(坚果壳核太难分解的的除外)。报纸,快递盒子(胶带要撕下来),泡沫塑料属于可回收。各种电池杀虫剂等有毒的属于有害垃圾,其他模棱两可的扔干垃圾]]></content>
+      <categories>
+        <category>vlog</category>
+      </categories>
+  </entry>
+  <entry>
+    <title><![CDATA[关于全面屏手机app点击无效问题]]></title>
+    <url>%2F2019%2F07%2F14%2F%E5%85%B3%E4%BA%8E%E5%85%A8%E9%9D%A2%E5%B1%8F%E6%89%8B%E6%9C%BAapp%E7%82%B9%E5%87%BB%E6%97%A0%E6%95%88%E9%97%AE%E9%A2%98%2F</url>
+    <content type="text"><![CDATA[概要&emsp;最近使用红手指(云手机)时触摸频繁失效,不被响应 现象&emsp;1.在使用云手机时,操作越频繁,失效概率越大&emsp;2.大约2-3分钟失效一段时间&emsp;3.点击左侧调整画质按钮后,可以恢复正常一段时 间(有时调整画质按钮也无法响应)&emsp;4.app的log日志中并没有接收到点击事件 原因&emsp;由于水滴屏等屏幕在运行此类app没有对流海屏做适应时,摄像头左右存在一个真空带,这个真空带在我们日常使用时是极容易被手掌内侧挤压(手越胖越容易,当然也与使用习惯有关),被挤压时因为其显示黑色使我们下意识认为这已经不属于屏幕范围,但是在挤压时会破坏一部分app的点击监听事件,导致app无法接收到操作请求,让用户以为是app未响应或者其他的问题]]></content>
+      <categories>
+        <category>BUG</category>
+      </categories>
+      <tags>
+        <tag>other</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[前端添加数据后动态刷新时获取获取后端数据是旧的]]></title>
+    <url>%2F2019%2F07%2F05%2F%E5%89%8D%E7%AB%AF%E6%B7%BB%E5%8A%A0%E6%95%B0%E6%8D%AE%E5%90%8E%E5%8A%A8%E6%80%81%E5%88%B7%E6%96%B0%E6%97%B6%E8%8E%B7%E5%8F%96%E8%8E%B7%E5%8F%96%E5%90%8E%E7%AB%AF%E6%95%B0%E6%8D%AE%E6%98%AF%E6%97%A7%E7%9A%84%2F</url>
+    <content type="text"><![CDATA[情况一(后端缓存)第一种情况是由于后端使用了缓存,且添加数据后由于后端代码问题导致缓存刷新不及时产生的 情况二(前端异步请求)由于服务器响应请求总会有延迟,前端前后相差几毫秒发出了修改请求和查询请求。这种情况下由于网络问题,前端会出现有时可以刷新成功,有时旧数据的情况。解决方法就是前端同步下请求,收到第一个请求的返回后再发送下一个请求]]></content>
+      <categories>
+        <category>BUG</category>
+      </categories>
+  </entry>
+  <entry>
+    <title><![CDATA[i++不是原子性操作]]></title>
+    <url>%2F2019%2F07%2F02%2Fi%2B%2B%E4%B8%8D%E6%98%AF%E5%8E%9F%E5%AD%90%E6%80%A7%E6%93%8D%E4%BD%9C%2F</url>
+    <content type="text"><![CDATA[前言这篇是从我以前csdn博客上搬运过来的,属于原创 正文 1234567891011121314151617public class CasStudy01 &#123; private static int count = 0; public static void main(String[] args) &#123; Runnable runnable = new Runnable() &#123; @Override public void run() &#123; count++; &#125; &#125;; for (int i = 0; i &lt; 10000; i++) &#123; new Thread(runnable).start(); &#125; Thread.sleep(1000);//为了等子线程全部运行结束 System.out.println(count); &#125;&#125; 输出:9945 Process finished with exit code 0 刚才的代码,照我们的设想,他应该是输出10000,然而每次我们run这段demo,输出结果各不相同这是因为count++这一行代码并不是原子操作,这一行代码实际在运行时,被分为取值,修改,存储三步操作,所以1,2两个线程同时取出值a,并且自增1修改为a+1,再存储的话,两次自增实际上只自增了1]]></content>
+      <categories>
+        <category>学习笔记</category>
+      </categories>
+      <tags>
+        <tag>java</tag>
+        <tag>base</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[AtomicLong]]></title>
+    <url>%2F2019%2F07%2F02%2FAtomicLong%2F</url>
+    <content type="text"><![CDATA[前言这篇是从我以前csdn博客上搬运过来的,属于原创 正文一.AtomicLong是做什么用的首先我们可以先看一下我的另一篇文章i++不是原子性操作 此时,我们通常选择会是进行这样的操作 123456789101112131415161718192021public class CasStudy01 &#123; private static int count = 0; private synchronized static void add()&#123; count++; &#125; public static void main(String[] args) throws InterruptedException &#123; Runnable runnable = new Runnable() &#123; @Override public void run() &#123; add(); &#125; &#125;; for (int i = 0; i &lt; 10000; i++) &#123; new Thread(runnable).start(); &#125; Thread.sleep(1000); System.out.println(count); &#125;&#125; 我们将count++操作放在了一个带锁的方法里面,来保证其线程安全性。然而,我们知道,加锁解锁操作会造成性能的消耗,在并发量不算太高的情况下,我们可以考虑采用AtomicLong(无锁的方式,采用/2019/07/02/CAS机制/)来保证线程安全性 二.AtomicLong的实现AtomicLong在源码中持有Unsafe类的实例,其大部分操作都是交付给Unsafe类来完成的(Unsafe中大多是本地方法,虽然我们可以通过反射来调用,但是官方强烈不建议我们这么做) AtomicLong里面持有一个long类型的valueOffset变量,这个变量表示的是其value值的内存偏移量(详见JVM内存模型),当我们调用incrementAndGet时,会交付Unsafe类来进行操作 123public final long incrementAndGet() &#123; return unsafe.getAndAddLong(this, valueOffset, 1L) + 1L;&#125; 我们传入本类的实例,value的偏移量,以及增加量 12345678public final long getAndAddLong(Object var1, long var2, long var4) &#123; long var6; do &#123; var6 = this.getLongVolatile(var1, var2); &#125; while(!this.compareAndSwapLong(var1, var2, var6, var6 + var4)); return var6;&#125; 在Unsafe中就会进行CAS操作,使得value增加1,这是线程安全的 三.AtomicLong的缺点当并发量极大的时候,由于CAS机制本身的原因,导致CAS失败率极高,从而拖慢性能。此时,我们可以考虑使用LongAdder(待补充)]]></content>
+      <categories>
+        <category>学习笔记</category>
+      </categories>
+      <tags>
+        <tag>java</tag>
+        <tag>base</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[CAS机制]]></title>
+    <url>%2F2019%2F07%2F02%2FCAS%E6%9C%BA%E5%88%B6%2F</url>
+    <content type="text"><![CDATA[前言这篇是从我以前csdn博客上搬运过来的,属于原创 正文一.什么是CAS机制CAS机制的全名叫做compare and swap让我们来看一行代码 1public final native boolean compareAndSwapLong(Object var1, long var2, long var4, long var6); 这行代码源于Unsafe类(待补充),参数var1和var2我们先不考虑,var4表示旧值,var6表示新值,这行代码的作用是,如果var4的值等于内存中的现有值,那么将内存中的值替换为var6同时返回true,否则返回false。这就是CAS机制,同时也是其在Java中的体现 二.为什么要使用CAS/有哪些好处一般情况下,当我们并发访问同一个int变量时,我们往往需要加锁操作,但每次加锁会造成大量的开销,影响性能,所以就有了CAS机制,可以让我们在不加锁的情况下做到线程安全 三.CAS机制存在哪些问题1.ABA问题先看一段代码,代码源于Unsafe类①这一步的意义是得到内存中的现有值(参数可忽略) 12345678public final long getAndAddLong(Object var1, long var2, long var4) &#123; long var6; do &#123; var6 = this.getLongVolatile(var1, var2);① &#125; while(!this.compareAndSwapLong(var1, var2, var6, var6 + var4)); return var6; &#125; ABA问题简述:如代码所示,假设存在线程1,2。线程1运行了①之后等待,线程2开始运行,线程2将A改变为B,再将B改变为A,线程2结束,线程1继续运行,此时,线程1会认为A依旧是原来他读取到的A,期间并没有改变,并且将他按照正常流程改变为B。当然,在正常情况下,变量加减方面这并不会造成什么影响,但是若将CAS用在堆栈或者链表上(网上搜索一下有很多这种ABA问题的例子),或由于业务错误,同时发出了两次修改金钱100为50的操作,但是此时又加入了一个修改金钱50为100的操作(参考自漫画：什么是CAS机制？（进阶篇）),那么就会出现严重的问题解决方案:最常见的ABA问题的解决方案就是诸如java并发包中的AtomicStampedReference类,其内部实现类似于。不同点是,其内部维护了一个内部类Pair,采用记录版本号的方式来避免ABA问题,不过每次在更改时都会new一个新的Pair来进行CAS,如果对性能有极高的要求,那么需要谨慎选择 2.由于在使用CAS时,往往使用的是重试机制,即在while循环中一直重试CAS直到成功为止,所以在极高并发情况下,CAS的失败率将增大,会导致严重的性能问题,对于这个问题,很多时候解决方案是在一般程度并发时采取CAS,极高并发时进行排队]]></content>
+      <categories>
+        <category>学习笔记</category>
+      </categories>
+      <tags>
+        <tag>java</tag>
+        <tag>base</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[jpa查询部分字段获取实体类]]></title>
+    <url>%2F2019%2F07%2F01%2Fjpa%E6%9F%A5%E8%AF%A2%E9%83%A8%E5%88%86%E5%AD%97%E6%AE%B5%E8%8E%B7%E5%8F%96%E5%AE%9E%E4%BD%93%E7%B1%BB%2F</url>
+    <content type="text"><![CDATA[代码已经放到github,test测试中的demo2对应的是sql方式,demo3对应的是hql方式,demo1是分页查询,我另一篇文章会讲到github地址 前言我们平时使用jpa查询时,有两种情况,一种是查询全部字段,另一种是查询部分字段,当我们按通常的sql语句写法查询部分字段时,会出现jpa无法自动解析类型的情况,例如这类报错 1org.springframework.dao.InvalidDataAccessResourceUsageException: could not execute query; SQL [ SELECT sa.name FROM student sa ]; nested exception is org.hibernate.exception.SQLGrammarException: could not execute query 解决方案针对hql和sql分别有两种解决方案 一. &emsp;hql情况下,我们可以用这种方式来解决,有必要注意的一点是,Student里面一定要有相应的构造类 123//TODO 查询部分字段的demo-hql@Query(value = " SELECT new Student(s.name) FROM Student s")List&lt;Student&gt; temp03(); 二. 在sql情况下,我们可以用这种方式解决,首先我们将查出来的数据领jpa解析为map,然后通过我们自己写的map转实体类方法来解决 1234//TODO 查询部分字段的demo-sql@Query(value = " SELECT sa.name FROM student sa ", nativeQuery = true)List&lt;Map&lt;String,Object&gt;&gt; temp02(); 下面是我自己写的一个map转实体类的工具方法 1234567891011121314151617181920212223242526272829303132333435363738/**将map转换为实体类,在jpa查询部分字段时会用到* 使用的时候注意,因为int类型会初始化的问题,无法被FASTJSON忽略掉,所以返回的json可能会带有额外的数字0* 由于是通过属性名来匹配,所以如果数据库字段名和参数名不一致,会导致部分字段映射不到实体,应该这么写* @Query(value = " select id,bar_code01 barCode01,bar_code02 barCode02,bar_code03 barCode03,name,comment from library_good ",nativeQuery=true)* 在查询时取别名,将其跟类的属性名一致 */public static &lt;T&gt;T mapToEntity(Map&lt;String,Object&gt; map,Class&lt;T&gt; targetClass) throws IllegalAccessException, InstantiationException &#123; Class superClass; Field[] fields; T target = targetClass.newInstance(); //接收targetClass的Field List&lt;Field&gt; targetfieldList = new LinkedList&lt;&gt;(); superClass = targetClass; while(superClass!=null&amp;&amp;superClass!=Object.class)&#123; //由于该方法只能获取superClass的参数(private,protect,public等任何声明),但无法获取父类的参数,这里我们迭代一波 fields = superClass.getDeclaredFields(); targetfieldList.addAll(Arrays.asList(fields)); superClass = superClass.getSuperclass(); &#125; //匹配并赋值 for (Field targetfield : targetfieldList) &#123; for (Map.Entry&lt;String, Object&gt; mapEntry : map.entrySet()) &#123; if (targetfield.getName().equals(mapEntry.getKey()))&#123; //暂时保存权限 boolean targetFlag = targetfield.isAccessible(); //赋予权限 targetfield.setAccessible(true); //赋值 targetfield.set(target,mapEntry.getValue()); //恢复原权限 targetfield.setAccessible(targetFlag); break; &#125; &#125; &#125; return target;&#125; 有一点需要注意,由于其底层用了反射,所以无论是通过该种方式取数据还是存数据,均需要setAccessible(true),否则会出现IllegalAccessException异常]]></content>
+      <categories>
+        <category>学习笔记</category>
+      </categories>
+      <tags>
+        <tag>jpa</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[linux安装jdk(非openjdk)]]></title>
+    <url>%2F2019%2F07%2F01%2Flinux%E5%AE%89%E8%A3%85jdk(%E9%9D%9Eopenjdk)%2F</url>
+    <content type="text"><![CDATA[1.官网下载压缩包,这里我下载的是解压版不是rpm版本,现在可能需要你登陆才可以下载,自己去注册个账户吧,或者用其他方式得到压缩包oracle下载jdk8的网址 2.解压压缩包tar -zxvf 你压缩包的名字.tar.gz 3.安装vim,这是个文本编辑器,你可以把它理解为记事本这种东西,至少我的ubuntu18.04是不自带vim的你可以使用sudo apt install vim这条命令安装,也可以在命令行输入vim按照他的提示安装 3.修改配置文件,原理跟window一样,只要将路径添加到配置文件中,操作系统就可以检测到我们想要安装的东西vim /etc/profile(这里需要注意了,要用root权限进行,前面加sudo) 4.打开配置文件后,我们在尾部追加如下内容,vim的操作方式请自行搜索 123export JAVA_HOME=你的jdk目录,注意是根目录,不是bin目录export CLASSPATH=$JAVA_HOME/lib/export PATH=$JAVA_HOME/bin:$PATH 5.使操作系统重新加载配置文件,注意需要root权限source /etc/profile 6.输入java -version出现java版本信息即我们配置成功了]]></content>
+      <categories>
+        <category>工具笔记</category>
+      </categories>
+      <tags>
+        <tag>base</tag>
+        <tag>linux</tag>
+        <tag>jdk</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[java中的锁]]></title>
+    <url>%2F2019%2F06%2F24%2Fjava%E4%B8%AD%E7%9A%84%E9%94%81%2F</url>
+    <content type="text"><![CDATA[锁的几种用法####synchronizede.g:1用synchronized对一个代码块加锁,object可以是任意的对象,任何其他synchronized(该对象)的代码块均需要获取到锁以后才可以执行,如果object=this,那么就是锁住的整个对象 123synchronized(object) &#123; //代码块&#125; e.g:2下方代码锁住的是此方法所在的对象,也就是如果该对象中两个不同的方法前面均有synchronized时,在多个线程操作同一个对象时,同一时间只有一个方法可以被调用 123public synchronized void work()&#123; System.out.println(123);&#125; e.g:3如果是对一个class或者static类型的对象加锁,那么因为class和static类型的对象只会在jvm虚拟机保存一份,所以加锁要额外注意e.g:4特别强调的一点是,synchronized是针对对象加锁,Class和static也可以看作一个对象,假如说出现下面代码,此时你的锁是无效的,虽然引用没变,但是引用指向的对象已经改变 123456Object obj = new Object();synchronized(obj)&#123; obj = new Object(); //代码块&#125;` 待续 拓展:分布式锁]]></content>
+      <categories>
+        <category>工具笔记</category>
+      </categories>
+      <tags>
+        <tag>java</tag>
+        <tag>base</tag>
+        <tag>lock</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[分布式锁]]></title>
+    <url>%2F2019%2F06%2F24%2F%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%2F</url>
+    <content type="text"><![CDATA[####什么是锁?&emsp;锁是一个多方可以共同访问的元素,各个访问者通过对该元素的信息的判断,按照一定事先约定的行为进行协调的功能。这个元素可以是任何的东西,根据事先约定的行为的不同也会随之变化。 &emsp;例如,一个队列,如果来访者发现自己的id在该队列的头部,那么就认为自己拥有了锁,可以执行某些逻辑,这时候这个队列就相当于一个锁。锁也可以是一个boolean类型的对象,当他为true或者false时,其他线程可以来竞争使得boolean状态改变,从而认为自己获取了锁(当然需要考虑使用场景)。锁也可以是一个信号量,也可以是一个节点,例如zookeeper中,一个节点存在与否就意味着是否可以竞争锁(当然行为是我们自己来定的,zookeeper和redis仅仅是提供了一个放置锁的地方)。当然,最重要的一点就是原子性,我们在加锁和解锁的时候,要充分考虑使用场景来决定对锁的判断策略 ####redis锁的实现&emsp;对于redis分布式锁来说,常用的莫过于SETNX,SET,DEL这几个函数了tip:现在SET函数可以传递参数,例如过期时间,在已存在值时的反应,对于添加成功或者失败的返回值这几个元素,所以SET已经完全可以取代SETNX,甚至说比SETNX表现更好。因为SETNX在加锁时还要设置过期时间字段,需要由客户端根据这个字段来判断锁是否过期,这样一牵扯到非原子性的问题,就会十分复杂 &emsp;最简单的加锁解锁代码如下,由于在解锁时,伴随着锁过期的可能,我们需要先判断锁是否是本客户端加的,再去解锁,否则A加锁,A过期,B加锁,A完成任务解锁,就把B加的锁解掉了。解锁操作我们可以想象,他是先查询再操作,不是原子性,所以我们需要封装LUA脚本来使这两条语句具备原子性具体SET参数意义可以自行搜索 123456789101112131415161718192021222324252627282930313233343536/*** Non-blocking try to hold a lock* if true,the work must be finished within millisecond,else the distributed-lock is meaningless* @param key the key of lock* @param value a unique String,it will be used When release* @param expiration it will expirate after now+expiration* @return true if access,else false* */public boolean tryLock(String key,String value,long expiration)&#123; //try to create a record if not exist Object res = redisTemplate.execute((RedisCallback) redisConnection -&gt; &#123; JedisCommands connect = (JedisCommands) redisConnection.getNativeConnection(); //SETNX can be replace by SET from Redis 2.6.12 version return connect.set(key,value,"NX","PX",expiration); &#125;); return res!=null;&#125;/*** Non-blocking release a lock,if lock has expiration,nothing happen* @param key the key of lock* @param value the String you set When try to hold a lock* */public void relaseLock(String key,String value)&#123; redisTemplate.execute((RedisCallback) redisConnection -&gt; &#123; Object obj = redisConnection.getNativeConnection(); System.out.println(obj.getClass().getName()); if (obj instanceof JedisCluster) &#123; JedisCluster connection = (JedisCluster) obj; return connection.eval(LUA,Collections.singletonList(key),Collections.singletonList(value)); &#125;else if (obj instanceof Jedis)&#123; Jedis connection = (Jedis) obj; return connection.eval(LUA,Collections.singletonList(key),Collections.singletonList(value)); &#125; return null; &#125;) ;&#125; 虽然SET方法是瞬时的,无法阻塞,但是我们可以自己封装方法来达到阻塞加锁的效果 123456789101112131415161718192021222324252627/*** blocking try to hold a lock* if true,the work must be finished within millisecond,else the distributed-lock is meaningless* @param key the key of lock* @param value a unique String,it will be used When release* @param expiration it will expirate after now+expiration* @param overtime if getLock unfinish after overtime,return false* @param frequency the frequency try to get a Lock,more small it will have a large probability to get a Lock* and more pressure on the CPU,* @return true if access,else false* */public boolean getLock(String key,String value,long expiration,long overtime,long frequency)&#123; Future future = executor.submit(() -&gt; &#123; boolean flag = false; while (!flag)&#123; flag = tryLock(key,value,expiration); Thread.sleep(frequency); &#125; return flag; &#125;); try &#123; return (boolean) future.get(overtime,TimeUnit.MILLISECONDS); &#125; catch (InterruptedException | ExecutionException | TimeoutException e) &#123; future.cancel(true); return false; &#125;&#125; tip:假如我们要做这种近似无限循环直到符合条件的操作,建议根据业务场景适当的Thread.sleep();让出cpu时间片,减少cpu压力。具体体现为,如果没有sleep,那么cpu的使用率在8线程测试机上直接飙升30%,而加入sleep后cpu使用率低于3%,另外true也可以改为flag标记位,以为今后增加中断功能做拓展 123while&#123;true&#125;&#123; //业务代码&#125; &emsp;上面我们说了分布式锁的简单加锁和解锁,那么接下来就出现了问题了,假如redis崩溃,我们的锁就全部失效。当然我们一般会搭建redis集群,每个redis都会有主从配置,但是有一点要注意,主从redis在同步的时候是异步的,无法保证实时一致性,也就是说如果我们A加了锁,主redis崩溃,锁未同步到从redis,B认为没有加锁,所以他可以成功加锁,这就产生了冲突,对于这种情况,antirez提出的redlock算法或许可以解决这个问题(还未仔细研究redlock算法,无法断言)]]></content>
+      <categories>
+        <category>探索笔记</category>
+      </categories>
+      <tags>
+        <tag>distributed-lock</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[利用git完成服务器自动化部署解决方案]]></title>
+    <url>%2F2019%2F06%2F24%2F%E5%88%A9%E7%94%A8git%E5%AE%8C%E6%88%90%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%87%AA%E5%8A%A8%E5%8C%96%E9%83%A8%E7%BD%B2%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88%2F</url>
+    <content type="text"><![CDATA[前言本篇主要讲述在团队合作时,如何利用脚本和git在前后端分离模式下,测试时的服务器自动化部署问题(只是个人想法和实践,仅作参考。下方代码已经经过测试,保证做好适配后可用) 适用情况:团队合作,前后端分离,后端需根据前端需求持续变更代码并提供给前端测试 需要的环境:linux服务器,git,maven,java 2019.6.25更新昨天忘记了说一个重要的问题,如果你是在window环境下写的shell脚本到linux环境下运行,由于两者系统换行符不一致,需要在linux中执行vim你的脚本名,进入脚本:set ff=unix,注意”:”这个符号需要带着,不明白的请去搜vim命令一定要赋予脚本可执行权限,赋权具体命令下文sh代码有提及刚才看了些博客,有提到用hook触发,而不是自己去循环访问,思路待定 原答案&emsp;首先讲成果,上代码,我会在其中伴随大量讲解1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465666768697071727374#!/bin/sh###本代码中的该项目特有名称均会用其他文本代替,例如我的项目名就用demo代替###该项目的git文件夹我们暂且称呼为demofunction updateAndRestart()&#123; #切换到online分支,这个地方需要根据自己的git分支做适配 git checkout online #git rev-parse online命令用于查看本地的online分支最后一次提交id LOCALONLINE=$(git rev-parse online) #用于这句话就是打印到控制台,没什么意义 echo "本地ONLINE为$&#123;LOCALONLINE&#125;" #从远程仓库fetch,这里选择fetch而不是pull也是为了性能考虑,如有偏差,请根据自己想法修改 git fetch echo "从远程仓库拉取结束" #获取已经fetch下来的远程仓库的HEAD,这里要做郑重说明,如果git rev-parse orgin/online虽然是获取远程仓库online分支的最后一次提交,但是他不会真的去连接远程仓库拉取信息,而是读取本地的远程仓库的缓存信息,所以之前需要git fetch也是为了刷新本地缓存的作用。 #关于如何直接去远程查看远程仓库最后一次提交这个问题,我找了一半天没有找到这个方法 REMOTEONLINE=$(git rev-parse origin/online) echo "远程HEAD为$&#123;REMOTEONLINE&#125;" #检查远程仓库是否与本地ONLINE一致,若不一致,则证明了远程已更新 if [[ $LOCALONLINE != $REMOTEONLINE ]]; then echo "进入重启-------------------------------------------" #将远程分支的更新合并到本地,由于git pull命令可以理解为git fetch+git merge,这一步的意义这里不做赘述 git merge $REMOTEONLINE #杀死所有名为下列的进程 #这里只讲一点,由于awk命令下文介绍过,那么此时可以想象文本状态是kill -9 进程pid,sh命令是把之前的输出当作脚本来执行,那么就成果实现了批量kill进程 jps | grep demo.jar|awk '&#123;print "kill -9 " $1&#125;'|sh #重新打包jar mvn clean package #给jar授权 #这里有必要作下说明,此脚本我是运行在root用户下(这点很重要,如果是其他用户,则在权限方面需要注意做适配) #chomd是赋权命令,后面参数则是其权限,参数每部分的具体意义请自行查询 #这条命令是授予demo.jar的root用户可执行权限(原本被mvn打包后默认为读写权限,没有执行权限) chmod 744 /你的目录/demo.jar #这个文件我不知道是什么,在window环境下尝试情况,删除了也不会有什么影响。有人说.jar是不带依赖的,original是带依赖的,但是观察文件大小,发现original文件只有几十k,明显不是带着依赖一起打包的样子 chmod 744 /你的目录/demo.jar.original #后台运行jar,具体意义可见后半部分文章 nohup java -jar /你的目录t/demo.jar &gt; /你的目录/xxx-`date +%Y-%m-%d-%H-%M-%S`.log 2&gt;&amp;1 &amp; sleep 15 fi&#125;###上面的是函数,只有调用时才会运行,首先运行的是下面代码#首先cd到你的demo存放目录,这一步可有可无,根据你的项目路径做好适配就行cd /xxx/xxx/demo#下面这行代码是脚本启动时用来检测是否demo程序正在运行#这里顺便讲解下shell和java的知识# jps该命令可以理解为和ps命令类似,只不过是用来显示java进程# |这个管道命令我无法解释,自己去搜索引擎# grep用来抓取出包含demo.jar字段的行# awk一种文本处理命令,将文本按照我们定义的规则处理# 这里'&#123;print $1&#125;'代表的是输出每行的第一个参数(在我的linux系统中,每行的第一个参数正好是java进程的pid,其他人需要根据情况适配,注意'引号一定要有)# wc -l是统计命令,由于之前都是一行一行打印的,所以此命令可以很轻松统计有多少在运行# 综上所述,该条命令的意义在于:统计名为demo.jar的java进程的数目,awk这段命令后来想了想属于冗余命令了,可视情况去除SUMMERTRAINPID=$(jps | grep demo.jar |awk '&#123;print $1&#125;' |wc -l)if [[ SUMMERTRAINPID!=0 ]]; then echo "脚本开始,检测到程序未启动,先启动程序------------------------" #summertrain-`date +%Y-%m-%d-%H-%M-%S` #下面这条命令是在后台启动demo.jar并且将输出重定向到指定的log文件,如果文件不存在会新建 #其实nohup java -jar /你的路径/demo.jar &gt; /你log日志的路径/文件名.log &amp;这条命令就可以做到这一点 #下面这条命令多出来的几个字段表示的是将error日志也重定向到log文件 #小提示,在自己的脚本,log日志太长不易于观看,所以可以文件名可以在后缀加上`date +%Y-%m-%d-%H-%M-%S`,参数可以在生成文件时自动加上当前实际后缀,例如demolog-`date +%Y-%m-%d-%H-%M-%S`.log nohup java -jar /你的路径/demo.jar &gt; /你log日志的路径/文件名.log 2&gt;&amp;1 &amp; #这里我令他休眠15秒等待java程序启动 sleep 15fi#接下来开始循环检测是否git有更新while truedo echo "自动循环中" updateAndRestart sleep 10done 后记:写该脚本时参考了git命令,shell语法,linux命令shell脚本中的空格一定要注意,少一个空格往往意义就会不同如果团队人数更多,那么该方法不再试用,每次程序启动都需一定时间。届时改为分布式项目,每个模块独立部署。]]></content>
+      <categories>
+        <category>探索笔记</category>
+      </categories>
+      <tags>
+        <tag>git</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[mysql启动(无需添加到服务)]]></title>
+    <url>%2F2019%2F06%2F22%2Fmysql%E5%90%AF%E5%8A%A8(%E6%97%A0%E9%9C%80%E6%B7%BB%E5%8A%A0%E5%88%B0%E6%9C%8D%E5%8A%A1)%2F</url>
+    <content type="text"><![CDATA[已经安装配置好mysql,无需将mysql添加到服务项中即可启动 1.打开cmd,通过cd到mysql安装/解压文件夹下 2.调用bin下的mysqld.exe文件(如果是linux则可能是.sh) 3.参数为my.ini/my.cnf 4.具体命令为&emsp;bin/mysqld –defaults-file=./my.ini 5.输入该命令后cmd应该会挂起,此时mysql已经启动成功。如果关闭cmd命令行那么mysql关闭]]></content>
+      <categories>
+        <category>工具笔记</category>
+      </categories>
+      <tags>
+        <tag>mysql</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[git使用笔记]]></title>
+    <url>%2F2019%2F06%2F21%2Fgit%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0%2F</url>
+    <content type="text"><![CDATA[详细介绍git使用和配置(不包括安装) 什么是git? 首先我用通俗语言解释下,git是一种版本控制工具,你既可以在本地进行版本控制,也可以与搭建好git服务器的远端进行同步 如何使用? windows的可以官方下载安装包,linux可以命令行下载(对于window来说可能需配置环境变量,可有可无) 配置全局信息 随便找个地方右键打开git bash ps:这里配置的昵称和邮箱可以随便写,作用体现在,假如你提交了git,那么在git记录中会显示提交者昵称和邮箱,即为下面输入的 输入git config –global user.name “你的昵称” 输入git config –global user.name “你的邮箱” 创建git仓库 随便找个地方新建文件夹进去打开git bash(此处建议选一个父文件夹作为git仓库目录) 输入git init 该命令的作用是在当前文件夹下生成git仓库所需文件(注意,这里git仓库通常指的是一个项目,而不是管理多个项目的仓库,而且生成的文件为.git是个隐藏文件夹) 使用git 当我们在文件夹下做了操作以后(添加修改删除文件),可以git add . .代表暂存全部文件,当然也可以是其他写法或部分文件 此时我们已经add成功,接下来git commit -m”此次提交的注释” 此时,本地的使用基本就到这里(此外还有分支,冲突等各种概念,不在本篇讲) 关联github/码云(也可以是其他的或者自己搭建的git服务器) 首先我们在git bash中生成一对密钥,命令为:ssh-keygen -t rsa -C “你之前填写的邮箱” 其实一般码云或者github都要官方绑定密钥教程,基本都一样 生成密钥后我们把密钥配置到git服务器上 如果是github之类的你从个人setting可以找到配置密钥的地方,如果是个人git服务器则可能需要手动添加 刚才生成的密钥分为公钥和私钥,一般公钥以.pub结尾,这部分涉及到密码学,你只需要知道这是非对称密钥用来代替用户密码做身份验证就好了,具体内容请自行搜索 在window中默认保存在C://user/{你的用户名}/.ssh文件夹中 当我们配置到服务器公钥后,就可以正常的git clone 远程私有仓库等操作 可视化界面SourceTree SourceTree需要注册啥的,可能被墙了,自己解决 这里要提到一点,它仅仅是个可视化界面,仍然需要你安装git 团队里有人出现了SourceTree没有权限的问题,打开密钥设置界面(不同版本打开位置有所不同,大概都是在工具-选项这一块),找到之前我们生成的密钥(上文提到过位置),将私钥添加进去即可 解决冲突 这里我不建议大家团队合作时在采用pull来拉代码,这样的话如果有冲突,文件会被标记为冲突,建议用fetch先检测一下 如果是在commit之前拉取,产生了冲突,那么可以针对冲突的文件,抛弃自己的修改(等fetch+merge之后在手动增加回来) 如果是在commit之后拉取产生了冲突,就会出现无法拉取也无法推送的情况,这时候我们可以撤销commit操作,使其返回到上一种情况 1234567git reset [--参数] 提交id参数有: mixed:不删除改动的代码,撤销commit和add soft:不删除改动代码,撤销commit hard:删除改动代码,撤销commit和add(这种是用指定的提交id强行覆盖掉现有代码)示例: git reset --soft xxxxxxxxx 这里我们说的是命令行的操作,如果是sourceTree,那么对应的就是”重置当前分支到此次提交” 如果想要抛弃对方的提交,使自己本次提交强行覆盖掉对方,那么可以见下方代码。如果是sourceTree的话,则需要取选项里面允许强制提交。此外,如果用的github之类的这种托管远程仓库,那么对方可能还会设置了权限,只有拥有者有权限强制推送,项目所属人去github里面设置一下就好(这一点笔者没有实践) 1git push --force origin 一些其他的诸如merge,rebase的用法 这些用法笔者的理解有限,这里附一个知乎的提问,大家可以参考下在开发过程中使用git rebase还是git merge，优缺点分别是什么？ 一些其他的bug如何解决 现象:原本中文编码变成了/xxx/xxx之类的八进制码解决:修改本地git仓库下的.git隐藏文件夹下config文件,在[core]部分新增quotepath = false字段保存即可 git忽略规则&emsp;当我们同步到远程仓库时,配置了.gitignore可以令git按照我们定义的规则,选择性的跟踪本地仓库的文件&emsp;具体的语法规范这里不做描述,搜索引擎搜教程即可&emsp;这里我将列出学生team一个springboot项目合作时使用的.gitignore。对官方生成的git做了少许改动 123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263HELP.mdtarget/!.mvn/wrapper/maven-wrapper.jar!**/src/main/**!**/src/test/**###团队合作config######由于团队合作时每个成员数据库账户密码不一样,所以每个成员都有个个人配置信息,在通用配置里面引入###person.properties###springboot######此处表示忽略测试文件夹###/src/test/java### STS ###.apt_generated.classpath.factorypath.project.settings.springBeans.sts4-cache### IntelliJ IDEA ###.idea*.iws*.iml*.ipr### NetBeans ###/nbproject/private//nbbuild//dist//nbdist//.nb-gradle/build/### VS Code ###.vscode/# Log file*.log# Compiled class file*.class# BlueJ files*.ctxt# Mobile Tools for Java (J2ME).mtj.tmp/# Package Files #*.jar*.war*.nar*.ear*.zip*.tar.gz*.rarhs_err_pid* &emsp;常见问题:配置了.gitignore仍然无法忽略&emsp;解决方式:git rm –cached filename&emsp;删除该filename文件的本地缓存,然后再进行add和commit等操作,等push到远端后,以后再就不会被追踪&emsp;原因:这是由于在配置.gitignore之前该文件就已经被git追踪造成的,]]></content>
+      <categories>
+        <category>工具笔记</category>
+      </categories>
+      <tags>
+        <tag>base</tag>
+        <tag>git</tag>
       </tags>
   </entry>
   <entry>
     <title><![CDATA[welcome]]></title>
     <url>%2F2019%2F06%2F20%2Fwelcome%2F</url>
-    <content type="text"><![CDATA[####测试图片 这是被居中的的文本 下一行文本]]></content>
+    <content type="text"><![CDATA[####测试图片,图片无效 图片下标 下一行文本 ####测试图片,图片无效]]></content>
   </entry>
 </search>
