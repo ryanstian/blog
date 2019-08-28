@@ -92,18 +92,18 @@
 
 
 
-  <meta name="description" content="1.官网下载压缩包,这里我下载的是解压版不是rpm版本,现在可能需要你登陆才可以下载,自己去注册个账户吧,或者用其他方式得到压缩包oracle下载jdk8的网址">
-<meta name="keywords" content="base,linux,jdk">
+  <meta name="description" content="####什么是锁?&amp;emsp;锁是一个多方可以共同访问的元素,各个访问者通过对该元素的信息的判断,按照一定事先约定的行为进行协调的功能。这个元素可以是任何的东西,根据事先约定的行为的不同也会随之变化。">
+<meta name="keywords" content="distributed-lock">
 <meta property="og:type" content="article">
-<meta property="og:title" content="linux安装jdk(非openjdk)">
-<meta property="og:url" content="https://qq616023844.github.io/2019/07/01/linux安装jdk(非openjdk)/index.html">
+<meta property="og:title" content="分布式锁">
+<meta property="og:url" content="https://qq616023844.github.io/2019/08/28/分布式锁/index.html">
 <meta property="og:site_name" content="柠檬不酸的博客">
-<meta property="og:description" content="1.官网下载压缩包,这里我下载的是解压版不是rpm版本,现在可能需要你登陆才可以下载,自己去注册个账户吧,或者用其他方式得到压缩包oracle下载jdk8的网址">
+<meta property="og:description" content="####什么是锁?&amp;emsp;锁是一个多方可以共同访问的元素,各个访问者通过对该元素的信息的判断,按照一定事先约定的行为进行协调的功能。这个元素可以是任何的东西,根据事先约定的行为的不同也会随之变化。">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-08-17T14:48:37.930Z">
+<meta property="og:updated_time" content="2019-08-28T15:59:40.893Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="linux安装jdk(非openjdk)">
-<meta name="twitter:description" content="1.官网下载压缩包,这里我下载的是解压版不是rpm版本,现在可能需要你登陆才可以下载,自己去注册个账户吧,或者用其他方式得到压缩包oracle下载jdk8的网址">
+<meta name="twitter:title" content="分布式锁">
+<meta name="twitter:description" content="####什么是锁?&amp;emsp;锁是一个多方可以共同访问的元素,各个访问者通过对该元素的信息的判断,按照一定事先约定的行为进行协调的功能。这个元素可以是任何的东西,根据事先约定的行为的不同也会随之变化。">
 
 
 
@@ -111,7 +111,7 @@
 
   
   
-  <link rel="canonical" href="https://qq616023844.github.io/2019/07/01/linux安装jdk(非openjdk)/">
+  <link rel="canonical" href="https://qq616023844.github.io/2019/08/28/分布式锁/">
 
 
 
@@ -121,7 +121,7 @@
   };
 </script>
 
-  <title>linux安装jdk(非openjdk) | 柠檬不酸的博客</title>
+  <title>分布式锁 | 柠檬不酸的博客</title>
   
 
 
@@ -344,7 +344,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://qq616023844.github.io/2019/07/01/linux安装jdk(非openjdk)/">
+    <link itemprop="mainEntityOfPage" href="https://qq616023844.github.io/2019/08/28/分布式锁/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Lemon Sour">
@@ -361,7 +361,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">linux安装jdk(非openjdk)
+          <h1 class="post-title" itemprop="name headline">分布式锁
 
               
             
@@ -387,24 +387,12 @@
                 
               
 
-              <time title="Created: 2019-07-01 08:56:00" itemprop="dateCreated datePublished" datetime="2019-07-01T08:56:00+08:00">2019-07-01</time>
+              <time title="Created: 2019-08-28 22:57:00 / Modified: 23:59:40" itemprop="dateCreated datePublished" datetime="2019-08-28T22:57:00+08:00">2019-08-28</time>
             
 
             
               
 
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">Edited on</span>
-                
-                <time title="Modified: 2019-08-17 22:48:37" itemprop="dateModified" datetime="2019-08-17T22:48:37+08:00">2019-08-17</time>
               
             
           </span>
@@ -421,7 +409,7 @@
                 <span class="post-meta-item-text">In</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/工具笔记/" itemprop="url" rel="index"><span itemprop="name">工具笔记</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/探索笔记/" itemprop="url" rel="index"><span itemprop="name">探索笔记</span></a></span>
 
                 
                 
@@ -456,16 +444,20 @@
       
 
       
-        <p>1.官网下载压缩包,这里我下载的是解压版不是rpm版本,现在可能需要你登陆才可以下载,自己去注册个账户吧,或者用其他方式得到压缩包<br><a href="https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html" target="_blank" rel="noopener">oracle下载jdk8的网址</a></p>
+        <p>####什么是锁?<br>&emsp;锁是一个多方可以共同访问的元素,各个访问者通过对该元素的信息的判断,按照一定事先约定的行为进行协调的功能。这个元素可以是任何的东西,根据事先约定的行为的不同也会随之变化。</p>
 <a id="more"></a>
-<p>2.解压压缩包<br>tar -zxvf 你压缩包的名字.tar.gz</p>
-<p>3.安装vim,这是个文本编辑器,你可以把它理解为记事本这种东西,至少我的ubuntu18.04是不自带vim的你可以使用<br>sudo apt install vim这条命令安装,也可以在命令行输入vim按照他的提示安装</p>
-<p>3.修改配置文件,原理跟window一样,只要将路径添加到配置文件中,操作系统就可以检测到我们想要安装的东西<br>vim /etc/profile(这里需要注意了,要用root权限进行,前面加sudo)</p>
-<p>4.打开配置文件后,我们在尾部追加如下内容,vim的操作方式请自行搜索</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">export JAVA_HOME=你的jdk目录,注意是根目录,不是bin目录</span><br><span class="line">export CLASSPATH=$JAVA_HOME/lib/</span><br><span class="line">export PATH=$JAVA_HOME/bin:$PATH</span><br></pre></td></tr></table></figure>
+<p>&emsp;例如,一个队列,如果来访者发现自己的id在该队列的头部,那么就认为自己拥有了锁,可以执行某些逻辑,这时候这个队列就相当于一个锁。锁也可以是一个boolean类型的对象,当他为true或者false时,其他线程可以来竞争使得boolean状态改变,从而认为自己获取了锁(当然需要考虑使用场景)。锁也可以是一个信号量,也可以是一个节点,例如zookeeper中,一个节点存在与否就意味着是否可以竞争锁(当然行为是我们自己来定的,zookeeper和redis仅仅是提供了一个放置锁的地方)。当然,最重要的一点就是原子性,我们在加锁和解锁的时候,要充分考虑使用场景来决定对锁的判断策略</p>
+<p>####redis锁的实现<br>&emsp;对于redis分布式锁来说,常用的莫过于SETNX,SET,DEL这几个函数了<br>tip:现在SET函数可以传递参数,例如过期时间,在已存在值时的反应,对于添加成功或者失败的返回值这几个元素,所以SET已经完全可以取代SETNX,甚至说比SETNX表现更好。因为SETNX在加锁时还要设置过期时间字段,需要由客户端根据这个字段来判断锁是否过期,这样一牵扯到非原子性的问题,就会十分复杂</p>
+<p>&emsp;最简单的加锁解锁代码如下,由于在解锁时,伴随着锁过期的可能,我们需要先判断锁是否是本客户端加的,再去解锁,否则A加锁,A过期,B加锁,A完成任务解锁,就把B加的锁解掉了。解锁操作我们可以想象,他是先查询再操作,不是原子性,所以我们需要封装LUA脚本来使这两条语句具备原子性<br>具体SET参数意义可以自行搜索</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* Non-blocking try to hold a lock</span></span><br><span class="line"><span class="comment">* if true,the work must be finished within millisecond,else the distributed-lock is meaningless</span></span><br><span class="line"><span class="comment">* <span class="doctag">@param</span> key the key of lock</span></span><br><span class="line"><span class="comment">* <span class="doctag">@param</span> value a unique String,it will be used When release</span></span><br><span class="line"><span class="comment">* <span class="doctag">@param</span> expiration it will expirate after now+expiration</span></span><br><span class="line"><span class="comment">* <span class="doctag">@return</span> true if access,else false</span></span><br><span class="line"><span class="comment">* */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">tryLock</span><span class="params">(String key,String value,<span class="keyword">long</span> expiration)</span></span>&#123;</span><br><span class="line">    <span class="comment">//try to create a record if not exist</span></span><br><span class="line">    Object res = redisTemplate.execute((RedisCallback) redisConnection -&gt; &#123;</span><br><span class="line">        JedisCommands connect = (JedisCommands) redisConnection.getNativeConnection();</span><br><span class="line">        <span class="comment">//SETNX can be replace by SET from Redis 2.6.12 version</span></span><br><span class="line">        <span class="keyword">return</span> connect.set(key,value,<span class="string">"NX"</span>,<span class="string">"PX"</span>,expiration);</span><br><span class="line">    &#125;);</span><br><span class="line">    <span class="keyword">return</span> res!=<span class="keyword">null</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* Non-blocking release a lock,if lock has expiration,nothing happen</span></span><br><span class="line"><span class="comment">* <span class="doctag">@param</span> key the key of lock</span></span><br><span class="line"><span class="comment">* <span class="doctag">@param</span> value the String you set When try to hold a lock</span></span><br><span class="line"><span class="comment">* */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">relaseLock</span><span class="params">(String key,String value)</span></span>&#123;</span><br><span class="line">    redisTemplate.execute((RedisCallback) redisConnection -&gt; &#123;</span><br><span class="line">        Object obj = redisConnection.getNativeConnection();</span><br><span class="line">        System.out.println(obj.getClass().getName());</span><br><span class="line">        <span class="keyword">if</span> (obj <span class="keyword">instanceof</span> JedisCluster) &#123;</span><br><span class="line">            JedisCluster connection = (JedisCluster) obj;</span><br><span class="line">            <span class="keyword">return</span> connection.eval(LUA,Collections.singletonList(key),Collections.singletonList(value));</span><br><span class="line">        &#125;<span class="keyword">else</span> <span class="keyword">if</span> (obj <span class="keyword">instanceof</span> Jedis)&#123;</span><br><span class="line">            Jedis connection = (Jedis) obj;</span><br><span class="line">            <span class="keyword">return</span> connection.eval(LUA,Collections.singletonList(key),Collections.singletonList(value));</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;) ;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>5.使操作系统重新加载配置文件,注意需要root权限<br>source /etc/profile</p>
-<p>6.输入java -version出现java版本信息即我们配置成功了</p>
+<p>虽然SET方法是瞬时的,无法阻塞,但是我们可以自己封装方法来达到阻塞加锁的效果</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* blocking try to hold a lock</span></span><br><span class="line"><span class="comment">* if true,the work must be finished within millisecond,else the distributed-lock is meaningless</span></span><br><span class="line"><span class="comment">* <span class="doctag">@param</span> key the key of lock</span></span><br><span class="line"><span class="comment">* <span class="doctag">@param</span> value a unique String,it will be used When release</span></span><br><span class="line"><span class="comment">* <span class="doctag">@param</span> expiration it will expirate after now+expiration</span></span><br><span class="line"><span class="comment">* <span class="doctag">@param</span> overtime if getLock unfinish after overtime,return false</span></span><br><span class="line"><span class="comment">* <span class="doctag">@param</span> frequency the frequency try to get a Lock,more small it will have a large probability to get a Lock</span></span><br><span class="line"><span class="comment">*                  and more pressure on the CPU,</span></span><br><span class="line"><span class="comment">* <span class="doctag">@return</span> true if access,else false</span></span><br><span class="line"><span class="comment">* */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">getLock</span><span class="params">(String key,String value,<span class="keyword">long</span> expiration,<span class="keyword">long</span> overtime,<span class="keyword">long</span> frequency)</span></span>&#123;</span><br><span class="line">    Future future = executor.submit(() -&gt; &#123;</span><br><span class="line">        <span class="keyword">boolean</span> flag = <span class="keyword">false</span>;</span><br><span class="line">        <span class="keyword">while</span> (!flag)&#123;</span><br><span class="line">            flag = tryLock(key,value,expiration);</span><br><span class="line">            Thread.sleep(frequency);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> flag;</span><br><span class="line">    &#125;);</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> (<span class="keyword">boolean</span>) future.get(overtime,TimeUnit.MILLISECONDS);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (InterruptedException | ExecutionException | TimeoutException e) &#123;</span><br><span class="line">        future.cancel(<span class="keyword">true</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>tip:假如我们要做这种近似无限循环直到符合条件的操作,建议根据业务场景适当的Thread.sleep();让出cpu时间片,减少cpu压力。具体体现为,如果没有sleep,那么cpu的使用率在8线程测试机上直接飙升30%,而加入sleep后cpu使用率低于3%,另外true也可以改为flag标记位,以为今后增加中断功能做拓展</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span>&#123;<span class="keyword">true</span>&#125;&#123;</span><br><span class="line">    <span class="comment">//业务代码</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>&emsp;上面我们说了分布式锁的简单加锁和解锁,那么接下来就出现了问题了,假如redis崩溃,我们的锁就全部失效。当然我们一般会搭建redis集群,每个redis都会有主从配置,但是有一点要注意,主从redis在同步的时候是异步的,无法保证实时一致性,也就是说如果我们A加了锁,主redis崩溃,锁未同步到从redis,B认为没有加锁,所以他可以成功加锁,这就产生了冲突,对于这种情况,antirez提出的redlock算法或许可以解决这个问题(还未仔细研究redlock算法,无法断言)</p>
 
       
     </div>
@@ -485,7 +477,7 @@
   <link rel="stylesheet" type="text/css" href="http://jslibs.wuxubj.cn/sweetalert_mini/sweetalert.mini.css">
 
   <p><span>本文作者:</span> Lemon Sour</p>  
-  <p><span>本文链接:</span><a href="/2019/07/01/linux安装jdk(非openjdk)/" title="linux安装jdk(非openjdk)">https://lemonsour.me/2019/07/01/linux安装jdk(非openjdk)/</a></p>
+  <p><span>本文链接:</span><a href="/2019/08/28/分布式锁/" title="分布式锁">https://lemonsour.me/2019/08/28/分布式锁/</a></p>
   <p><span>许可协议:</span>本站博文均采用 <a href="http://creativecommons.org/licenses/by-nc-sa/3.0/cn/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0 CN</a> 许可协议，转载请注明出处及原文作者并置顶！</p>  
 </div>
 
@@ -513,11 +505,7 @@
         
         <div class="post-tags">
           
-            <a href="/tags/base/" rel="tag"># base</a>
-          
-            <a href="/tags/linux/" rel="tag"># linux</a>
-          
-            <a href="/tags/jdk/" rel="tag"># jdk</a>
+            <a href="/tags/distributed-lock/" rel="tag"># distributed-lock</a>
           
         </div>
       
@@ -530,8 +518,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/06/24/利用git完成服务器自动化部署解决方案/" rel="next" title="利用git完成服务器自动化部署解决方案">
-                <i class="fa fa-chevron-left"></i> 利用git完成服务器自动化部署解决方案
+              <a href="/2019/08/27/简记20190927/" rel="next" title="简记20190927">
+                <i class="fa fa-chevron-left"></i> 简记20190927
               </a>
             
           </div>
@@ -540,8 +528,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/07/01/jpa查询部分字段获取实体类/" rel="prev" title="jpa查询部分字段获取实体类">
-                jpa查询部分字段获取实体类 <i class="fa fa-chevron-right"></i>
+              <a href="/2019/08/28/java中的锁/" rel="prev" title="java中的锁">
+                java中的锁 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>

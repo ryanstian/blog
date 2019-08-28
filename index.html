@@ -340,6 +340,351 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://qq616023844.github.io/2019/08/28/java中的锁/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Lemon Sour">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="柠檬不酸的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2019/08/28/java中的锁/" class="post-title-link" itemprop="url">java中的锁</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2019-08-28 22:57:00 / Modified: 23:59:38" itemprop="dateCreated datePublished" datetime="2019-08-28T22:57:00+08:00">2019-08-28</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/工具笔记/" itemprop="url" rel="index"><span itemprop="name">工具笔记</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h3 id="锁的几种用法"><a href="#锁的几种用法" class="headerlink" title="锁的几种用法"></a>锁的几种用法</h3><p>####synchronized<br>e.g:1<br>用synchronized对一个代码块加锁,object可以是任意的对象,任何其他synchronized(该对象)的代码块均需要获取到锁以后才可以执行,如果object=this,那么就是锁住的整个对象</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">synchronized</span>(object) &#123;</span><br><span class="line">    <span class="comment">//代码块</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2019/08/28/java中的锁/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    <div>
+      
+    </div>
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://qq616023844.github.io/2019/08/28/分布式锁/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Lemon Sour">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="柠檬不酸的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2019/08/28/分布式锁/" class="post-title-link" itemprop="url">分布式锁</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2019-08-28 22:57:00 / Modified: 23:59:40" itemprop="dateCreated datePublished" datetime="2019-08-28T22:57:00+08:00">2019-08-28</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/探索笔记/" itemprop="url" rel="index"><span itemprop="name">探索笔记</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>####什么是锁?<br>&emsp;锁是一个多方可以共同访问的元素,各个访问者通过对该元素的信息的判断,按照一定事先约定的行为进行协调的功能。这个元素可以是任何的东西,根据事先约定的行为的不同也会随之变化。</p>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2019/08/28/分布式锁/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    <div>
+      
+    </div>
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://qq616023844.github.io/2019/08/27/简记20190927/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -752,7 +1097,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2019-08-17 23:19:08" itemprop="dateModified" datetime="2019-08-17T23:19:08+08:00">2019-08-17</time>
+                <time title="Modified: 2019-08-28 23:59:55" itemprop="dateModified" datetime="2019-08-28T23:59:55+08:00">2019-08-28</time>
               
             
           </span>
@@ -805,17 +1150,16 @@
 
       
         
+          <p>&emsp;首先不得不提到的一点就是气候差异(夏天)。不下雨的情况下,北方空气湿度40%左右,上海长期80%偶尔60%,导致的就是,在北方糙汉子还可以2天洗一次澡,到了上海恨不得一天洗两次,而且晚上睡觉会感觉床单特别潮湿(这里楼主用了150多块左右吸湿垫和粗布床单,感觉比一开始带来的学生宿舍用床单好了不少)。晾衣服有风还好说,床单在高层楼的穿堂风下一天就干了,然而不开窗户即使3天也晾不干一条内裤</p>
+          <!--noindex-->
           
-            <a id="more"></a>
-<p>&emsp;首先不得不提到的一点就是气候差异(夏天)。不下雨的情况下,北方空气湿度40%左右,上海长期80%偶尔60%,导致的就是,在北方糙汉子还可以2天洗一次澡,到了上海恨不得一天洗两次,而且晚上睡觉会感觉床单特别潮湿(这里楼主用了150多块左右吸湿垫和粗布床单,感觉比一开始带来的学生宿舍用床单好了不少)。晾衣服有风还好说,床单在高层楼的穿堂风下一天就干了,然而不开窗户即使3天也晾不干一条内裤</p>
-<p>&emsp;接下来,我要说一下去上海租房我做了哪些准备。首先,我提前先浏览了各大租房app,发现价格和质量实在是无法承受,于是去了豆瓣小组蹲点,蹲了一个月终于蹲到了一个不错的合租房(建议先问下公司有没有配宿舍或者折扣房,还有尽量错过实习高峰找房)。<strong>非常重要的一点</strong>:一定要靠近地铁。对于没做过地铁的小伙伴来说,是体会不到的(当时租了离地铁两公里的房子,哭晕),地铁有点类似高铁的感觉,每一站都是卡着时间到站,而且速度非常的快,5公里的距离基本可以无视时间成本。对于资金的话,上海这边个人转租半年的话押一付二,押一付三的居多,各种app上一般是押一付一,<strong>租房子一定要提前蹲消息,一个处得来的室友和房东可以让你不用花精力在生活琐事上,一个好的室友往往比一个性价比高的房子更重要</strong></p>
-<p>&emsp;当我去上海的时候,我只带了钱包(现在都是支付宝了,不过上海有的地铁只能用他的app或者投币,没法直接支付宝,前排提醒),电脑,手机,各种证件,还有3套夏装1套秋装,一条宿舍用床单(因为没订酒店直接去的出租房,临时凑活一晚),还有一些小物件,轻装上阵。</p>
-<p>&emsp;到了之后这是我的采购清单</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">网购:</span><br><span class="line">	1 床单(大床,尽量防潮吧),最后买了防潮垫和粗布床单</span><br><span class="line">	1 椅子</span><br><span class="line">	1 瑜伽垫</span><br><span class="line">	1 枕头</span><br><span class="line">	1 墙纸,墙胶(墙皮有些开裂,还有地板是那种简装修的,有的地方还露着水泥,风一吹就飘灰)</span><br><span class="line">	1 烧水器,大水杯,小水杯,暖壶</span><br><span class="line">	1 指甲刀,镊子,螺丝刀(因为楼主的门锁坏了,自力更生)</span><br><span class="line">	1 垃圾桶(多个,垃圾分类)</span><br><span class="line">	1 洗手台</span><br><span class="line">	1 电脑支架</span><br><span class="line">	1 垃圾袋</span><br><span class="line">	1 除潮剂</span><br><span class="line">    1 洗衣液(大份)</span><br><span class="line">	1 卫生纸(批发)</span><br><span class="line">	1 衣架</span><br><span class="line">    1 枕巾</span><br><span class="line">	1 鞋(一定要有换洗的鞋,不然太难晾干了洗完了)</span><br><span class="line">	1 洗面奶(北方的油皮肤,一直是用的硫磺皂洗脸,到了上海发现洗脸太频繁了硫磺皂对皮肤伤害太大了,真的,到了上海,脸上出油量*n,原地爆炸)</span><br><span class="line">实体店:</span><br><span class="line">    1 洗衣液(临时)</span><br><span class="line">	1 卫生纸(临时)</span><br><span class="line">	1 拖把</span><br><span class="line">	1 多块抹布,毛巾</span><br><span class="line">	1 网线(临时应急)</span><br><span class="line">	1 拖鞋(凉拖两用的那种)</span><br><span class="line">	1 垃圾袋(临时)</span><br><span class="line">	1 脸盆(大中小各一个)</span><br><span class="line">	1 洗发膏</span><br><span class="line">	1 扫把,簸箕</span><br></pre></td></tr></table></figure>
-
-<p>&emsp;ps:垃圾分类小提示:瓜果之类可以用微生物腐化之后做能源的属于湿垃圾(坚果壳核太难分解的的除外)。报纸,快递盒子(胶带要撕下来),泡沫塑料属于可回收。各种电池杀虫剂等有毒的属于有害垃圾,其他模棱两可的扔干垃圾</p>
-
+            <div class="post-button text-center">
+              <a class="btn" href="/2019/07/23/关于在上海生活六个月提前要做的准备/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
           
+          <!--/noindex-->
         
       
     </div>
@@ -1718,376 +2062,6 @@
           
             <div class="post-button text-center">
               <a class="btn" href="/2019/07/02/CAS机制/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    <div>
-      
-    </div>
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://qq616023844.github.io/2019/07/01/jpa查询部分字段获取实体类/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Lemon Sour">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="柠檬不酸的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2019/07/01/jpa查询部分字段获取实体类/" class="post-title-link" itemprop="url">jpa查询部分字段获取实体类</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-
-              
-                
-              
-
-              <time title="Created: 2019-07-01 17:07:00" itemprop="dateCreated datePublished" datetime="2019-07-01T17:07:00+08:00">2019-07-01</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">Edited on</span>
-                
-                <time title="Modified: 2019-08-17 22:53:47" itemprop="dateModified" datetime="2019-08-17T22:53:47+08:00">2019-08-17</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/学习笔记/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>代码已经放到github,test测试中的demo2对应的是sql方式,demo3对应的是hql方式,demo1是分页查询,我另一篇文章会讲到<br><a href="https://github.com/qq616023844/springboot-jpa-paging" target="_blank" rel="noopener">github地址</a></p>
-<h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><p>我们平时使用jpa查询时,有两种情况,一种是查询全部字段,另一种是查询部分字段,当我们按通常的sql语句写法查询部分字段时,会出现jpa无法自动解析类型的情况,例如这类报错</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">org.springframework.dao.InvalidDataAccessResourceUsageException: could not execute query; SQL [ SELECT sa.name FROM student sa ]; nested exception is org.hibernate.exception.SQLGrammarException: could not execute query</span><br></pre></td></tr></table></figure>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2019/07/01/jpa查询部分字段获取实体类/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    <div>
-      
-    </div>
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://qq616023844.github.io/2019/07/01/linux安装jdk(非openjdk)/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Lemon Sour">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="柠檬不酸的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2019/07/01/linux安装jdk(非openjdk)/" class="post-title-link" itemprop="url">linux安装jdk(非openjdk)</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-
-              
-                
-              
-
-              <time title="Created: 2019-07-01 08:56:00" itemprop="dateCreated datePublished" datetime="2019-07-01T08:56:00+08:00">2019-07-01</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">Edited on</span>
-                
-                <time title="Modified: 2019-08-17 22:48:37" itemprop="dateModified" datetime="2019-08-17T22:48:37+08:00">2019-08-17</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/工具笔记/" itemprop="url" rel="index"><span itemprop="name">工具笔记</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>1.官网下载压缩包,这里我下载的是解压版不是rpm版本,现在可能需要你登陆才可以下载,自己去注册个账户吧,或者用其他方式得到压缩包<br><a href="https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html" target="_blank" rel="noopener">oracle下载jdk8的网址</a></p>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2019/07/01/linux安装jdk(非openjdk)/#more" rel="contents">
                 Read more &raquo;
               </a>
             </div>
