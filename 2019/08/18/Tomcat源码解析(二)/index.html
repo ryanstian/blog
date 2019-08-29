@@ -92,13 +92,22 @@
 
 
 
-  <meta property="og:type" content="website">
-<meta property="og:title" content="柠檬不酸的博客">
-<meta property="og:url" content="https://qq616023844.github.io/tags/base/index.html">
+  <meta name="description" content="生命周期Tomcat的各个组件也是有生命周期的,这个生命周期由一种设计模式(状态机)来控制,下面让我们了解一下">
+<meta name="keywords" content="Tomcat,源码">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Tomcat源码解析(二)">
+<meta property="og:url" content="https://qq616023844.github.io/2019/08/18/Tomcat源码解析(二)/index.html">
 <meta property="og:site_name" content="柠檬不酸的博客">
+<meta property="og:description" content="生命周期Tomcat的各个组件也是有生命周期的,这个生命周期由一种设计模式(状态机)来控制,下面让我们了解一下">
 <meta property="og:locale" content="en">
+<meta property="og:image" content="http://188.131.252.235:8888/Tomcat源码解析/LifecycleMBeanBase继承图.png">
+<meta property="og:image" content="http://188.131.252.235:8888/Tomcat源码解析/Lifecycle接口实现列表.png">
+<meta property="og:image" content="http://188.131.252.235:8888/Tomcat源码解析/LifecycleMBeanBase类图.png">
+<meta property="og:updated_time" content="2019-08-29T15:56:39.975Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="柠檬不酸的博客">
+<meta name="twitter:title" content="Tomcat源码解析(二)">
+<meta name="twitter:description" content="生命周期Tomcat的各个组件也是有生命周期的,这个生命周期由一种设计模式(状态机)来控制,下面让我们了解一下">
+<meta name="twitter:image" content="http://188.131.252.235:8888/Tomcat源码解析/LifecycleMBeanBase继承图.png">
 
 
 
@@ -106,7 +115,7 @@
 
   
   
-  <link rel="canonical" href="https://qq616023844.github.io/tags/base/">
+  <link rel="canonical" href="https://qq616023844.github.io/2019/08/18/Tomcat源码解析(二)/">
 
 
 
@@ -116,7 +125,7 @@
   };
 </script>
 
-  <title>Tag: base | 柠檬不酸的博客</title>
+  <title>Tomcat源码解析(二) | 柠檬不酸的博客</title>
   
 
 
@@ -164,7 +173,7 @@
     
   
 
-  <div class="container sidebar-position-left ">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -221,7 +230,7 @@
         
         
           
-          <li class="menu-item menu-item-tags menu-item-active">
+          <li class="menu-item menu-item-tags">
 
     
     
@@ -319,210 +328,251 @@
           
             
 
-    
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-    
-
-  
-
-
           
           <div id="content" class="content">
             
 
+  <div id="posts" class="posts-expand">
+    
+
+  
+
   
   
   
-  <div class="post-block tag">
 
-    <div id="posts" class="posts-collapse">
-      <div class="collection-title">
-        <h1>base<small>Tag</small>
-        </h1>
-      </div>
-
-      
-        
+  
 
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://qq616023844.github.io/2019/08/18/Tomcat源码解析(二)/">
 
-      <h2 class="post-title">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Lemon Sour">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="柠檬不酸的博客">
+    </span>
+
+    
+      <header class="post-header">
+
         
-          <a class="post-title-link" href="/2019/08/28/java中的锁/" itemprop="url">
-            
-              <span itemprop="name">java中的锁</span>
-            
-          </a>
         
-      </h2>
+          <h1 class="post-title" itemprop="name headline">Tomcat源码解析(二)
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-08-28T22:57:00+08:00" content="2019-08-28">
-          08-28
-        </time>
-      </div>
+              
+            
+          </h1>
+        
 
-    </header>
-  </article>
+        <div class="post-meta">
+          <span class="post-time">
 
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2019-08-18 18:10:00" itemprop="dateCreated datePublished" datetime="2019-08-18T18:10:00+08:00">2019-08-18</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2019-08-29 23:56:39" itemprop="dateModified" datetime="2019-08-29T23:56:39+08:00">2019-08-29</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/学习笔记/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-          <a class="post-title-link" href="/2019/07/02/i++不是原子性操作/" itemprop="url">
-            
-              <span itemprop="name">i++不是原子性操作</span>
-            
-          </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-07-02T00:05:00+08:00" content="2019-07-02">
-          07-02
-        </time>
-      </div>
-
-    </header>
-  </article>
-
+      
 
       
-        
+        <h4 id="生命周期"><a href="#生命周期" class="headerlink" title="生命周期"></a>生命周期</h4><p>Tomcat的各个组件也是有生命周期的,这个生命周期由一种设计模式(状态机)来控制,下面让我们了解一下</p>
+<a id="more"></a>
+<p>首先要介绍的是LifecycleMBeanBase类,下面是这个类的类图<br><img src="http://188.131.252.235:8888/Tomcat源码解析/LifecycleMBeanBase继承图.png" text-align:center width="352" height="236" alt="如果图片失效,请邮件联系作者补图"></p>
+<center></center>
 
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+<p>我们从Lifecycle接口开始了解,Lifecycle定义了一个状态机,下面是Lifecycle的原注释</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">*            start()</span><br><span class="line">*  -----------------------------</span><br><span class="line">*  |                           |</span><br><span class="line">*  | init()                    |</span><br><span class="line">* NEW -»-- INITIALIZING        |</span><br><span class="line">* | |           |              |     ------------------«-----------------------</span><br><span class="line">* | |           |auto          |     |                                        |</span><br><span class="line">* | |          \|/    start() \|/   \|/     auto          auto         stop() |</span><br><span class="line">* | |      INITIALIZED --»-- STARTING_PREP --»- STARTING --»- STARTED --»---  |</span><br><span class="line">* | |         |                                                            |  |</span><br><span class="line">* | |destroy()|                                                            |  |</span><br><span class="line">* | --»-----«--    ------------------------«--------------------------------  ^</span><br><span class="line">* |     |          |                                                          |</span><br><span class="line">* |     |         \|/          auto                 auto              start() |</span><br><span class="line">* |     |     STOPPING_PREP ----»---- STOPPING ------»----- STOPPED -----»-----</span><br><span class="line">* |    \|/                               ^                     |  ^</span><br><span class="line">* |     |               stop()           |                     |  |</span><br><span class="line">* |     |       --------------------------                     |  |</span><br><span class="line">* |     |       |                                              |  |</span><br><span class="line">* |     |       |    destroy()                       destroy() |  |</span><br><span class="line">* |     |    FAILED ----»------ DESTROYING ---«-----------------  |</span><br><span class="line">* |     |                        ^     |                          |</span><br><span class="line">* |     |     destroy()          |     |auto                      |</span><br><span class="line">* |     --------»-----------------    \|/                         |</span><br><span class="line">* |                                 DESTROYED                     |</span><br><span class="line">* |                                                               |</span><br><span class="line">* |                            stop()                             |</span><br><span class="line">* ----»-----------------------------»------------------------------</span><br></pre></td></tr></table></figure>
 
-      <h2 class="post-title">
-        
-          <a class="post-title-link" href="/2019/07/02/AtomicLong/" itemprop="url">
-            
-              <span itemprop="name">AtomicLong</span>
-            
-          </a>
-        
-      </h2>
+<p>我们可以看到,这是一种状态机设计模式,规定了组件生命周期的状态转换,可以方便的进行组件生命周期的管理,从下图我们可以看到,从Server开始几乎每一个组件间接继承/实现了该状态机<br><img src="http://188.131.252.235:8888/Tomcat源码解析/Lifecycle接口实现列表.png" text-align:center width="1108" height="590" alt="如果图片失效,请邮件联系作者补图"></p>
+<center></center>
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-07-02T00:02:00+08:00" content="2019-07-02">
-          07-02
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
+<p>接下来让我们看LifecycleBase,这是一个抽象类,实现了fireLifecycleEvent,init,start…等方法<br>fireLifecycleEvent的设计其实是根据观察者模式<br>init,start等方法仅仅是用来控制其生命周期的,每个方法例如init,在内部还会调用initInternal(),Tomcat的很多组件的业务代码全部都在xxxInternal()中,由子类负责实现</p>
+<p>LifecycleMBeanBase则对LifecycleBase进行了进一步的实现,我们从他的图中可以看到<br><img src="http://188.131.252.235:8888/Tomcat源码解析/LifecycleMBeanBase类图.png" text-align:center width="437" height="520" alt="如果图片失效,请邮件联系作者补图"></p>
+<center></center>
+其中最关键的是initInternal()和destroyInternal(),主要实现了委托Register类来将子类(类如StandardServer等)注册到bean容器中。容器部分设计是符合JMX规范的,此处暂且不谈,如果在看源码过程中大家对ManagedBean或者MBeanServer抱有疑惑,可以先去学习一下JMX规范再回来看容器部分代码,不过即使跳过容器部分,也不影响接下来的部分
       
-        
+    </div>
 
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+    
 
-      <h2 class="post-title">
-        
-          <a class="post-title-link" href="/2019/07/02/CAS机制/" itemprop="url">
-            
-              <span itemprop="name">CAS机制</span>
-            
-          </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-07-02T00:02:00+08:00" content="2019-07-02">
-          07-02
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
+    
+    <div>
       
-        
+          
+<div class="my_post_copyright">
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+  
+  <!-- JS库 sweetalert 可修改路径 -->
+  <script type="text/javascript" src="http://jslibs.wuxubj.cn/sweetalert_mini/jquery-1.7.1.min.js"></script>
+  <script src="http://jslibs.wuxubj.cn/sweetalert_mini/sweetalert.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="http://jslibs.wuxubj.cn/sweetalert_mini/sweetalert.mini.css">
 
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-          <a class="post-title-link" href="/2019/07/01/linux安装jdk(非openjdk)/" itemprop="url">
-            
-              <span itemprop="name">linux安装jdk(非openjdk)</span>
-            
-          </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-07-01T08:56:00+08:00" content="2019-07-01">
-          07-01
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-      
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-          <a class="post-title-link" href="/2019/06/21/git使用笔记/" itemprop="url">
-            
-              <span itemprop="name">git使用笔记</span>
-            
-          </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-06-21T13:02:00+08:00" content="2019-06-21">
-          06-21
-        </time>
-      </div>
-
-    </header>
-  </article>
+  <p><span>本文作者:</span> Lemon Sour</p>  
+  <p><span>本文链接:</span><a href="/2019/08/18/Tomcat源码解析(二)/" title="Tomcat源码解析(二)">https://lemonsour.me/2019/08/18/Tomcat源码解析(二)/</a></p>
+  <p><span>许可协议:</span>本站博文均采用 <a href="http://creativecommons.org/licenses/by-nc-sa/3.0/cn/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0 CN</a> 许可协议，转载请注明出处及原文作者并置顶！</p>  
+</div>
 
 
       
     </div>
 
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        
+          
+        
+        <div class="post-tags">
+          
+            <a href="/tags/Tomcat/" rel="tag"># Tomcat</a>
+          
+            <a href="/tags/源码/" rel="tag"># 源码</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/08/17/Tomcat源码解析(三)/" rel="next" title="Tomcat源码解析(三)">
+                <i class="fa fa-chevron-left"></i> Tomcat源码解析(三)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/08/25/BUG_kafka_01/" rel="prev" title="Exception thrown when sending a message with key='null'">
+                Exception thrown when sending a message with key='null' <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
 
+  </div>
 
 
           </div>
           
+
+  
+
+
 
         </div>
         
@@ -542,8 +592,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
 
-      <div class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <div class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -684,6 +743,23 @@
       </div>
 
       
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#生命周期"><span class="nav-number">1.</span> <span class="nav-text">生命周期</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
 
       
 
@@ -808,6 +884,10 @@
 
 
   
+  <script src="/js/scrollspy.js?v=7.1.2"></script>
+<script src="/js/post-details.js?v=7.1.2"></script>
+
+
 
   
 
@@ -823,6 +903,8 @@
 
   
 
+
+  
 
 
   

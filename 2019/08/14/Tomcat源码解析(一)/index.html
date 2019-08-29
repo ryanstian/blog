@@ -92,13 +92,18 @@
 
 
 
-  <meta property="og:type" content="website">
-<meta property="og:title" content="柠檬不酸的博客">
-<meta property="og:url" content="https://qq616023844.github.io/tags/base/index.html">
+  <meta name="description" content="ps:由于图片过大,所以限制了在博客中显示大小,大家可以右键查看图片看原图本系列均是基于9.0.21版本&amp;emsp;本章我们不会涉及代码,而是笼统的分析Tomcat的实现原理,让大家对全局有一定的掌控,后面几章我会带大家分析代码">
+<meta name="keywords" content="Tomcat,源码">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Tomcat源码解析(一)">
+<meta property="og:url" content="https://qq616023844.github.io/2019/08/14/Tomcat源码解析(一)/index.html">
 <meta property="og:site_name" content="柠檬不酸的博客">
+<meta property="og:description" content="ps:由于图片过大,所以限制了在博客中显示大小,大家可以右键查看图片看原图本系列均是基于9.0.21版本&amp;emsp;本章我们不会涉及代码,而是笼统的分析Tomcat的实现原理,让大家对全局有一定的掌控,后面几章我会带大家分析代码">
 <meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2019-08-29T15:44:16.795Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="柠檬不酸的博客">
+<meta name="twitter:title" content="Tomcat源码解析(一)">
+<meta name="twitter:description" content="ps:由于图片过大,所以限制了在博客中显示大小,大家可以右键查看图片看原图本系列均是基于9.0.21版本&amp;emsp;本章我们不会涉及代码,而是笼统的分析Tomcat的实现原理,让大家对全局有一定的掌控,后面几章我会带大家分析代码">
 
 
 
@@ -106,7 +111,7 @@
 
   
   
-  <link rel="canonical" href="https://qq616023844.github.io/tags/base/">
+  <link rel="canonical" href="https://qq616023844.github.io/2019/08/14/Tomcat源码解析(一)/">
 
 
 
@@ -116,7 +121,7 @@
   };
 </script>
 
-  <title>Tag: base | 柠檬不酸的博客</title>
+  <title>Tomcat源码解析(一) | 柠檬不酸的博客</title>
   
 
 
@@ -164,7 +169,7 @@
     
   
 
-  <div class="container sidebar-position-left ">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -221,7 +226,7 @@
         
         
           
-          <li class="menu-item menu-item-tags menu-item-active">
+          <li class="menu-item menu-item-tags">
 
     
     
@@ -319,210 +324,247 @@
           
             
 
-    
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-    
-
-  
-
-
           
           <div id="content" class="content">
             
 
+  <div id="posts" class="posts-expand">
+    
+
+  
+
   
   
   
-  <div class="post-block tag">
 
-    <div id="posts" class="posts-collapse">
-      <div class="collection-title">
-        <h1>base<small>Tag</small>
-        </h1>
-      </div>
-
-      
-        
+  
 
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://qq616023844.github.io/2019/08/14/Tomcat源码解析(一)/">
 
-      <h2 class="post-title">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Lemon Sour">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="柠檬不酸的博客">
+    </span>
+
+    
+      <header class="post-header">
+
         
-          <a class="post-title-link" href="/2019/08/28/java中的锁/" itemprop="url">
-            
-              <span itemprop="name">java中的锁</span>
-            
-          </a>
         
-      </h2>
+          <h1 class="post-title" itemprop="name headline">Tomcat源码解析(一)
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-08-28T22:57:00+08:00" content="2019-08-28">
-          08-28
-        </time>
-      </div>
+              
+            
+          </h1>
+        
 
-    </header>
-  </article>
+        <div class="post-meta">
+          <span class="post-time">
 
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2019-08-14 23:24:00" itemprop="dateCreated datePublished" datetime="2019-08-14T23:24:00+08:00">2019-08-14</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2019-08-29 23:44:16" itemprop="dateModified" datetime="2019-08-29T23:44:16+08:00">2019-08-29</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/学习笔记/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-          <a class="post-title-link" href="/2019/07/02/i++不是原子性操作/" itemprop="url">
-            
-              <span itemprop="name">i++不是原子性操作</span>
-            
-          </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-07-02T00:05:00+08:00" content="2019-07-02">
-          07-02
-        </time>
-      </div>
-
-    </header>
-  </article>
-
+      
 
       
-        
+        <p><strong>ps:由于图片过大,所以限制了在博客中显示大小,大家可以右键查看图片看原图</strong><br><strong>本系列均是基于9.0.21版本</strong><br>&emsp;本章我们不会涉及代码,而是笼统的分析Tomcat的实现原理,让大家对全局有一定的掌控,后面几章我会带大家分析代码</p>
+<a id="more"></a>
+<p>####Tomcat是什么?<br>&emsp;在我看来,Tomcat是利用各种模型和设计方式对socket的深度封装,做到适配各种协议同时达到一定性能的代码组,同时给我们写的各种业务代码(Servlet)提供了容器(也可以理解为tomcat可以将以对象的形式使用我们写的Servlet业务),这是Tomcat的核心。当然,Tomcat还实现了一些其他的比如生命周期管理,但是这些都是为了核心而服务的</p>
+<p>&emsp;我们第一次接触Tomcat,相信大多数人都是Hello World。想想当时我们是怎么做的:首先我们建立了个项目,按照网上的教程建好了项目里面的文件夹,导入servlet包,然后开始编写xml配置文件,继承Servlet编写Get,Post代码,然后导出war包放到tomcat下的webapps文件夹,启动tomcat。so easy,然后我们就可以通过浏览器访问我们之前写好的接口了。</p>
+<p>&emsp;但是,我们有没有想过是为什么,为什么我们GET中的代码会被调用,为什么我们访问一个网址会执行我们的代码,他又是怎么执行的。这一切,我们将从Servlet与Tomcat的源码解析中找到答案</p>
+<p>####消息接收<br>&emsp;首先,消息是如何接收的。这里,我要阐述下自己的理解,在网络传输的世界里面,一切都是消息,消息是指什么?消息可以理解为一串二进制,一串byte或者字符串,当然,在网络模型的最底层,这些都会被转换为二进制来传输。</p>
+<p>&emsp;协议又是什么?协议是一种事先约定的规范,规定了消息格式,消息处理方式等等各种机制,例如我们编写servlet最常用到的http协议,他的可视化表示就如同下面这些内容,其实,每一行后面都跟着\r\n,不过这是换行符,所以在屏幕上展现出来就是一行一行的数据</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">GET / HTTP/1.1</span><br><span class="line">Host: localhost:8080</span><br><span class="line">User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101 Firefox/68.0</span><br><span class="line">Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8</span><br><span class="line">Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Connection: keep-alive</span><br><span class="line">Upgrade-Insecure-Requests: 1</span><br></pre></td></tr></table></figure>
 
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-          <a class="post-title-link" href="/2019/07/02/AtomicLong/" itemprop="url">
-            
-              <span itemprop="name">AtomicLong</span>
-            
-          </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-07-02T00:02:00+08:00" content="2019-07-02">
-          07-02
-        </time>
-      </div>
-
-    </header>
-  </article>
-
+<p>&emsp;了解了这些以后,我们就可以继续进行了,既然一切都是消息,那么当我们发送一个http请求的时候,Tomcat最开始接收到的也是一串像是上面这种的字符串,java中接收消息用的就是socket,Tomcat也不例外。所以我在文章最开始的时候说到,Tomcat实质就是对socket的深度封装。在获取到socket套接字以后,Tomcat开始解析,根据传入内容标明协议的不同,按照在代码中定义好的各种协议模板来解析这个字符串,解析完成后封装到Request和Response中交给Servlet执行用户自定义的业务代码,最后再由socket发送响应,这就是Tomcat最浅显的流程</p>
 
       
-        
+    </div>
 
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+    
 
-      <h2 class="post-title">
-        
-          <a class="post-title-link" href="/2019/07/02/CAS机制/" itemprop="url">
-            
-              <span itemprop="name">CAS机制</span>
-            
-          </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-07-02T00:02:00+08:00" content="2019-07-02">
-          07-02
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
+    
+    <div>
       
-        
+          
+<div class="my_post_copyright">
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+  
+  <!-- JS库 sweetalert 可修改路径 -->
+  <script type="text/javascript" src="http://jslibs.wuxubj.cn/sweetalert_mini/jquery-1.7.1.min.js"></script>
+  <script src="http://jslibs.wuxubj.cn/sweetalert_mini/sweetalert.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="http://jslibs.wuxubj.cn/sweetalert_mini/sweetalert.mini.css">
 
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-          <a class="post-title-link" href="/2019/07/01/linux安装jdk(非openjdk)/" itemprop="url">
-            
-              <span itemprop="name">linux安装jdk(非openjdk)</span>
-            
-          </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-07-01T08:56:00+08:00" content="2019-07-01">
-          07-01
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-      
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-          <a class="post-title-link" href="/2019/06/21/git使用笔记/" itemprop="url">
-            
-              <span itemprop="name">git使用笔记</span>
-            
-          </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-06-21T13:02:00+08:00" content="2019-06-21">
-          06-21
-        </time>
-      </div>
-
-    </header>
-  </article>
+  <p><span>本文作者:</span> Lemon Sour</p>  
+  <p><span>本文链接:</span><a href="/2019/08/14/Tomcat源码解析(一)/" title="Tomcat源码解析(一)">https://lemonsour.me/2019/08/14/Tomcat源码解析(一)/</a></p>
+  <p><span>许可协议:</span>本站博文均采用 <a href="http://creativecommons.org/licenses/by-nc-sa/3.0/cn/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0 CN</a> 许可协议，转载请注明出处及原文作者并置顶！</p>  
+</div>
 
 
       
     </div>
 
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        
+          
+        
+        <div class="post-tags">
+          
+            <a href="/tags/Tomcat/" rel="tag"># Tomcat</a>
+          
+            <a href="/tags/源码/" rel="tag"># 源码</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/07/23/关于在上海生活六个月提前要做的准备/" rel="next" title="关于在上海生活六个月提前要做的准备">
+                <i class="fa fa-chevron-left"></i> 关于在上海生活六个月提前要做的准备
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/08/17/Tomcat源码解析(三)/" rel="prev" title="Tomcat源码解析(三)">
+                Tomcat源码解析(三) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
 
+  </div>
 
 
           </div>
           
+
+  
+
+
 
         </div>
         
@@ -808,6 +850,10 @@
 
 
   
+  <script src="/js/scrollspy.js?v=7.1.2"></script>
+<script src="/js/post-details.js?v=7.1.2"></script>
+
+
 
   
 
@@ -823,6 +869,8 @@
 
   
 
+
+  
 
 
   
