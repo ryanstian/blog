@@ -92,18 +92,18 @@
 
 
 
-  <meta name="description" content="前言这篇是从我以前csdn博客上搬运过来的,属于原创 正文一.AtomicLong是做什么用的首先我们可以先看一下我的另一篇文章i++不是原子性操作">
-<meta name="keywords" content="java,base">
+  <meta name="description" content="之前发生了这样一件事,由于是用的postman发送的消息,消息体有几种常用构造方式:none,form-data,x-www-form-urlencoded有一些构造方式通过getParameter方法是获取不到数据的,接下来让我们一起看一下这个问题">
+<meta name="keywords" content="Tomcat">
 <meta property="og:type" content="article">
-<meta property="og:title" content="AtomicLong">
-<meta property="og:url" content="https://qq616023844.github.io/2019/07/02/AtomicLong/index.html">
+<meta property="og:title" content="getParamter为何接收不到postman构造的信息">
+<meta property="og:url" content="https://qq616023844.github.io/2019/06/28/getParamter为何接收不到postman构造的信息/index.html">
 <meta property="og:site_name" content="柠檬不酸的博客">
-<meta property="og:description" content="前言这篇是从我以前csdn博客上搬运过来的,属于原创 正文一.AtomicLong是做什么用的首先我们可以先看一下我的另一篇文章i++不是原子性操作">
+<meta property="og:description" content="之前发生了这样一件事,由于是用的postman发送的消息,消息体有几种常用构造方式:none,form-data,x-www-form-urlencoded有一些构造方式通过getParameter方法是获取不到数据的,接下来让我们一起看一下这个问题">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-08-17T15:02:45.723Z">
+<meta property="og:updated_time" content="2019-09-01T13:49:49.282Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="AtomicLong">
-<meta name="twitter:description" content="前言这篇是从我以前csdn博客上搬运过来的,属于原创 正文一.AtomicLong是做什么用的首先我们可以先看一下我的另一篇文章i++不是原子性操作">
+<meta name="twitter:title" content="getParamter为何接收不到postman构造的信息">
+<meta name="twitter:description" content="之前发生了这样一件事,由于是用的postman发送的消息,消息体有几种常用构造方式:none,form-data,x-www-form-urlencoded有一些构造方式通过getParameter方法是获取不到数据的,接下来让我们一起看一下这个问题">
 
 
 
@@ -111,7 +111,7 @@
 
   
   
-  <link rel="canonical" href="https://qq616023844.github.io/2019/07/02/AtomicLong/">
+  <link rel="canonical" href="https://qq616023844.github.io/2019/06/28/getParamter为何接收不到postman构造的信息/">
 
 
 
@@ -121,7 +121,7 @@
   };
 </script>
 
-  <title>AtomicLong | 柠檬不酸的博客</title>
+  <title>getParamter为何接收不到postman构造的信息 | 柠檬不酸的博客</title>
   
 
 
@@ -344,7 +344,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://qq616023844.github.io/2019/07/02/AtomicLong/">
+    <link itemprop="mainEntityOfPage" href="https://qq616023844.github.io/2019/06/28/getParamter为何接收不到postman构造的信息/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Lemon Sour">
@@ -361,7 +361,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">AtomicLong
+          <h1 class="post-title" itemprop="name headline">getParamter为何接收不到postman构造的信息
 
               
             
@@ -387,7 +387,7 @@
                 
               
 
-              <time title="Created: 2019-07-02 00:02:00" itemprop="dateCreated datePublished" datetime="2019-07-02T00:02:00+08:00">2019-07-02</time>
+              <time title="Created: 2019-06-28 16:16:00" itemprop="dateCreated datePublished" datetime="2019-06-28T16:16:00+08:00">2019-06-28</time>
             
 
             
@@ -404,7 +404,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2019-08-17 23:02:45" itemprop="dateModified" datetime="2019-08-17T23:02:45+08:00">2019-08-17</time>
+                <time title="Modified: 2019-09-01 21:49:49" itemprop="dateModified" datetime="2019-09-01T21:49:49+08:00">2019-09-01</time>
               
             
           </span>
@@ -456,23 +456,21 @@
       
 
       
-        <h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><p>这篇是从我以前csdn博客上搬运过来的,属于原创</p>
-<h4 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h4><p>一.AtomicLong是做什么用的<br>首先我们可以先看一下我的另一篇文章<a href="/2019/07/02/i++不是原子性操作/" title="i++不是原子性操作">i++不是原子性操作</a></p>
+        <p>之前发生了这样一件事,由于是用的postman发送的消息,消息体有几种常用构造方式:none,form-data,x-www-form-urlencoded<br>有一些构造方式通过getParameter方法是获取不到数据的,接下来让我们一起看一下这个问题</p>
 <a id="more"></a>
-<p>此时,我们通常选择会是进行这样的操作</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CasStudy01</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> count = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">synchronized</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">()</span></span>&#123;</span><br><span class="line">            count++;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">        Runnable runnable = <span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                add();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10000</span>; i++) &#123;</span><br><span class="line">            <span class="keyword">new</span> Thread(runnable).start();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        Thread.sleep(<span class="number">1000</span>);</span><br><span class="line">        System.out.println(count);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>我们将count++操作放在了一个带锁的方法里面,来保证其线程安全性。然而,我们知道,加锁解锁操作会造成性能的消耗,在并发量不算太高的情况下,我们可以考虑采用AtomicLong(无锁的方式,采用/2019/07/02/CAS机制/)来保证线程安全性</p>
-<p>二.AtomicLong的实现<br>AtomicLong在源码中持有Unsafe类的实例,其大部分操作都是交付给Unsafe类来完成的(Unsafe中大多是本地方法,虽然我们可以通过反射来调用,但是官方强烈不建议我们这么做)</p>
-<p>AtomicLong里面持有一个long类型的valueOffset变量,这个变量表示的是其value值的内存偏移量(详见JVM内存模型),当我们调用incrementAndGet时,会交付Unsafe类来进行操作</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">long</span> <span class="title">incrementAndGet</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> unsafe.getAndAddLong(<span class="keyword">this</span>, valueOffset, <span class="number">1L</span>) + <span class="number">1L</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>首先我对两种构造方式进行了抓包,看到他们发出去的请求<br>首先时form-data格式下的Get,Post方式</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">GET http://localhost:8080/TestHttp/HelloWord HTTP/1.1</span><br><span class="line">Content-Type: multipart/form-data; boundary=--------------------------130695699130126180335395</span><br><span class="line">User-Agent: PostmanRuntime/7.15.0</span><br><span class="line">Accept: */*</span><br><span class="line">Cache-Control: no-cache</span><br><span class="line">Postman-Token: 255c0f6d-0296-4095-af08-3a0bc1e1f756</span><br><span class="line">Host: localhost:8080</span><br><span class="line">accept-encoding: gzip, deflate</span><br><span class="line">content-length: 281</span><br><span class="line">Connection: keep-alive</span><br><span class="line"></span><br><span class="line">----------------------------130695699130126180335395</span><br><span class="line">Content-Disposition: form-data; name=&quot;username&quot;</span><br><span class="line"></span><br><span class="line">admin</span><br><span class="line">----------------------------130695699130126180335395</span><br><span class="line">Content-Disposition: form-data; name=&quot;password&quot;</span><br><span class="line"></span><br><span class="line">123456</span><br><span class="line">----------------------------130695699130126180335395--</span><br></pre></td></tr></table></figure>
 
-<p>我们传入本类的实例,value的偏移量,以及增加量</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">long</span> <span class="title">getAndAddLong</span><span class="params">(Object var1, <span class="keyword">long</span> var2, <span class="keyword">long</span> var4)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">long</span> var6;</span><br><span class="line">    <span class="keyword">do</span> &#123;</span><br><span class="line">        var6 = <span class="keyword">this</span>.getLongVolatile(var1, var2);</span><br><span class="line">    &#125; <span class="keyword">while</span>(!<span class="keyword">this</span>.compareAndSwapLong(var1, var2, var6, var6 + var4));</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> var6;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">POST http://localhost:8080/TestHttp/HelloWord HTTP/1.1</span><br><span class="line">Content-Type: multipart/form-data; boundary=--------------------------666026373795318990654180</span><br><span class="line">User-Agent: PostmanRuntime/7.15.0</span><br><span class="line">Accept: */*</span><br><span class="line">Cache-Control: no-cache</span><br><span class="line">Postman-Token: f7e5f00a-65d9-4aba-961d-34762e8c410c</span><br><span class="line">Host: localhost:8080</span><br><span class="line">accept-encoding: gzip, deflate</span><br><span class="line">content-length: 281</span><br><span class="line">Connection: keep-alive</span><br><span class="line"></span><br><span class="line">----------------------------666026373795318990654180</span><br><span class="line">Content-Disposition: form-data; name=&quot;username&quot;</span><br><span class="line"></span><br><span class="line">admin</span><br><span class="line">----------------------------666026373795318990654180</span><br><span class="line">Content-Disposition: form-data; name=&quot;password&quot;</span><br><span class="line"></span><br><span class="line">123456</span><br><span class="line">----------------------------666026373795318990654180--</span><br><span class="line">`</span><br></pre></td></tr></table></figure>
 
-<p>在Unsafe中就会进行CAS操作,使得value增加1,这是线程安全的</p>
-<p>三.AtomicLong的缺点<br>当并发量极大的时候,由于CAS机制本身的原因,导致CAS失败率极高,从而拖慢性能。此时,我们可以考虑使用LongAdder(待补充)</p>
+<p>接下来是x-www-form-urlencoded格式下的Get,Post方式</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">GET http://localhost:8080/TestHttp/HelloWord HTTP/1.1</span><br><span class="line">Content-Type: application/x-www-form-urlencoded</span><br><span class="line">User-Agent: PostmanRuntime/7.15.0</span><br><span class="line">Accept: */*</span><br><span class="line">Cache-Control: no-cache</span><br><span class="line">Postman-Token: 7e03a95e-5539-4a2a-b0e7-0fe399a4af28</span><br><span class="line">Host: localhost:8080</span><br><span class="line">accept-encoding: gzip, deflate</span><br><span class="line">content-length: 30</span><br><span class="line">Connection: keep-alive</span><br><span class="line"></span><br><span class="line">username=admin&amp;password=123456</span><br></pre></td></tr></table></figure>
 
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">POST http://localhost:8080/TestHttp/HelloWord HTTP/1.1</span><br><span class="line">Content-Type: application/x-www-form-urlencoded</span><br><span class="line">User-Agent: PostmanRuntime/7.15.0</span><br><span class="line">Accept: */*</span><br><span class="line">Cache-Control: no-cache</span><br><span class="line">Postman-Token: 13ed95bb-803d-451c-b046-db4e5eb142b2</span><br><span class="line">Host: localhost:8080</span><br><span class="line">accept-encoding: gzip, deflate</span><br><span class="line">content-length: 30</span><br><span class="line">Connection: keep-alive</span><br><span class="line"></span><br><span class="line">username=admin&amp;password=123456</span><br></pre></td></tr></table></figure>
+
+<p>根据实验结果,在POST模式下x-www-form-urlencoded才可以通过getParameter获取数据,那么导致这一问题的原因是什么呢?<br>通过代码,锁定了Tomcat Request类的parseParameters方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//这里对消息格式进行判断</span></span><br><span class="line"><span class="keyword">if</span> (<span class="string">"multipart/form-data"</span>.equals(contentType)) &#123;</span><br><span class="line">    parseParts(<span class="keyword">false</span>);</span><br><span class="line">    success = <span class="keyword">true</span>;</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//在这一行对method进行了判断,如果是POST,则进行接下来的解析,如果是其他的,那么直接返回</span></span><br><span class="line"><span class="keyword">if</span>( !getConnector().isParseBodyMethod(getMethod()) ) &#123;</span><br><span class="line">    success = <span class="keyword">true</span>;</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//这里对消息格式进行判断</span></span><br><span class="line"><span class="keyword">if</span> (!(<span class="string">"application/x-www-form-urlencoded"</span>.equals(contentType))) &#123;</span><br><span class="line">    success = <span class="keyword">true</span>;</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
       
     </div>
 
@@ -491,7 +489,7 @@
   <link rel="stylesheet" type="text/css" href="http://jslibs.wuxubj.cn/sweetalert_mini/sweetalert.mini.css">
 
   <p><span>本文作者:</span> Lemon Sour</p>  
-  <p><span>本文链接:</span><a href="/2019/07/02/AtomicLong/" title="AtomicLong">https://lemonsour.me/2019/07/02/AtomicLong/</a></p>
+  <p><span>本文链接:</span><a href="/2019/06/28/getParamter为何接收不到postman构造的信息/" title="getParamter为何接收不到postman构造的信息">https://lemonsour.me/2019/06/28/getParamter为何接收不到postman构造的信息/</a></p>
   <p><span>许可协议:</span>本站博文均采用 <a href="http://creativecommons.org/licenses/by-nc-sa/3.0/cn/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0 CN</a> 许可协议，转载请注明出处及原文作者并置顶！</p>  
 </div>
 
@@ -519,9 +517,7 @@
         
         <div class="post-tags">
           
-            <a href="/tags/java/" rel="tag"># java</a>
-          
-            <a href="/tags/base/" rel="tag"># base</a>
+            <a href="/tags/Tomcat/" rel="tag"># Tomcat</a>
           
         </div>
       
@@ -534,8 +530,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/07/02/CAS机制/" rel="next" title="CAS机制">
-                <i class="fa fa-chevron-left"></i> CAS机制
+              <a href="/2019/06/24/利用git完成服务器自动化部署解决方案/" rel="next" title="利用git完成服务器自动化部署解决方案">
+                <i class="fa fa-chevron-left"></i> 利用git完成服务器自动化部署解决方案
               </a>
             
           </div>
@@ -544,8 +540,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/07/02/i++不是原子性操作/" rel="prev" title="i++不是原子性操作">
-                i++不是原子性操作 <i class="fa fa-chevron-right"></i>
+              <a href="/2019/06/28/Servlet源码笔记/" rel="prev" title="Servlet源码笔记">
+                Servlet源码笔记 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -590,17 +586,8 @@
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            Table of Contents
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            Overview
-          </li>
-        </ul>
-      
 
-      <div class="site-overview-wrap sidebar-panel">
+      <div class="site-overview-wrap sidebar-panel sidebar-panel-active">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -748,23 +735,6 @@
         </div>
       </div>
 
-      
-      <!--noindex-->
-        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-            
-            
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#正文"><span class="nav-number">2.</span> <span class="nav-text">正文</span></a></li></ol></div>
-            
-
-          </div>
-        </div>
-      <!--/noindex-->
       
 
       

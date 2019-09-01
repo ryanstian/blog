@@ -92,18 +92,22 @@
 
 
 
-  <meta name="description" content="前言这篇是从我以前csdn博客上搬运过来的,属于原创 正文一.AtomicLong是做什么用的首先我们可以先看一下我的另一篇文章i++不是原子性操作">
-<meta name="keywords" content="java,base">
+  <meta name="description" content="首先我们来谈一谈java中常见的几种IO线程模型 我们知道一般io(socket)都是由accept,read,write,close几种状态组成 ####同步阻塞(bio)在read时需要无限等待直到消息到达,就是阻塞,同步则指的是每一步都需要等待上一步完成然后被调用   ####同步非阻塞()同步阻塞和同步非阻塞的区别就在于,在read时无论是否有数据,立刻返回。那么或许有人会问了,这样有什">
+<meta name="keywords" content="线程">
 <meta property="og:type" content="article">
-<meta property="og:title" content="AtomicLong">
-<meta property="og:url" content="https://qq616023844.github.io/2019/07/02/AtomicLong/index.html">
+<meta property="og:title" content="线程模型">
+<meta property="og:url" content="https://qq616023844.github.io/2019/08/17/线程模型/index.html">
 <meta property="og:site_name" content="柠檬不酸的博客">
-<meta property="og:description" content="前言这篇是从我以前csdn博客上搬运过来的,属于原创 正文一.AtomicLong是做什么用的首先我们可以先看一下我的另一篇文章i++不是原子性操作">
+<meta property="og:description" content="首先我们来谈一谈java中常见的几种IO线程模型 我们知道一般io(socket)都是由accept,read,write,close几种状态组成 ####同步阻塞(bio)在read时需要无限等待直到消息到达,就是阻塞,同步则指的是每一步都需要等待上一步完成然后被调用   ####同步非阻塞()同步阻塞和同步非阻塞的区别就在于,在read时无论是否有数据,立刻返回。那么或许有人会问了,这样有什">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-08-17T15:02:45.723Z">
+<meta property="og:image" content="http://188.131.252.235:8888/线程模型/同步阻塞io.png">
+<meta property="og:image" content="http://188.131.252.235:8888/线程模型/同步非阻塞io.png">
+<meta property="og:image" content="http://188.131.252.235:8888/线程模型/io多路复用.png">
+<meta property="og:updated_time" content="2019-09-01T13:49:49.283Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="AtomicLong">
-<meta name="twitter:description" content="前言这篇是从我以前csdn博客上搬运过来的,属于原创 正文一.AtomicLong是做什么用的首先我们可以先看一下我的另一篇文章i++不是原子性操作">
+<meta name="twitter:title" content="线程模型">
+<meta name="twitter:description" content="首先我们来谈一谈java中常见的几种IO线程模型 我们知道一般io(socket)都是由accept,read,write,close几种状态组成 ####同步阻塞(bio)在read时需要无限等待直到消息到达,就是阻塞,同步则指的是每一步都需要等待上一步完成然后被调用   ####同步非阻塞()同步阻塞和同步非阻塞的区别就在于,在read时无论是否有数据,立刻返回。那么或许有人会问了,这样有什">
+<meta name="twitter:image" content="http://188.131.252.235:8888/线程模型/同步阻塞io.png">
 
 
 
@@ -111,7 +115,7 @@
 
   
   
-  <link rel="canonical" href="https://qq616023844.github.io/2019/07/02/AtomicLong/">
+  <link rel="canonical" href="https://qq616023844.github.io/2019/08/17/线程模型/">
 
 
 
@@ -121,7 +125,7 @@
   };
 </script>
 
-  <title>AtomicLong | 柠檬不酸的博客</title>
+  <title>线程模型 | 柠檬不酸的博客</title>
   
 
 
@@ -344,7 +348,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://qq616023844.github.io/2019/07/02/AtomicLong/">
+    <link itemprop="mainEntityOfPage" href="https://qq616023844.github.io/2019/08/17/线程模型/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Lemon Sour">
@@ -361,7 +365,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">AtomicLong
+          <h1 class="post-title" itemprop="name headline">线程模型
 
               
             
@@ -387,7 +391,7 @@
                 
               
 
-              <time title="Created: 2019-07-02 00:02:00" itemprop="dateCreated datePublished" datetime="2019-07-02T00:02:00+08:00">2019-07-02</time>
+              <time title="Created: 2019-08-17 23:25:00" itemprop="dateCreated datePublished" datetime="2019-08-17T23:25:00+08:00">2019-08-17</time>
             
 
             
@@ -404,7 +408,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2019-08-17 23:02:45" itemprop="dateModified" datetime="2019-08-17T23:02:45+08:00">2019-08-17</time>
+                <time title="Modified: 2019-09-01 21:49:49" itemprop="dateModified" datetime="2019-09-01T21:49:49+08:00">2019-09-01</time>
               
             
           </span>
@@ -456,22 +460,37 @@
       
 
       
-        <h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><p>这篇是从我以前csdn博客上搬运过来的,属于原创</p>
-<h4 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h4><p>一.AtomicLong是做什么用的<br>首先我们可以先看一下我的另一篇文章<a href="/2019/07/02/i++不是原子性操作/" title="i++不是原子性操作">i++不是原子性操作</a></p>
-<a id="more"></a>
-<p>此时,我们通常选择会是进行这样的操作</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CasStudy01</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> count = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">synchronized</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">()</span></span>&#123;</span><br><span class="line">            count++;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">        Runnable runnable = <span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                add();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10000</span>; i++) &#123;</span><br><span class="line">            <span class="keyword">new</span> Thread(runnable).start();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        Thread.sleep(<span class="number">1000</span>);</span><br><span class="line">        System.out.println(count);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+        <a id="more"></a>
+<p>首先我们来谈一谈java中常见的几种IO线程模型</p>
+<p>我们知道一般io(socket)都是由accept,read,write,close几种状态组成</p>
+<p>####同步阻塞(bio)<br>在read时需要无限等待直到消息到达,就是阻塞,同步则指的是每一步都需要等待上一步完成然后被调用<br><img src="http://188.131.252.235:8888/线程模型/同步阻塞io.png" text-align:center alt="如果图片失效,请邮件联系作者补图"></p>
+<center></center>
 
-<p>我们将count++操作放在了一个带锁的方法里面,来保证其线程安全性。然而,我们知道,加锁解锁操作会造成性能的消耗,在并发量不算太高的情况下,我们可以考虑采用AtomicLong(无锁的方式,采用/2019/07/02/CAS机制/)来保证线程安全性</p>
-<p>二.AtomicLong的实现<br>AtomicLong在源码中持有Unsafe类的实例,其大部分操作都是交付给Unsafe类来完成的(Unsafe中大多是本地方法,虽然我们可以通过反射来调用,但是官方强烈不建议我们这么做)</p>
-<p>AtomicLong里面持有一个long类型的valueOffset变量,这个变量表示的是其value值的内存偏移量(详见JVM内存模型),当我们调用incrementAndGet时,会交付Unsafe类来进行操作</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">long</span> <span class="title">incrementAndGet</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> unsafe.getAndAddLong(<span class="keyword">this</span>, valueOffset, <span class="number">1L</span>) + <span class="number">1L</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>####同步非阻塞()<br>同步阻塞和同步非阻塞的区别就在于,在read时无论是否有数据,立刻返回。那么或许有人会问了,这样有什么意义,还需要自己写while循环包裹来促使其不断访问直到数据到达。其实针对这一点,如果一个程序在底层进入了阻塞状态,也就意味着我们失去了对其控制,对于socket来说,我们只能通过close来使其断开连接离开阻塞状态,而如果我们是非阻塞的情况下,我们发现read数据未到达,可以先允许该线程去做其他工作,过一会再来read一次检测下消息是否到达,同时我们也可以通过标记位来控制其后续行为<br><img src="http://188.131.252.235:8888/线程模型/同步非阻塞io.png" text-align:center alt="如果图片失效,请邮件联系作者补图"></p>
+<center></center>
 
-<p>我们传入本类的实例,value的偏移量,以及增加量</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">long</span> <span class="title">getAndAddLong</span><span class="params">(Object var1, <span class="keyword">long</span> var2, <span class="keyword">long</span> var4)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">long</span> var6;</span><br><span class="line">    <span class="keyword">do</span> &#123;</span><br><span class="line">        var6 = <span class="keyword">this</span>.getLongVolatile(var1, var2);</span><br><span class="line">    &#125; <span class="keyword">while</span>(!<span class="keyword">this</span>.compareAndSwapLong(var1, var2, var6, var6 + var4));</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> var6;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>在Unsafe中就会进行CAS操作,使得value增加1,这是线程安全的</p>
-<p>三.AtomicLong的缺点<br>当并发量极大的时候,由于CAS机制本身的原因,导致CAS失败率极高,从而拖慢性能。此时,我们可以考虑使用LongAdder(待补充)</p>
+
+<p>####io多路复用(nio)<br>其实nio也被算作同步非阻塞,但是在使用时也可以成为异步非阻塞,不过我们不必拘泥于这些分类,在发展中,是先有的模型,后来才被分类,所以很多情况下分类是模棱两可的。<br>io多路复用跟之前说的同步非阻塞有点关系,io多路复用的read也是非阻塞的,跟之前的最大区别在于,他采用了Selector选择器负责监听每一个socket的各种行为,当该行为被激活的时候,通知后续线程去处理。<br>我们可以想象,此时有巨量的socket链接进来,我们需要为每一个socket创建一个线程来read(即使是使用线程池减少了创建线程的消耗,那么大量的线程也依旧会在while(){//read}上浪费掉),此时我们就需要一个方案来解放这些线程无意义的循环read<br>一个管理者,来管理所有的Socket,这也就诞生了Selector选择器,由Selector负责检测是否有accept,read,write行为,并且通知其他线程来处理,这样我们可以节约大量线程,配合线程池我们就可以用有限的资源处理大量的连接<br><font color="red">假设我们将流程分类为,io监听和io接收,业务处理三部分,那么nio的核心就是在于将io监听给提取出来单独管理</font><br><img src="http://188.131.252.235:8888/线程模型/io多路复用.png" text-align:center alt="如果图片失效,请邮件联系作者补图"></p>
+<center></center>
+
+<p>####异步<br>说到异步,阻塞与非阻塞的界限更为模糊。<br>下面让我们来看一段代码,这段代码并不是异步,他只是一个回调雏形,后面我会谈到</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">CallBack</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">callback</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Main</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">work</span><span class="params">(CallBack callBack)</span></span>&#123;</span><br><span class="line">        <span class="comment">//业务代码省略...</span></span><br><span class="line">        callBack.callback();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Main main = <span class="keyword">new</span> Main();</span><br><span class="line">        System.out.println(<span class="number">1</span>);</span><br><span class="line">        main.work(<span class="keyword">new</span> CallBack() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">callback</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                System.out.println(<span class="number">2</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">        System.out.println(<span class="number">3</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如果你对代理模式比较熟悉,那么这里你肯定会产生疑问:这不就是代理模式么?<br>嗯,没错,这个东西在我眼里就是代理模式,只不过我们一般使用的代理模式的代码是写死在代理类中,而这里我们传入了自定义的代码,这就是回调的雏形</p>
+<p>你肯定会问,这有什么用?还不如直接在一个方法里从头到尾写下来。<br>这是因为我们还没有引入其他的模型,假设我们引入多线程,那么我们的代码就成了这样</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">CallBack</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">callback</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Main</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">work</span><span class="params">(CallBack callBack)</span></span>&#123;</span><br><span class="line">        <span class="comment">//业务代码</span></span><br><span class="line">        callBack.callback();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Main main = <span class="keyword">new</span> Main();</span><br><span class="line">        System.out.println(<span class="number">1</span>);</span><br><span class="line">        <span class="keyword">new</span> Thread(<span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                main.work(<span class="keyword">new</span> CallBack() &#123;</span><br><span class="line">                    <span class="meta">@Override</span></span><br><span class="line">                    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">callback</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                        System.out.println(<span class="number">2</span>);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;).start();</span><br><span class="line">        System.out.println(<span class="number">3</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>通过对比,我们发现,引入了线程的概念后,他的意义就完全改变,变成了一种近似异步(不必在乎这些概念,你重点关注的应该是是否对于性能有真正的提升)的实现。<br>假设我们面对这样一个场景(此处我们先以非阻塞为例,否则引入自变量过的多不宜于理解),两个socket AB互相长期通信,且每次通信在业务上(我们先将流程简单的分为为io,业务两部分)所需要耗费的时间是不确定的,假若说我们采用同步的方式,每一次A发往B,因B只有一根线程,需要顺序的处理读io,业务操作,写io后才可继续处理A的后续请求。<br>而现在,我们将双方模型改为异步,A只要有请求就向B发送,无需等待B响应,当B读取完消息后(你可能会问A一直在发送消息,B怎么知道A是发送到一个请求还是两个请求,这一点你可以去了解粘包拆包的问题),将消息封装为一个任务,递交给线程池执行(执行完毕后会将执行回调函数来决定接下来的操作,由于任务耗时的不确定性,如果返回消息的话,消息的先后顺序也是不确定的,所以A在请求时需要附带消息的序列号),并立刻返回A一条消息表示自己已经接收到了请求。</p>
+<p>到这里你会觉得一切豁然开朗,你仿佛明白了同步异步,阻塞非阻塞,感觉自己成为了大佬。但是,我刚才做的将同步改为异步的操作,真的提高了性能么,假设我线程池只设置一根线程,那么性能跟io和业务在同一根线程有区别么,这真的是异步带来的福利,还是仅仅是多线程带来的福利?我只不过是让A提前知道了,B已经接收到了来自A的消息,但是实际如果线程池只有一根线程的话,业务处理时间是不会改变的。那么异步的意义何在?仅仅是为了利用起多线程并发处理业务这个效果么?</p>
+<p>…<br>…<br>…</p>
+<p>答案:<br>&emsp;异步确实起到了利用多线程的作用,这里的异步我们要明确,异步并非是一个确切的概念,而是一个抽象宏观的概念,是针对于观察点而不断变化的,例如在当前这个场景中,如果A只有当收到B的处理结果才会继续发送,那么B的异步还算是真正的异步吗?我们当然可以说B是异步的,但是对于整体来说,他又是同步的,B在此时的是无法体现其性能优势的。假如说在这个基础上,有许许多多的A连接同一个B向其发送消息,此时B针对每一个连接起一个io线程(这里当然可以用Selector选择器配合io线程池),接到消息后扔到线程池(即使线程池只有一根线程,但是由于io是并发的,省去了io时间)去处理,这时候B又能体现他的性能优势了</p>
+<p>那么接下来我们抛开异步同步阻塞非阻塞这个问题,从性能方面总结一下,之前我们提到的线程模型,变化繁多,那么他们为了性能所做的改变都有什么共同点呢?<br><font color="red">将职责精细划分,对于每一部分职责分别进行深度优化,使得每一部分职责成为一个组件,各组件之间相互通信,以避免某一组件因为另一组件的原因而造成无意义的等待</font><br>在并发量低的环境下,由于我们机器可以开足够的线程来处理消息,即使义务处理因为io产生了等待,其他的消息也可以选择其他线程去处理。而当并发量增高,此时如果我们线程随之增高的话,会产生大量的线程上下文切换开销,所以我们不得不把控线程的数目,转而通过技巧来充分利用起每一条线程(例如线程池,组件功能划分等方式),这也就是这些线程模型存在并逐渐演化的原因</p>
+<p>拓展:</p>
+<a href="/2019/08/14/Tomcat源码笔记/" title="Tomcat源码笔记">Tomcat源码笔记</a>最尾处的Tomcat线程模型
+
+
+<p>待续</p>
 
       
     </div>
@@ -491,7 +510,7 @@
   <link rel="stylesheet" type="text/css" href="http://jslibs.wuxubj.cn/sweetalert_mini/sweetalert.mini.css">
 
   <p><span>本文作者:</span> Lemon Sour</p>  
-  <p><span>本文链接:</span><a href="/2019/07/02/AtomicLong/" title="AtomicLong">https://lemonsour.me/2019/07/02/AtomicLong/</a></p>
+  <p><span>本文链接:</span><a href="/2019/08/17/线程模型/" title="线程模型">https://lemonsour.me/2019/08/17/线程模型/</a></p>
   <p><span>许可协议:</span>本站博文均采用 <a href="http://creativecommons.org/licenses/by-nc-sa/3.0/cn/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0 CN</a> 许可协议，转载请注明出处及原文作者并置顶！</p>  
 </div>
 
@@ -519,9 +538,7 @@
         
         <div class="post-tags">
           
-            <a href="/tags/java/" rel="tag"># java</a>
-          
-            <a href="/tags/base/" rel="tag"># base</a>
+            <a href="/tags/线程/" rel="tag"># 线程</a>
           
         </div>
       
@@ -534,8 +551,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/07/02/CAS机制/" rel="next" title="CAS机制">
-                <i class="fa fa-chevron-left"></i> CAS机制
+              <a href="/2019/08/14/Tomcat源码笔记/" rel="next" title="Tomcat源码笔记">
+                <i class="fa fa-chevron-left"></i> Tomcat源码笔记
               </a>
             
           </div>
@@ -544,8 +561,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/07/02/i++不是原子性操作/" rel="prev" title="i++不是原子性操作">
-                i++不是原子性操作 <i class="fa fa-chevron-right"></i>
+              <a href="/2019/08/25/BUG_kafka_01/" rel="prev" title="Exception thrown when sending a message with key='null'">
+                Exception thrown when sending a message with key='null' <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -590,17 +607,8 @@
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            Table of Contents
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            Overview
-          </li>
-        </ul>
-      
 
-      <div class="site-overview-wrap sidebar-panel">
+      <div class="site-overview-wrap sidebar-panel sidebar-panel-active">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -748,23 +756,6 @@
         </div>
       </div>
 
-      
-      <!--noindex-->
-        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-            
-            
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#正文"><span class="nav-number">2.</span> <span class="nav-text">正文</span></a></li></ol></div>
-            
-
-          </div>
-        </div>
-      <!--/noindex-->
       
 
       

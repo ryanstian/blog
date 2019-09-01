@@ -92,18 +92,18 @@
 
 
 
-  <meta name="description" content="问题描述直接上报错,简单来讲就是报错说表没找到">
+  <meta name="description" content="直接上报错,简单来讲就是报错说表没找到">
 <meta name="keywords" content="base,mysql">
 <meta property="og:type" content="article">
 <meta property="og:title" content="mysql大小写问题">
 <meta property="og:url" content="https://qq616023844.github.io/2019/07/02/mysql大小写问题/index.html">
 <meta property="og:site_name" content="柠檬不酸的博客">
-<meta property="og:description" content="问题描述直接上报错,简单来讲就是报错说表没找到">
+<meta property="og:description" content="直接上报错,简单来讲就是报错说表没找到">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-07-02T07:41:16.451Z">
+<meta property="og:updated_time" content="2019-09-01T14:00:08.938Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="mysql大小写问题">
-<meta name="twitter:description" content="问题描述直接上报错,简单来讲就是报错说表没找到">
+<meta name="twitter:description" content="直接上报错,简单来讲就是报错说表没找到">
 
 
 
@@ -387,12 +387,24 @@
                 
               
 
-              <time title="Created: 2019-07-02 12:31:00 / Modified: 15:41:16" itemprop="dateCreated datePublished" datetime="2019-07-02T12:31:00+08:00">2019-07-02</time>
+              <time title="Created: 2019-07-02 12:31:00" itemprop="dateCreated datePublished" datetime="2019-07-02T12:31:00+08:00">2019-07-02</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2019-09-01 22:00:08" itemprop="dateModified" datetime="2019-09-01T22:00:08+08:00">2019-09-01</time>
               
             
           </span>
@@ -444,13 +456,13 @@
       
 
       
-        <h4 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h4><p>直接上报错,简单来讲就是报错说表没找到</p>
+        <p>直接上报错,简单来讲就是报错说表没找到</p>
 <a id="more"></a>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">2019-07-02 12:26:48.782  WARN 16022 --- [nio-8080-exec-2] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Error: 1146, SQLState: 42S02</span><br><span class="line">2019-07-02 12:26:48.782 ERROR 16022 --- [nio-8080-exec-2] o.h.engine.jdbc.spi.SqlExceptionHelper   : Table &apos;summertrain.Market_good&apos; doesn&apos;t exist</span><br><span class="line">org.springframework.dao.InvalidDataAccessResourceUsageException: could not execute statement; SQL [n/a]; nested exception is org.hibernate.exception.SQLGrammarException: could not execute statement</span><br><span class="line">        ...</span><br><span class="line">Caused by: org.hibernate.exception.SQLGrammarException: could not execute statement</span><br><span class="line">        ... 74 more</span><br><span class="line">Caused by: java.sql.SQLSyntaxErrorException: Table &apos;summertrain.Market_good&apos; doesn&apos;t exist</span><br><span class="line">        ... 92 more</span><br></pre></td></tr></table></figure>
 
-<h4 id="发生情况"><a href="#发生情况" class="headerlink" title="发生情况"></a>发生情况</h4><p>由于团队成员都会先从本地进行调试,本地调试成功就会推送到远程服务器让其自动部署<br>本次情况发生时,成员本地调试通过,远程确报错如上内容</p>
-<h4 id="原因分析"><a href="#原因分析" class="headerlink" title="原因分析"></a>原因分析</h4><p>这是由于大小写问题引起的,写这个错误的成员,其本地数据库大小写不敏感,而我们远程服务器使用的mysql大小写敏感,从而summertrain.Market_good,M大写导致出现异常</p>
-<p>在我更改其所有大写M为小写m后,推送到服务器,测试了可以正常使用</p>
+<p>由于团队成员都会先从本地进行调试,本地调试成功就会推送到远程服务器让其自动部署<br>本次情况发生时,成员本地调试通过,远程确报错如上内容</p>
+<p>这是由于大小写问题引起的,写这个错误的成员,其本地数据库大小写不敏感,而我们远程服务器使用的mysql大小写敏感,从而summertrain.Market_good,M大写导致出现异常<br>在更改其所有大写M为小写m后,推送到服务器,测试了可以正常使用</p>
+<p>如果不想mysql对大小写敏感的话,可以在my.ini配置文件的字段mysqld下增加：lower_case_table_names=1(0表示大小写敏感,1表示不敏感,2表示存储时按大小写,比较时统一按小写比较)。如果我们设置表名大小写的话,需要操作系统支持,例如有的操作系统对于文件名是不区分大小写的,此时设置0会导致mysql启动异常</p>
 
       
     </div>
@@ -523,8 +535,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/07/03/VM options And Program arguments/" rel="prev" title="VM options And Program arguments">
-                VM options And Program arguments <i class="fa fa-chevron-right"></i>
+              <a href="/2019/07/05/前端添加数据后动态刷新时获取获取后端数据是旧的/" rel="prev" title="前端添加数据后动态刷新时获取获取后端数据是旧的">
+                前端添加数据后动态刷新时获取获取后端数据是旧的 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -569,17 +581,8 @@
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            Table of Contents
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            Overview
-          </li>
-        </ul>
-      
 
-      <div class="site-overview-wrap sidebar-panel">
+      <div class="site-overview-wrap sidebar-panel sidebar-panel-active">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -621,7 +624,13 @@
                     
                       
                     
-                    <span class="site-state-item-count">5</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">8</span>
                     <span class="site-state-item-name">categories</span>
                   </a>
                 </div>
@@ -668,15 +677,7 @@
                     
                       
                     
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                    <span class="site-state-item-count">19</span>
+                    <span class="site-state-item-count">15</span>
                     <span class="site-state-item-name">tags</span>
                   </a>
                 </div>
@@ -729,23 +730,6 @@
         </div>
       </div>
 
-      
-      <!--noindex-->
-        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-            
-            
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#问题描述"><span class="nav-number">1.</span> <span class="nav-text">问题描述</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#发生情况"><span class="nav-number">2.</span> <span class="nav-text">发生情况</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#原因分析"><span class="nav-number">3.</span> <span class="nav-text">原因分析</span></a></li></ol></div>
-            
-
-          </div>
-        </div>
-      <!--/noindex-->
       
 
       
