@@ -340,7 +340,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://qq616023844.github.io/2019/10/05/ThreadPoolExecutor源码分析/">
+    <link itemprop="mainEntityOfPage" href="https://qq616023844.github.io/2019/11/23/简记20191123/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Lemon Sour">
@@ -360,7 +360,7 @@
           <h1 class="post-title" itemprop="name headline">
                 
                 
-                <a href="/2019/10/05/ThreadPoolExecutor源码分析/" class="post-title-link" itemprop="url">ThreadPoolExecutor源码分析</a>
+                <a href="/2019/11/23/简记20191123/" class="post-title-link" itemprop="url">简记20191123</a>
               
             
           </h1>
@@ -385,24 +385,12 @@
                 
               
 
-              <time title="Created: 2019-10-05 18:11:00" itemprop="dateCreated datePublished" datetime="2019-10-05T18:11:00+08:00">2019-10-05</time>
+              <time title="Created: 2019-11-23 21:33:00 / Modified: 23:18:30" itemprop="dateCreated datePublished" datetime="2019-11-23T21:33:00+08:00">2019-11-23</time>
             
 
             
               
 
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">Edited on</span>
-                
-                <time title="Modified: 2019-10-06 23:19:15" itemprop="dateModified" datetime="2019-10-06T23:19:15+08:00">2019-10-06</time>
               
             
           </span>
@@ -419,7 +407,7 @@
                 <span class="post-meta-item-text">In</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/源码/" itemprop="url" rel="index"><span itemprop="name">源码</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/简记/" itemprop="url" rel="index"><span itemprop="name">简记</span></a></span>
 
                 
                 
@@ -455,16 +443,22 @@
 
       
         
-          <p>看到网上讲线程池源码的文章一堆大坑,只能自己扒源码扒篇文章出来了,坐标jdk8</p>
-          <!--noindex-->
           
-            <div class="post-button text-center">
-              <a class="btn" href="/2019/10/05/ThreadPoolExecutor源码分析/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
+            <p>&emsp;大四已经实习了四个多月,在工作上遇到了很多技术问题,原本是十分开心的,毕竟不断地遇到问题解决问题技术才能得到提高。<br>&emsp;但是逐渐的感觉到这种学习方式似乎不适合我,个人是有些强迫症的,遇到了问题总想要刨根问底,不懂的地方就要去研究,每次遇到了耗时较长的资料时,总会放入收藏夹想着有时间了慢慢看,但是互联网是一个高速发展的行业,虽然解决问题的速度可以跟遇到问题的速度持平,但是想要刨根问底的话,速度却远远达不到出现问题的速度。<br>&emsp;我曾因为一个http请求却无法被request.getparameter()获取到参数的问题去研究各种content_type下的http报文格式,下载了tomcat源码从启动类开始看起,一点点的追踪,看完整个的报文解析流程,然而知识是延伸的,看到了tomcat的线程处理方式,就顺便看完(其实我也不知道该如何表述我学习的程度)了各种io模型,比如tomcat的直接起线程莽上的方式,或者像是netty中主从线程模型这种,看完了这些我又想去看netty的源码,然而至今他依然排在我的任务列表里面没有去做。我也曾经遇到了根据用户传入的参数从数据库导出大数据制定excel表格提供用户下载的功能,虽然这个功能不是我做的,但是当时在看这份代码的时候,我就认为他不完美,究竟哪里不完美呢?首先,原始是用POI的XSSFWorkbook,在大数据量情况下分分钟爆掉内存,然后我去搜索了资料,发现用SXSSFWorkbook确实可以解决爆内存的问题,他是可以将过程数据贮藏在硬盘中,但是这样我依旧认为他不完美,因为他用到了硬盘,需要多次io。后来因为前辈一句流式导出,我去研究了导出方案,通过查阅资料,发现excel2007以后本质是一个zip压缩包的形式,并且内容为xml格式存储,那么既然是这样,他就应该支持流式导出,通过翻阅博客或者官方文档,我了解了它里面常用的每个字段的含义,并且看了几份业务中导出的excel表格,经过解剖以后作为参照和测试,最终确认了,虽然excel中部分文件的头部是有一个内容总大小的标识位的,但是即时不填写,excel也能照常运行,这样的话,excel流式导出便有了希望,这段研究测试基本是在业余时间进行的,大概花了两天多。但是剖析完,我却遇到了一个十分棘手的问题,那就是excel本身是有内部的压缩算法的,它会将字符串单独放在一张xml中,在核心文本区域仅仅保存其引用,这个压缩算法虽然是可以被无视的,经过实验,即使你不对其进行字符串压缩,但是只要按照他的引用规则来生成xml文件,依旧可以正常使用,只不过文件体积会根据文件内容类型而增大,我想到了可以采用类似操作系统内存管理的FIFO算法或者FLU算法来进行不完全的压缩,虽然理论上可行,但是将花费的时间太多了。后来有一段时间,我又觉得算法是程序员的基础,开始刷leetcode,然而又是因为各种想学的东西或者想玩的东西(沉迷小说,已卸载!(╯▔皿▔)╯)中途打断了。<br>&emsp;尴尬了,老毛病又犯了,不把事情弄清楚,就会觉得非常难受。<br>&emsp;就这样,我发现我想弄明白的事情越来越多,我的任务清单越来越长,当我发现我想要学的东西增长速度以指数增长远大于log式学习的时候,我开始不想学习了,这也就是近期我没再更新过博客的一部分原因,在这之前,我一度开着netty源码准备详细研究里面的线程模型。<br>&emsp;我认为在某些方面自己还是比较幸运的,我偶然看到了知乎的一个问题回答”25岁做什么,可以在5年后受益匪浅?”里面有答主说:”有人问他,给他5年时间专研某个领域,可否成为该领域的专家,他认为可以。”同样的,我也认为可以。同时我也看到了一个答主的回答,当然,那个回答我已经找不到了,他说:”我在xx(抱歉已经记不清了)领域就是专家,别的领域你跟我比,但是我为什么要跟你比,只要你擅长的比别人都强就够了,不要拿自己不会的去跟别人比,我一直口语不太好,遇到个对外项目要谈进行沟通,口语不好怎么办,叫个翻译就好了,反正在我的领域,我就是强。”<br>&emsp;看完后,我想到了很多。现在这个时代的互联网发展速度极快,这既是幸运又是悲哀,对于喜欢的人来说,就像是有无数的财富摆在眼前,但是他却让人眼花缭乱没有方向。我曾记得小时候我想当程序员的时候,我家那片还不叫作程序员,那叫啥呢?”干IT的”。当时的我感觉IT就像是个匠人,就像是艺术家,为了达到极致不断地打磨,差不多就类似以前的暴雪爸爸,每个游戏一发布即是巅峰。儿时的梦想到了要实现的年纪,却成为了快餐化的职业,一个个看准了高薪挤进来,虽然能力上我们没有区别,但是却仅仅将它看作一个职业。<br>&emsp;我曾一度被行业快速发展的巨浪卷着四处飘荡,漫无目的,为了适应找工作需要而去学习。现在,我终于看清了,既然我是真心的喜欢这个行业,那么就按着自己的心意去学习,做好自己的规划,而不是面向薪资学习。<br>&emsp;我不认为自己有着某种天赋,但是就像答主所说:”我们还远远达不到需要拼天赋的程度。当你遇到需要拼天赋的时候,回过头看一看,发现自己已经走了很远很远。”<br>&emsp;我是个做事比较莽(这个词还是打王者时候出现的,我的理解是,看似骚的一匹,其实稳如老狗,奥利给?/手动滑稽)而且喜欢钻牛角尖的人,但我并不认为这是个缺点。希望未来五年,这种性格可以让我碾过路上遇到的困难。<br>&emsp;接下来!</p>
+<ul>
+<li>《计算机网络基础》,《计算机网络基础：自顶向下》</li>
+<li>《TCP/IP详解1:协议》,《鸟哥的LINUX私房菜:基础篇》,抓包分析</li>
+<li>协议分析能力,底层协议,《TCP/IP详解:实现》,《计算机网络》</li>
+<li>高性能io</li>
+<li>设计模式,深入线程及并发控制</li>
+<li>网络编程框架解剖,netty,tomcat解剖</li>
+<li>自己实现网络编程框架</li>
+<li>分布式网络编程框架学习</li>
+<li>自己实现分布式网络框架<br>&emsp;虽然不知道能走多快,也不知道这条路线到底对不对。但是,我喜欢!
+&emsp;奥利给!</li>
+</ul>
+
           
-          <!--/noindex-->
         
       
     </div>
@@ -632,6 +626,190 @@
           
             <div class="post-button text-center">
               <a class="btn" href="/2019/10/05/FutureTask源码分析/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    <div>
+      
+    </div>
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://qq616023844.github.io/2019/10/05/ThreadPoolExecutor源码分析/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Lemon Sour">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="柠檬不酸的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2019/10/05/ThreadPoolExecutor源码分析/" class="post-title-link" itemprop="url">ThreadPoolExecutor源码分析</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2019-10-05 18:11:00" itemprop="dateCreated datePublished" datetime="2019-10-05T18:11:00+08:00">2019-10-05</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2019-10-06 23:19:15" itemprop="dateModified" datetime="2019-10-06T23:19:15+08:00">2019-10-06</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/源码/" itemprop="url" rel="index"><span itemprop="name">源码</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>看到网上讲线程池源码的文章一堆大坑,只能自己扒源码扒篇文章出来了,坐标jdk8</p>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2019/10/05/ThreadPoolExecutor源码分析/#more" rel="contents">
                 Read more &raquo;
               </a>
             </div>
@@ -930,7 +1108,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2019-09-18 01:34:39" itemprop="dateModified" datetime="2019-09-18T01:34:39+08:00">2019-09-18</time>
+                <time title="Modified: 2019-10-27 21:08:00" itemprop="dateModified" datetime="2019-10-27T21:08:00+08:00">2019-10-27</time>
               
             
           </span>
@@ -1904,178 +2082,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://qq616023844.github.io/2019/08/25/BUG_kafka_01/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Lemon Sour">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="柠檬不酸的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2019/08/25/BUG_kafka_01/" class="post-title-link" itemprop="url">Exception thrown when sending a message with key='null'</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-
-              
-                
-              
-
-              <time title="Created: 2019-08-25 22:16:00 / Modified: 22:19:07" itemprop="dateCreated datePublished" datetime="2019-08-25T22:16:00+08:00">2019-08-25</time>
-            
-
-            
-              
-
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/BUG/" itemprop="url" rel="index"><span itemprop="name">BUG</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h4 id="报错"><a href="#报错" class="headerlink" title="报错"></a>报错</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">2019-08-20 18:45:09 [nioEventLoopGroup-3-15] ERROR o.s.k.s.LoggingProducerListener - Exception thrown when sending a message with key=&apos;null&apos; and payload=&apos;xxxxxxxxxxxxxx&apos; to topic abc-event:</span><br><span class="line">org.apache.kafka.common.errors.TimeoutException: Failed to update metadata after 60000 ms.</span><br></pre></td></tr></table></figure>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2019/08/25/BUG_kafka_01/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    <div>
-      
-    </div>
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2153,9 +2159,7 @@
                     
                       
                     
-                      
-                    
-                    <span class="site-state-item-count">8</span>
+                    <span class="site-state-item-count">7</span>
                     <span class="site-state-item-name">categories</span>
                   </a>
                 </div>
