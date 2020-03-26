@@ -92,18 +92,18 @@
 
 
 
-  <meta name="description" content="正文">
+  <meta name="description" content="正文1234567891011121314151617public class CasStudy01 &amp;#123;    private static int count = 0;    public static void main(String[] args) &amp;#123;        Runnable runnable = new Runnable() &amp;#123;">
 <meta name="keywords" content="java,base">
 <meta property="og:type" content="article">
 <meta property="og:title" content="i++不是原子性操作">
 <meta property="og:url" content="https://qq616023844.github.io/2019/07/02/i++不是原子性操作/index.html">
 <meta property="og:site_name" content="柠檬不酸的博客">
-<meta property="og:description" content="正文">
+<meta property="og:description" content="正文1234567891011121314151617public class CasStudy01 &amp;#123;    private static int count = 0;    public static void main(String[] args) &amp;#123;        Runnable runnable = new Runnable() &amp;#123;">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-09-17T17:34:42.833Z">
+<meta property="og:updated_time" content="2020-03-26T07:27:06.183Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="i++不是原子性操作">
-<meta name="twitter:description" content="正文">
+<meta name="twitter:description" content="正文1234567891011121314151617public class CasStudy01 &amp;#123;    private static int count = 0;    public static void main(String[] args) &amp;#123;        Runnable runnable = new Runnable() &amp;#123;">
 
 
 
@@ -404,7 +404,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2019-09-18 01:34:42" itemprop="dateModified" datetime="2019-09-18T01:34:42+08:00">2019-09-18</time>
+                <time title="Modified: 2020-03-26 15:27:06" itemprop="dateModified" datetime="2020-03-26T15:27:06+08:00">2020-03-26</time>
               
             
           </span>
@@ -456,9 +456,7 @@
       
 
       
-        <h4 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h4><a id="more"></a>
-
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CasStudy01</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> count = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Runnable runnable = <span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                count++;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10000</span>; i++) &#123;</span><br><span class="line">            <span class="keyword">new</span> Thread(runnable).start();</span><br><span class="line">        &#125;</span><br><span class="line">        Thread.sleep(<span class="number">1000</span>);<span class="comment">//为了等子线程全部运行结束</span></span><br><span class="line">        System.out.println(count);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+        <h4 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CasStudy01</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> count = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Runnable runnable = <span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                count++;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10000</span>; i++) &#123;</span><br><span class="line">            <span class="keyword">new</span> Thread(runnable).start();</span><br><span class="line">        &#125;</span><br><span class="line">        Thread.sleep(<span class="number">1000</span>);<span class="comment">//为了等子线程全部运行结束</span></span><br><span class="line">        System.out.println(count);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>输出:<br>9945</p>
 <p>Process finished with exit code 0</p>
@@ -525,8 +523,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/07/02/CAS机制/" rel="next" title="CAS机制">
-                <i class="fa fa-chevron-left"></i> CAS机制
+              <a href="/2019/07/02/AtomicLong/" rel="next" title="AtomicLong">
+                <i class="fa fa-chevron-left"></i> AtomicLong
               </a>
             
           </div>
@@ -606,7 +604,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">26</span>
+                    <span class="site-state-item-count">27</span>
                     <span class="site-state-item-name">posts</span>
                   </a>
                 </div>
@@ -773,7 +771,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
   <span class="with-love" id="animate">
     <i class="fa fa-user"></i>
   </span>

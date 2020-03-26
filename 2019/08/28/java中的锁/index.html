@@ -92,18 +92,18 @@
 
 
 
-  <meta name="description" content="锁的几种用法####synchronizede.g:1用synchronized对一个代码块加锁,object可以是任意的对象,任何其他synchronized(该对象)的代码块均需要获取到锁以后才可以执行,如果object=this,那么就是锁住的整个对象 123synchronized(object) &amp;#123;    //代码块&amp;#125;">
+  <meta name="description" content="锁的几种用法####synchronizede.g:1用synchronized对一个代码块加锁,object可以是任意的对象,任何其他synchronized(该对象)的代码块均需要获取到锁以后才可以执行,如果object=this,那么就是锁住的整个对象 123synchronized(object) &amp;#123;    //代码块&amp;#125;  e.g:2下方代码锁住的是此方法所在的对象,也">
 <meta name="keywords" content="java,base,lock">
 <meta property="og:type" content="article">
 <meta property="og:title" content="java中的锁">
 <meta property="og:url" content="https://qq616023844.github.io/2019/08/28/java中的锁/index.html">
 <meta property="og:site_name" content="柠檬不酸的博客">
-<meta property="og:description" content="锁的几种用法####synchronizede.g:1用synchronized对一个代码块加锁,object可以是任意的对象,任何其他synchronized(该对象)的代码块均需要获取到锁以后才可以执行,如果object=this,那么就是锁住的整个对象 123synchronized(object) &amp;#123;    //代码块&amp;#125;">
+<meta property="og:description" content="锁的几种用法####synchronizede.g:1用synchronized对一个代码块加锁,object可以是任意的对象,任何其他synchronized(该对象)的代码块均需要获取到锁以后才可以执行,如果object=this,那么就是锁住的整个对象 123synchronized(object) &amp;#123;    //代码块&amp;#125;  e.g:2下方代码锁住的是此方法所在的对象,也">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-08-28T15:59:38.907Z">
+<meta property="og:updated_time" content="2020-03-26T07:27:06.184Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="java中的锁">
-<meta name="twitter:description" content="锁的几种用法####synchronizede.g:1用synchronized对一个代码块加锁,object可以是任意的对象,任何其他synchronized(该对象)的代码块均需要获取到锁以后才可以执行,如果object=this,那么就是锁住的整个对象 123synchronized(object) &amp;#123;    //代码块&amp;#125;">
+<meta name="twitter:description" content="锁的几种用法####synchronizede.g:1用synchronized对一个代码块加锁,object可以是任意的对象,任何其他synchronized(该对象)的代码块均需要获取到锁以后才可以执行,如果object=this,那么就是锁住的整个对象 123synchronized(object) &amp;#123;    //代码块&amp;#125;  e.g:2下方代码锁住的是此方法所在的对象,也">
 
 
 
@@ -387,12 +387,24 @@
                 
               
 
-              <time title="Created: 2019-08-28 22:57:00 / Modified: 23:59:38" itemprop="dateCreated datePublished" datetime="2019-08-28T22:57:00+08:00">2019-08-28</time>
+              <time title="Created: 2019-08-28 22:57:00" itemprop="dateCreated datePublished" datetime="2019-08-28T22:57:00+08:00">2019-08-28</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2020-03-26 15:27:06" itemprop="dateModified" datetime="2020-03-26T15:27:06+08:00">2020-03-26</time>
               
             
           </span>
@@ -447,11 +459,11 @@
         <h3 id="锁的几种用法"><a href="#锁的几种用法" class="headerlink" title="锁的几种用法"></a>锁的几种用法</h3><p>####synchronized<br>e.g:1<br>用synchronized对一个代码块加锁,object可以是任意的对象,任何其他synchronized(该对象)的代码块均需要获取到锁以后才可以执行,如果object=this,那么就是锁住的整个对象</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">synchronized</span>(object) &#123;</span><br><span class="line">    <span class="comment">//代码块</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<a id="more"></a>
 <p>e.g:2<br>下方代码锁住的是此方法所在的对象,也就是如果该对象中两个不同的方法前面均有synchronized时,在多个线程操作同一个对象时,同一时间只有一个方法可以被调用</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">work</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="number">123</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>e.g:3<br>如果是对一个class或者static类型的对象加锁,那么因为class和static类型的对象只会在jvm虚拟机保存一份,所以加锁要额外注意<br>e.g:4<br>特别强调的一点是,synchronized是针对对象加锁,Class和static也可以看作一个对象,假如说出现下面代码,此时你的锁是无效的,虽然引用没变,但是引用指向的对象已经改变</p>
+<p>e.g:3<br>如果是对一个class或者static类型的对象加锁,那么因为class和static类型的对象只会在jvm虚拟机保存一份,所以加锁要额外注意</p>
+<p>e.g:4<br>特别强调的一点是,synchronized是针对对象加锁,Class和static也可以看作一个对象,假如说出现下面代码,此时你的锁是无效的,虽然引用没变,但是引用指向的对象已经改变</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Object obj = <span class="keyword">new</span> Object();</span><br><span class="line"><span class="keyword">synchronized</span>(obj)&#123;</span><br><span class="line">    obj = <span class="keyword">new</span> Object();</span><br><span class="line">    <span class="comment">//代码块</span></span><br><span class="line">&#125;</span><br><span class="line">`</span><br></pre></td></tr></table></figure>
 
 <p>待续</p>
@@ -601,7 +613,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">26</span>
+                    <span class="site-state-item-count">27</span>
                     <span class="site-state-item-name">posts</span>
                   </a>
                 </div>
@@ -768,7 +780,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
   <span class="with-love" id="animate">
     <i class="fa fa-user"></i>
   </span>

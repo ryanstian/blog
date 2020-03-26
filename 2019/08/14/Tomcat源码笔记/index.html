@@ -92,13 +92,13 @@
 
 
 
-  <meta name="description" content="ps:由于图片过大,所以限制了在博客中显示大小,大家可以右键查看图片看原图本系列均是基于9.0.21版本&amp;emsp;本章我们不会涉及代码,而是笼统的分析Tomcat的实现原理,让大家对全局有一定的掌控,后面几章我会带大家分析代码">
+  <meta name="description" content="ps:由于图片过大,所以限制了在博客中显示大小,大家可以右键查看图片看原图本系列均是基于9.0.21版本&amp;emsp;本章我们不会涉及代码,而是笼统的分析Tomcat的实现原理,让大家对全局有一定的掌控,后面几章我会带大家分析代码 ####Tomcat是什么?&amp;emsp;在我看来,Tomcat是利用各种模型和设计方式对socket的深度封装,做到适配各种协议同时达到一定性能的代码组,同时给我们写的各">
 <meta name="keywords" content="Tomcat,源码">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Tomcat源码笔记">
 <meta property="og:url" content="https://qq616023844.github.io/2019/08/14/Tomcat源码笔记/index.html">
 <meta property="og:site_name" content="柠檬不酸的博客">
-<meta property="og:description" content="ps:由于图片过大,所以限制了在博客中显示大小,大家可以右键查看图片看原图本系列均是基于9.0.21版本&amp;emsp;本章我们不会涉及代码,而是笼统的分析Tomcat的实现原理,让大家对全局有一定的掌控,后面几章我会带大家分析代码">
+<meta property="og:description" content="ps:由于图片过大,所以限制了在博客中显示大小,大家可以右键查看图片看原图本系列均是基于9.0.21版本&amp;emsp;本章我们不会涉及代码,而是笼统的分析Tomcat的实现原理,让大家对全局有一定的掌控,后面几章我会带大家分析代码 ####Tomcat是什么?&amp;emsp;在我看来,Tomcat是利用各种模型和设计方式对socket的深度封装,做到适配各种协议同时达到一定性能的代码组,同时给我们写的各">
 <meta property="og:locale" content="en">
 <meta property="og:image" content="http://188.131.252.235:8888/Tomcat源码解析/LifecycleMBeanBase继承图.png">
 <meta property="og:image" content="http://188.131.252.235:8888/Tomcat源码解析/Lifecycle接口实现列表.png">
@@ -106,10 +106,10 @@
 <meta property="og:image" content="http://188.131.252.235:8888/Tomcat源码解析/tomcat时序图init.png">
 <meta property="og:image" content="http://188.131.252.235:8888/Tomcat源码解析/tomcatNIO接收请求逻辑图.png">
 <meta property="og:image" content="http://188.131.252.235:8888/Tomcat源码解析/TomcatNIO线程模型.png">
-<meta property="og:updated_time" content="2019-09-01T13:49:49.282Z">
+<meta property="og:updated_time" content="2020-03-26T07:27:06.184Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Tomcat源码笔记">
-<meta name="twitter:description" content="ps:由于图片过大,所以限制了在博客中显示大小,大家可以右键查看图片看原图本系列均是基于9.0.21版本&amp;emsp;本章我们不会涉及代码,而是笼统的分析Tomcat的实现原理,让大家对全局有一定的掌控,后面几章我会带大家分析代码">
+<meta name="twitter:description" content="ps:由于图片过大,所以限制了在博客中显示大小,大家可以右键查看图片看原图本系列均是基于9.0.21版本&amp;emsp;本章我们不会涉及代码,而是笼统的分析Tomcat的实现原理,让大家对全局有一定的掌控,后面几章我会带大家分析代码 ####Tomcat是什么?&amp;emsp;在我看来,Tomcat是利用各种模型和设计方式对socket的深度封装,做到适配各种协议同时达到一定性能的代码组,同时给我们写的各">
 <meta name="twitter:image" content="http://188.131.252.235:8888/Tomcat源码解析/LifecycleMBeanBase继承图.png">
 
 
@@ -411,7 +411,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2019-09-01 21:49:49" itemprop="dateModified" datetime="2019-09-01T21:49:49+08:00">2019-09-01</time>
+                <time title="Modified: 2020-03-26 15:27:06" itemprop="dateModified" datetime="2020-03-26T15:27:06+08:00">2020-03-26</time>
               
             
           </span>
@@ -464,7 +464,6 @@
 
       
         <p><strong>ps:由于图片过大,所以限制了在博客中显示大小,大家可以右键查看图片看原图</strong><br><strong>本系列均是基于9.0.21版本</strong><br>&emsp;本章我们不会涉及代码,而是笼统的分析Tomcat的实现原理,让大家对全局有一定的掌控,后面几章我会带大家分析代码</p>
-<a id="more"></a>
 <p>####Tomcat是什么?<br>&emsp;在我看来,Tomcat是利用各种模型和设计方式对socket的深度封装,做到适配各种协议同时达到一定性能的代码组,同时给我们写的各种业务代码(Servlet)提供了容器(也可以理解为tomcat可以将以对象的形式使用我们写的Servlet业务),这是Tomcat的核心。当然,Tomcat还实现了一些其他的比如生命周期管理,但是这些都是为了核心而服务的</p>
 <p>&emsp;我们第一次接触Tomcat,相信大多数人都是Hello World。想想当时我们是怎么做的:首先我们建立了个项目,按照网上的教程建好了项目里面的文件夹,导入servlet包,然后开始编写xml配置文件,继承Servlet编写Get,Post代码,然后导出war包放到tomcat下的webapps文件夹,启动tomcat。so easy,然后我们就可以通过浏览器访问我们之前写好的接口了。</p>
 <p>&emsp;但是,我们有没有想过是为什么,为什么我们GET中的代码会被调用,为什么我们访问一个网址会执行我们的代码,他又是怎么执行的。这一切,我们将从Servlet与Tomcat的源码解析中找到答案</p>
@@ -486,7 +485,7 @@
 <p>接下来让我们看LifecycleBase,这是一个抽象类,实现了fireLifecycleEvent,init,start…等方法<br>fireLifecycleEvent的设计其实是根据观察者模式<br>init,start等方法仅仅是用来控制其生命周期的,每个方法例如init,在内部还会调用initInternal(),Tomcat的很多组件的业务代码全部都在xxxInternal()中,由子类负责实现</p>
 <p>LifecycleMBeanBase则对LifecycleBase进行了进一步的实现,我们从他的图中可以看到<br><img src="http://188.131.252.235:8888/Tomcat源码解析/LifecycleMBeanBase类图.png" text-align:center width="437" height="520" alt="如果图片失效,请邮件联系作者补图"></p>
 <center></center>
-其中最关键的是initInternal()和destroyInternal(),主要实现了委托Register类来将子类(类如StandardServer等)注册到bean容器中。容器部分设计是符合JMX规范的,此处暂且不谈,如果在看源码过程中大家对ManagedBean或者MBeanServer抱有疑惑,可以先去学习一下JMX规范再回来看容器部分代码,不过即使跳过容器部分,也不影响接下来的部分
+其中最关键的是initInternal()和destroyInternal(),主要实现了委托Register类来将子类(类如StandardServer等)注册到bean容器中。如果在看源码过程中大家对ManagedBean或者MBeanServer抱有疑惑,可以先去学习一下JMX规范再回来看容器部分代码,不过即使跳过容器部分,也不影响接下来的部分
 
 <h4 id="Tomcat初始化流程-仅需有个印象即可-想要学到东西的话还是要自己去研究代码"><a href="#Tomcat初始化流程-仅需有个印象即可-想要学到东西的话还是要自己去研究代码" class="headerlink" title="Tomcat初始化流程(仅需有个印象即可,想要学到东西的话还是要自己去研究代码)"></a>Tomcat初始化流程(仅需有个印象即可,想要学到东西的话还是要自己去研究代码)</h4><p>Tomcat工作主要有几个流程:init(负责new各级对象,组件依赖关系,加载配置文件),start(这一步完成时可以正常接收请求开始处理),处理消息,结束<br>首先放一张tomcat init的流程图(简化版)</p>
 <img src="http://188.131.252.235:8888/Tomcat源码解析/tomcat时序图init.png" text-align:center width="510" height="160" alt="如果图片失效,请邮件联系作者补图">
@@ -500,7 +499,8 @@
 <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">Server</span> <span class="attr">port</span>=<span class="string">"8005"</span> <span class="attr">shutdown</span>=<span class="string">"SHUTDOWN"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">Listener</span> <span class="attr">className</span>=<span class="string">"org.apache.catalina.startup.VersionLoggerListener"</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">Listener</span> <span class="attr">className</span>=<span class="string">"org.apache.catalina.core.AprLifecycleListener"</span> <span class="attr">SSLEngine</span>=<span class="string">"on"</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">Listener</span> <span class="attr">className</span>=<span class="string">"org.apache.catalina.core.JreMemoryLeakPreventionListener"</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">Listener</span> <span class="attr">className</span>=<span class="string">"org.apache.catalina.mbeans.GlobalResourcesLifecycleListener"</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">Listener</span> <span class="attr">className</span>=<span class="string">"org.apache.catalina.core.ThreadLocalLeakPreventionListener"</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">GlobalNamingResources</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">Resource</span> <span class="attr">name</span>=<span class="string">"UserDatabase"</span> <span class="attr">auth</span>=<span class="string">"Container"</span></span></span><br><span class="line"><span class="tag">              <span class="attr">type</span>=<span class="string">"org.apache.catalina.UserDatabase"</span></span></span><br><span class="line"><span class="tag">              <span class="attr">description</span>=<span class="string">"User database that can be updated and saved"</span></span></span><br><span class="line"><span class="tag">              <span class="attr">factory</span>=<span class="string">"org.apache.catalina.users.MemoryUserDatabaseFactory"</span></span></span><br><span class="line"><span class="tag">              <span class="attr">pathname</span>=<span class="string">"conf/tomcat-users.xml"</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">GlobalNamingResources</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">Service</span> <span class="attr">name</span>=<span class="string">"Catalina"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">Connector</span> <span class="attr">port</span>=<span class="string">"8080"</span> <span class="attr">protocol</span>=<span class="string">"HTTP/1.1"</span></span></span><br><span class="line"><span class="tag">               <span class="attr">connectionTimeout</span>=<span class="string">"20000"</span></span></span><br><span class="line"><span class="tag">               <span class="attr">redirectPort</span>=<span class="string">"8443"</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">Connector</span> <span class="attr">port</span>=<span class="string">"8009"</span> <span class="attr">protocol</span>=<span class="string">"AJP/1.3"</span> <span class="attr">redirectPort</span>=<span class="string">"8443"</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">Engine</span> <span class="attr">name</span>=<span class="string">"Catalina"</span> <span class="attr">defaultHost</span>=<span class="string">"localhost"</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">Realm</span> <span class="attr">className</span>=<span class="string">"org.apache.catalina.realm.LockOutRealm"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">Realm</span> <span class="attr">className</span>=<span class="string">"org.apache.catalina.realm.UserDatabaseRealm"</span></span></span><br><span class="line"><span class="tag">               <span class="attr">resourceName</span>=<span class="string">"UserDatabase"</span>/&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">Realm</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">Host</span> <span class="attr">name</span>=<span class="string">"localhost"</span>  <span class="attr">appBase</span>=<span class="string">"webapps"</span></span></span><br><span class="line"><span class="tag">            <span class="attr">unpackWARs</span>=<span class="string">"true"</span> <span class="attr">autoDeploy</span>=<span class="string">"true"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">Valve</span> <span class="attr">className</span>=<span class="string">"org.apache.catalina.valves.AccessLogValve"</span> <span class="attr">directory</span>=<span class="string">"logs"</span></span></span><br><span class="line"><span class="tag">               <span class="attr">prefix</span>=<span class="string">"localhost_access_log"</span> <span class="attr">suffix</span>=<span class="string">".txt"</span></span></span><br><span class="line"><span class="tag">               <span class="attr">pattern</span>=<span class="string">"%h %l %u %t &amp;quot;%r&amp;quot; %s %b"</span> /&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">Host</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">Engine</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">Service</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">Server</span>&gt;</span></span><br></pre></td></tr></table></figure>
 
 <p>ScheduledThreadPoolExecutor:线程池,后面我在讲述线程模型的时候会讲到</p>
-<p>Container容器模块,呈现包含关系,之间以责任链形式调用,这里注意一点,虽然方法名是invoke,但实际上并不是通过反射来调用,类似的在tomcat中也有很多继承了Runnable但是有些模块用不到start而是使用run的情况{<br>  Engine{<br>    Host{<br>      Context{<br>        Wrapper<br>      }<br>    }<br>  }<br>}</p>
+<p>Container容器模块,呈现包含关系,之间以责任链形式调用,这里注意一点,虽然方法名是invoke,但实际上并不是通过反射来调用,类似的在tomcat中也有很多继承了Runnable但是有些模块用不到start而是使用run的情况<br>{
+  Engine{<br>    Host{<br>      Context{<br>        Wrapper<br>      }<br>    }<br>  }<br>}</p>
 <p>Endpoint:核心部分,后面讲线程模型我会提到</p>
 <p>Tomcat的start流程其实跟init流程类似,在宏观上几乎没有改动,因此省略</p>
 <p>####Tomcat接收消息流程<br>这里我认为一张图足以<br><img src="http://188.131.252.235:8888/Tomcat源码解析/tomcatNIO接收请求逻辑图.png" text-align:center width="700" height="400" alt="如果图片失效,请邮件联系作者补图"></p>
@@ -663,7 +663,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">26</span>
+                    <span class="site-state-item-count">27</span>
                     <span class="site-state-item-name">posts</span>
                   </a>
                 </div>
@@ -830,7 +830,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
   <span class="with-love" id="animate">
     <i class="fa fa-user"></i>
   </span>

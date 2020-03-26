@@ -100,7 +100,7 @@
 <meta property="og:site_name" content="柠檬不酸的博客">
 <meta property="og:description" content="代码已经放到github,test测试中的demo2对应的是sql方式,demo3对应的是hql方式,demo1是分页查询,我另一篇文章会讲到github地址 前言我们平时使用jpa查询时,有两种情况,一种是查询全部字段,另一种是查询部分字段,当我们按通常的sql语句写法查询部分字段时,会出现jpa无法自动解析类型的情况,例如这类报错 1org.springframework.dao.Invali">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-08-17T14:53:47.898Z">
+<meta property="og:updated_time" content="2020-03-26T07:27:06.183Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="jpa查询部分字段获取实体类">
 <meta name="twitter:description" content="代码已经放到github,test测试中的demo2对应的是sql方式,demo3对应的是hql方式,demo1是分页查询,我另一篇文章会讲到github地址 前言我们平时使用jpa查询时,有两种情况,一种是查询全部字段,另一种是查询部分字段,当我们按通常的sql语句写法查询部分字段时,会出现jpa无法自动解析类型的情况,例如这类报错 1org.springframework.dao.Invali">
@@ -404,7 +404,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2019-08-17 22:53:47" itemprop="dateModified" datetime="2019-08-17T22:53:47+08:00">2019-08-17</time>
+                <time title="Modified: 2020-03-26 15:27:06" itemprop="dateModified" datetime="2020-03-26T15:27:06+08:00">2020-03-26</time>
               
             
           </span>
@@ -460,7 +460,6 @@
 <h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><p>我们平时使用jpa查询时,有两种情况,一种是查询全部字段,另一种是查询部分字段,当我们按通常的sql语句写法查询部分字段时,会出现jpa无法自动解析类型的情况,例如这类报错</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">org.springframework.dao.InvalidDataAccessResourceUsageException: could not execute query; SQL [ SELECT sa.name FROM student sa ]; nested exception is org.hibernate.exception.SQLGrammarException: could not execute query</span><br></pre></td></tr></table></figure>
 
-<a id="more"></a>
 <h4 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h4><p>针对hql和sql分别有两种解决方案</p>
 <p><font size="5">一.</font></p>
 <p>&emsp;hql情况下,我们可以用这种方式来解决,有必要注意的一点是,<font color="red">Student里面一定要有相应的构造类</font></p>
@@ -544,8 +543,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/07/02/AtomicLong/" rel="prev" title="AtomicLong">
-                AtomicLong <i class="fa fa-chevron-right"></i>
+              <a href="/2019/07/02/CAS机制/" rel="prev" title="CAS机制">
+                CAS机制 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -615,7 +614,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">26</span>
+                    <span class="site-state-item-count">27</span>
                     <span class="site-state-item-name">posts</span>
                   </a>
                 </div>
@@ -782,7 +781,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
   <span class="with-love" id="animate">
     <i class="fa fa-user"></i>
   </span>

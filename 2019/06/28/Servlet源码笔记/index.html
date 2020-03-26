@@ -100,7 +100,7 @@
 <meta property="og:site_name" content="柠檬不酸的博客">
 <meta property="og:description" content="主要简单介绍下servlet源码结构">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-09-01T13:50:26.528Z">
+<meta property="og:updated_time" content="2020-03-26T07:27:06.183Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Servlet源码笔记">
 <meta name="twitter:description" content="主要简单介绍下servlet源码结构">
@@ -404,7 +404,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2019-09-01 21:50:26" itemprop="dateModified" datetime="2019-09-01T21:50:26+08:00">2019-09-01</time>
+                <time title="Modified: 2020-03-26 15:27:06" itemprop="dateModified" datetime="2020-03-26T15:27:06+08:00">2020-03-26</time>
               
             
           </span>
@@ -465,11 +465,11 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HelloWord</span> <span class="keyword">extends</span> <span class="title">HttpServlet</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">doGet</span><span class="params">(HttpServletRequest request, HttpServletResponse response)</span></span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">doPost</span><span class="params">(HttpServletRequest request, HttpServletResponse response)</span></span>&#123;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
 
 <p>好了,这下应该不陌生了,我们用Servlet写代码一般都是继承HttpServlet来进行,这属于第二模块,而我们代码中操作的request属于第一模块</p>
-<p>在具体分析代码之前,有必要先科普下Servlet的生命周期,平时我们在写Servlet服务端的时候,是没有main入口类的,仔细想想,没有入口类为何可以启动?<br>答案来了,是因为tomcat,如果将Servlet看作对象的话,那么tomcat就是Servlet的容器,tomcat负责操控Servlet的生命周期,tomcat从他自己的入口类启动,运行时调用Servlet从而进行一切操作。<br>我看了很多的博客教程,他们都是这么说的:</p>
+<p>在具体分析代码之前,有必要先科普下Servlet的生命周期,平时我们在写Servlet服务端的时候,是不需要写main入口类的,仔细想想,没有入口类为何可以启动?<br>答案来了,是因为tomcat,如果将Servlet看作对象的话,那么tomcat就是Servlet的容器,tomcat负责操控Servlet的生命周期,tomcat从他自己的入口类启动,运行时调用Servlet从而进行一切操作。<br>我看了很多的博客教程,他们都是这么说的:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&amp;emsp;tomcat作为servlet容器,当http请求进来时,发现没有servlet,那么则初始化一个servlet,将http请求封装为Request交给servlet处理,且servlet为单例重复使用,若长时间未调用才会销毁</span><br></pre></td></tr></table></figure>
 
 <p>但是在tomcat8.5.28+servlet4.0环境下,在不调整任何参数时(默认),我的测试跟上述操作有点出入,servlet并不是在接到http请求时才初始化,而是在随tomcat启动时便已经初始化,这一点可以根据我对servlet初始化init方法打断点,并且以debug方式启动可以看出,各位尽可以自行尝试,当然这不是重点,大体流程了解即可。</p>
-<h4 id="首先我们从第二模块开始"><a href="#首先我们从第二模块开始" class="headerlink" title="首先我们从第二模块开始"></a>首先我们从第二模块开始</h4><ul>
+<h4 id="第二模块"><a href="#第二模块" class="headerlink" title="第二模块"></a>第二模块</h4><ul>
 <li>Servlet这个接口类定义了一系列与tomcat相互交互的一系列接口</li>
 <li>ServletConfig看名字也知道是提供配置信息的一个接口</li>
 <li>GenericServlet这个是对Servlet和ServletConfig接口的一些实现,另外增加了一些log方法来传递异常</li>
@@ -548,8 +548,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/06/24/利用git完成服务器自动化部署解决方案/" rel="next" title="利用git完成服务器自动化部署解决方案">
-                <i class="fa fa-chevron-left"></i> 利用git完成服务器自动化部署解决方案
+              <a href="/2019/06/28/getParamter为何接收不到postman构造的信息/" rel="next" title="getParamter为何接收不到postman构造的信息">
+                <i class="fa fa-chevron-left"></i> getParamter为何接收不到postman构造的信息
               </a>
             
           </div>
@@ -558,8 +558,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/06/28/getParamter为何接收不到postman构造的信息/" rel="prev" title="getParamter为何接收不到postman构造的信息">
-                getParamter为何接收不到postman构造的信息 <i class="fa fa-chevron-right"></i>
+              <a href="/2019/07/01/linux安装jdk(非openjdk)/" rel="prev" title="linux安装jdk(非openjdk)">
+                linux安装jdk(非openjdk) <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -629,7 +629,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">26</span>
+                    <span class="site-state-item-count">27</span>
                     <span class="site-state-item-name">posts</span>
                   </a>
                 </div>
@@ -775,7 +775,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#介绍"><span class="nav-number">1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#首先我们从第二模块开始"><span class="nav-number">2.</span> <span class="nav-text">首先我们从第二模块开始</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#接下来分析第一模块"><span class="nav-number">3.</span> <span class="nav-text">接下来分析第一模块</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#介绍"><span class="nav-number">1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第二模块"><span class="nav-number">2.</span> <span class="nav-text">第二模块</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#接下来分析第一模块"><span class="nav-number">3.</span> <span class="nav-text">接下来分析第一模块</span></a></li></ol></div>
             
 
           </div>
@@ -796,7 +796,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
   <span class="with-love" id="animate">
     <i class="fa fa-user"></i>
   </span>

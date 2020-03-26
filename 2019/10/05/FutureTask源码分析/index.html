@@ -92,17 +92,17 @@
 
 
 
-  <meta name="description" content="FutureTask直接继承了RunnableFuture,间接继承了Future,Runnable。当我们使用Runnable时,是无法获得返回值的,而RunnableFuture则是为了解决这一个问题而存在">
+  <meta name="description" content="FutureTask直接继承了RunnableFuture,间接继承了Future,Runnable。当我们使用Runnable时,是无法获得返回值的,而RunnableFuture则是为了解决这一个问题而存在 在该类中,有一点你会发现,他用到了自定义的链表,并且在get阻塞等待以及任务完成时都会操作该链表,例如awaitDone(boolean timed, long nanos)方法中的这些操">
 <meta property="og:type" content="article">
 <meta property="og:title" content="FutureTask源码分析">
 <meta property="og:url" content="https://qq616023844.github.io/2019/10/05/FutureTask源码分析/index.html">
 <meta property="og:site_name" content="柠檬不酸的博客">
-<meta property="og:description" content="FutureTask直接继承了RunnableFuture,间接继承了Future,Runnable。当我们使用Runnable时,是无法获得返回值的,而RunnableFuture则是为了解决这一个问题而存在">
+<meta property="og:description" content="FutureTask直接继承了RunnableFuture,间接继承了Future,Runnable。当我们使用Runnable时,是无法获得返回值的,而RunnableFuture则是为了解决这一个问题而存在 在该类中,有一点你会发现,他用到了自定义的链表,并且在get阻塞等待以及任务完成时都会操作该链表,例如awaitDone(boolean timed, long nanos)方法中的这些操">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-10-05T10:56:35.013Z">
+<meta property="og:updated_time" content="2020-03-25T07:50:30.009Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="FutureTask源码分析">
-<meta name="twitter:description" content="FutureTask直接继承了RunnableFuture,间接继承了Future,Runnable。当我们使用Runnable时,是无法获得返回值的,而RunnableFuture则是为了解决这一个问题而存在">
+<meta name="twitter:description" content="FutureTask直接继承了RunnableFuture,间接继承了Future,Runnable。当我们使用Runnable时,是无法获得返回值的,而RunnableFuture则是为了解决这一个问题而存在 在该类中,有一点你会发现,他用到了自定义的链表,并且在get阻塞等待以及任务完成时都会操作该链表,例如awaitDone(boolean timed, long nanos)方法中的这些操">
 
 
 
@@ -386,12 +386,24 @@
                 
               
 
-              <time title="Created: 2019-10-05 18:11:00 / Modified: 18:56:35" itemprop="dateCreated datePublished" datetime="2019-10-05T18:11:00+08:00">2019-10-05</time>
+              <time title="Created: 2019-10-05 18:11:00" itemprop="dateCreated datePublished" datetime="2019-10-05T18:11:00+08:00">2019-10-05</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2020-03-25 15:50:30" itemprop="dateModified" datetime="2020-03-25T15:50:30+08:00">2020-03-25</time>
               
             
           </span>
@@ -444,17 +456,13 @@
 
       
         <p>FutureTask直接继承了RunnableFuture,间接继承了Future,Runnable。当我们使用Runnable时,是无法获得返回值的,而RunnableFuture则是为了解决这一个问题而存在</p>
-<a id="more"></a>
-<p>首先,这段代码不熟悉的可以去看这篇文章 <a href="/2019/10/05/如何使用Unsafe类方法/" title="如何使用Unsafe类方法">如何使用Unsafe类方法</a></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Unsafe mechanics</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> sun.misc.Unsafe UNSAFE;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> stateOffset;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> runnerOffset;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> waitersOffset;</span><br><span class="line">    <span class="keyword">static</span> &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            UNSAFE = sun.misc.Unsafe.getUnsafe();</span><br><span class="line">            Class&lt;?&gt; k = FutureTask.class;</span><br><span class="line">            stateOffset = UNSAFE.objectFieldOffset</span><br><span class="line">                (k.getDeclaredField(<span class="string">"state"</span>));</span><br><span class="line">            runnerOffset = UNSAFE.objectFieldOffset</span><br><span class="line">                (k.getDeclaredField(<span class="string">"runner"</span>));</span><br><span class="line">            waitersOffset = UNSAFE.objectFieldOffset</span><br><span class="line">                (k.getDeclaredField(<span class="string">"waiters"</span>));</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> Error(e);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-
-<p>如果没有问题我们继续,在该类中,还有一点你会发现,他用到了自定义的链表,并且在get阻塞等待以及任务完成时都会操作该链表,例如awaitDone(boolean timed, long nanos)方法中的这些操作,该链表的作用是,如果多个线程同时get阻塞等待该任务,这些线程的信息分别保存在链表上的一个节点中,那么当任务完成时可以通过该操作来即时唤醒这些线程,超时的被从链表中移除,例如下面代码demo</p>
+<p>在该类中,有一点你会发现,他用到了自定义的链表,并且在get阻塞等待以及任务完成时都会操作该链表,例如awaitDone(boolean timed, long nanos)方法中的这些操作,该链表的作用是,如果多个线程同时get阻塞等待该任务,这些线程的信息分别保存在链表上的一个节点中,那么当任务完成时可以通过该操作来即时唤醒这些线程,超时的被从链表中移除,例如下面代码demo</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test42</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">        <span class="comment">//构造FutureTask</span></span><br><span class="line">        FutureTask futureTask = <span class="keyword">new</span> FutureTask(() -&gt; &#123;</span><br><span class="line">            Thread.sleep(<span class="number">5000</span>);</span><br><span class="line">            System.out.println(<span class="string">"callable has run"</span>);</span><br><span class="line">            <span class="keyword">return</span> <span class="string">"123"</span>;</span><br><span class="line">        &#125;);</span><br><span class="line">        <span class="comment">//运行FutureTask中传入的任务</span></span><br><span class="line">        <span class="keyword">new</span> Thread(() -&gt; futureTask.run()).start();</span><br><span class="line">        <span class="comment">//开启第一个get</span></span><br><span class="line">        <span class="keyword">new</span> Thread(() -&gt; &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                System.out.println(<span class="string">"Thread one:"</span>+futureTask.get());</span><br><span class="line">            &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125; <span class="keyword">catch</span> (ExecutionException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;).start();</span><br><span class="line">        <span class="comment">//开启第二个get</span></span><br><span class="line">        <span class="keyword">new</span> Thread(() -&gt; &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                System.out.println(<span class="string">"Thread two:"</span>+futureTask.get());</span><br><span class="line">            &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125; <span class="keyword">catch</span> (ExecutionException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;).start();</span><br><span class="line">        <span class="comment">//主线程睡眠等待其他线程结束</span></span><br><span class="line">        Thread.sleep(<span class="number">10000</span>);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
 
 <p>在该类中有一处代码,这里保存该任务的状态,这种方式很常见,也可以方便的通过比较大小等方式来判断其状态范围</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">int</span> state;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> NEW          = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> COMPLETING   = <span class="number">1</span>;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> NORMAL       = <span class="number">2</span>;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> EXCEPTIONAL  = <span class="number">3</span>;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> CANCELLED    = <span class="number">4</span>;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> INTERRUPTING = <span class="number">5</span>;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> INTERRUPTED  = <span class="number">6</span>;</span><br></pre></td></tr></table></figure>
 
-<p>callable是接到的任务,即时构造时采用的Future也会为了统一而被封装为Callable,outcome是返回值,如果任务执行过程中出现异常,那么outcome中保存的则是异常信息,waitNode则是刚刚提到的链表,runner是运行该任务的线程信息,在本类中常被用来做CAS操作,只有当其为null run()才可被调用,避免连续调用两次run()导致重复运行任务</p>
+<p>callable是接到的任务,即使构造时采用的Future也会为了统一而被封装为Callable,outcome是返回值,如果任务执行过程中出现异常,那么outcome中保存的则是异常信息,waitNode则是刚刚提到的链表,runner是运行该任务的线程信息,在本类中常被用来做CAS操作,只有当其为null,run()才可被调用,避免连续调用两次run()导致重复运行任务</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/** The underlying callable; nulled out after running */</span></span><br><span class="line"><span class="keyword">private</span> Callable&lt;V&gt; callable;</span><br><span class="line"><span class="comment">/** The result to return or exception to throw from get() */</span></span><br><span class="line"><span class="keyword">private</span> Object outcome; <span class="comment">// non-volatile, protected by state reads/writes</span></span><br><span class="line"><span class="comment">/** The thread running the callable; CASed during run() */</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">volatile</span> Thread runner;</span><br><span class="line"><span class="comment">/** Treiber stack of waiting threads */</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">volatile</span> WaitNode waiters;</span><br></pre></td></tr></table></figure>
 
 <p>finishCompletion()方法就是之前提到的唤醒链表上所有get阻塞的线程<br>LockSupport.unpark和park可以理解为信号量<br>runAndReset()这是个protected方法,作用是,通过不改变state的状态使其可以运行多次,普通的run()运行一次以后state状态就改变了</p>
@@ -510,8 +518,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/09/15/IDEA修改java版本号/" rel="next" title="IDEA修改java版本号">
-                <i class="fa fa-chevron-left"></i> IDEA修改java版本号
+              <a href="/2019/10/05/ThreadPoolExecutor源码分析/" rel="next" title="ThreadPoolExecutor源码分析">
+                <i class="fa fa-chevron-left"></i> ThreadPoolExecutor源码分析
               </a>
             
           </div>
@@ -520,8 +528,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/10/05/如何使用Unsafe类方法/" rel="prev" title="如何使用Unsafe类方法">
-                如何使用Unsafe类方法 <i class="fa fa-chevron-right"></i>
+              <a href="/2019/11/30/mysql事务/" rel="prev" title="mysql事务">
+                mysql事务 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -582,7 +590,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">26</span>
+                    <span class="site-state-item-count">27</span>
                     <span class="site-state-item-name">posts</span>
                   </a>
                 </div>
@@ -732,7 +740,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
   <span class="with-love" id="animate">
     <i class="fa fa-user"></i>
   </span>
