@@ -93,13 +93,14 @@
 
 
   <meta name="description" content="FutureTask直接继承了RunnableFuture,间接继承了Future,Runnable。当我们使用Runnable时,是无法获得返回值的,而RunnableFuture则是为了解决这一个问题而存在 在该类中,有一点你会发现,他用到了自定义的链表,并且在get阻塞等待以及任务完成时都会操作该链表,例如awaitDone(boolean timed, long nanos)方法中的这些操">
+<meta name="keywords" content="java">
 <meta property="og:type" content="article">
 <meta property="og:title" content="FutureTask源码分析">
 <meta property="og:url" content="https://qq616023844.github.io/2019/10/05/FutureTask源码分析/index.html">
 <meta property="og:site_name" content="柠檬不酸的博客">
 <meta property="og:description" content="FutureTask直接继承了RunnableFuture,间接继承了Future,Runnable。当我们使用Runnable时,是无法获得返回值的,而RunnableFuture则是为了解决这一个问题而存在 在该类中,有一点你会发现,他用到了自定义的链表,并且在get阻塞等待以及任务完成时都会操作该链表,例如awaitDone(boolean timed, long nanos)方法中的这些操">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2020-03-25T07:50:30.009Z">
+<meta property="og:updated_time" content="2020-07-29T16:24:04.758Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="FutureTask源码分析">
 <meta name="twitter:description" content="FutureTask直接继承了RunnableFuture,间接继承了Future,Runnable。当我们使用Runnable时,是无法获得返回值的,而RunnableFuture则是为了解决这一个问题而存在 在该类中,有一点你会发现,他用到了自定义的链表,并且在get阻塞等待以及任务完成时都会操作该链表,例如awaitDone(boolean timed, long nanos)方法中的这些操">
@@ -403,7 +404,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2020-03-25 15:50:30" itemprop="dateModified" datetime="2020-03-25T15:50:30+08:00">2020-03-25</time>
+                <time title="Modified: 2020-07-30 00:24:04" itemprop="dateModified" datetime="2020-07-30T00:24:04+08:00">2020-07-30</time>
               
             
           </span>
@@ -509,6 +510,15 @@
 
     <footer class="post-footer">
       
+        
+          
+        
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+        </div>
+      
 
       
       
@@ -590,7 +600,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">27</span>
+                    <span class="site-state-item-count">30</span>
                     <span class="site-state-item-name">posts</span>
                   </a>
                 </div>
@@ -621,7 +631,25 @@
                     
                       
                     
-                    <span class="site-state-item-count">7</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">16</span>
                     <span class="site-state-item-name">categories</span>
                   </a>
                 </div>
@@ -672,7 +700,15 @@
                     
                       
                     
-                    <span class="site-state-item-count">17</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">21</span>
                     <span class="site-state-item-name">tags</span>
                   </a>
                 </div>
