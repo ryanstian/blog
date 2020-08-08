@@ -93,7 +93,7 @@
 
 
   <meta name="description" content="状况一:can’t assign requested addressgo用了mysql连接池,高并发压测时出现该报错分析:该报错是由于mac自身fd句柄打开数限制,并且mysql连接池并非一开始就创建出连接,而是随着请求进来才创建连接,大量并发同时进入,占满了mac的fd,导致mysql连接池无法使用fd,无法分配新的连接结论:修改mac参数限制/上服务器测临时修改方式,命令行直接输入永久修改方">
-<meta name="keywords" content="mac,go">
+<meta name="keywords" content="go,mac">
 <meta property="og:type" content="article">
 <meta property="og:title" content="can&#39;t assign requested address,i&#x2F;o timeout,too many open files in system">
 <meta property="og:url" content="https://qq616023844.github.io/2020/07/30/can't assign requested address/index.html">
@@ -507,9 +507,9 @@
         
         <div class="post-tags">
           
-            <a href="/tags/mac/" rel="tag"># mac</a>
-          
             <a href="/tags/go/" rel="tag"># go</a>
+          
+            <a href="/tags/mac/" rel="tag"># mac</a>
           
         </div>
       

@@ -107,7 +107,7 @@
 <meta property="og:image" content="http://188.131.252.235:8888/docker for mac网络不通/图2-2.png">
 <meta property="og:image" content="http://188.131.252.235:8888/docker for mac网络不通/图2-3.png">
 <meta property="og:image" content="http://188.131.252.235:8888/docker for mac网络不通/图2-4.png">
-<meta property="og:updated_time" content="2020-08-08T16:14:25.381Z">
+<meta property="og:updated_time" content="2020-08-08T16:50:29.162Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="docker for mac网络不通">
 <meta name="twitter:description" content="现象:docker安装在linux上一切正常,安装在mac上,宿主机无法ping通容器ip经常出现在宿主机连接容器kafka集群的情况下,无法连通">
@@ -412,7 +412,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2020-08-09 00:14:25" itemprop="dateModified" datetime="2020-08-09T00:14:25+08:00">2020-08-09</time>
+                <time title="Modified: 2020-08-09 00:50:29" itemprop="dateModified" datetime="2020-08-09T00:50:29+08:00">2020-08-09</time>
               
             
           </span>
@@ -475,13 +475,23 @@
 <h2 id="宿主机与容器访问的解决方案"><a href="#宿主机与容器访问的解决方案" class="headerlink" title="宿主机与容器访问的解决方案"></a>宿主机与容器访问的解决方案</h2><h4 id="对于图2的结构"><a href="#对于图2的结构" class="headerlink" title="对于图2的结构"></a>对于图2的结构</h4><p>我们即使在docker run时指定了-p,也无法在宿主机通过端口访问到。</p>
 <p>因为此时的映射如下图,仅仅将docker容器端口映射到了linux虚拟机上</p>
 <p>所以我们如果想要从宿主机通过localhost:post访问到对应容器,还需要手动将linux虚拟机的对应端口映射到宿主机上(当然,在docker中的几个容器如果没有设置防火墙可以互相通过各自内网ip访问,因为他们在同一网域)</p>
-<p>docker端口映射<br><img src="http://188.131.252.235:8888/docker for mac网络不通/图2-1.png" text-align:center alt="如果图片失效,请邮件联系作者补图"></p>
-<p>docker+虚拟机端口映射<br><img src="http://188.131.252.235:8888/docker for mac网络不通/图2-2.png" text-align:center alt="如果图片失效,请邮件联系作者补图"></p>
+<img src="http://188.131.252.235:8888/docker for mac网络不通/图2-1.png" text-align:center alt="如果图片失效,请邮件联系作者补图">
+<center>docker端口映射<center>
+
+<img src="http://188.131.252.235:8888/docker for mac网络不通/图2-2.png" text-align:center alt="如果图片失效,请邮件联系作者补图">
+<center>docker+虚拟机端口映射<center>
+
 <p>刚才我们说了宿主机主动访问容器的方法,那么接下来说容器中访问宿主机的方法。</p>
 <p>方法一:如果宿主机连接了外网/局域网,可以通过宿主机ip来访问,具体数据流向如下图</p>
-<p>网络结构2,容器中访问宿主机方法一数据流向<br><img src="http://188.131.252.235:8888/docker for mac网络不通/图2-3.png" text-align:center alt="如果图片失效,请邮件联系作者补图"></p>
+<img src="http://188.131.252.235:8888/docker for mac网络不通/图2-3.png" text-align:center alt="如果图片失效,请邮件联系作者补图">
+<center>网络结构2,容器中访问宿主机方法一数据流向<center>
+<br>
+
 <p>方法二:由于linux虚拟机既可以通过网桥一访问宿主机,又可以通过网桥二访问容器,那么我们在linux虚拟机中做vpn,将容器的流量传输到宿主机中</p>
-<p>网络结构2,容器中访问宿主机方法二数据流向<br><img src="http://188.131.252.235:8888/docker for mac网络不通/图2-4.png" text-align:center alt="如果图片失效,请邮件联系作者补图"></p>
+<img src="http://188.131.252.235:8888/docker for mac网络不通/图2-4.png" text-align:center alt="如果图片失效,请邮件联系作者补图">
+<center>网络结构2,容器中访问宿主机方法二数据流向</center>
+<br>
+
 <p>方法三(并不确定Docker Toolbox是否提供该功能):通过docker提供的域名来访问宿主机</p>
 <h4 id="对于图3的结构"><a href="#对于图3的结构" class="headerlink" title="对于图3的结构"></a>对于图3的结构</h4><p>其实该结构本质上与结构2本质并没有什么区别,只不过宿主机与linux虚拟机之间的数据交互由原来的网桥改为了sock文件(可能位于/var/run/docker.sock)</p>
 <p>但是HyperKit (Docker Desktop for Mac)相比于Docker Toolbox,提供了自动的端口映射,也就是说,我们在docker run -p指定端口映射以后,会自动帮我们把这个端口映射到宿主机,无需我们手动操作虚拟机</p>
@@ -498,7 +508,7 @@
 <p>在kafka的server.properties配置文件中,我们可以看到,kafka默认的寻找zookeeper的ip为localhost。显而易见,由于每个容器都有一套自己的网络,通过localhost是无法找到zookeeper的。所以这里我们可以通过填写zookeeper容器在docker的内部ip,或者通过域名来访问zookeeper(实际数据流向为kafka容器-&gt;虚拟机-&gt;宿主机-&gt;经过zookeeper映射出来的端口-&gt;虚拟机-&gt;zookeeper容器),这样kafka才能连通zookeeper将自身信息挂载上</p>
 <p>另外还有一个问题我们需要解决,在默认情况下,kafka挂载到zookeeper的host为自身的容器id,显然我们的宿主机是无法将容器id当作host找到该容器的。那么挂载为自己容器id的原因是什么呢?答案是,kafka会先尝试获取advertised.host.name,如果未设置则尝试获取host.name,如果均未设置则会调用java.net.InetAddress.getCanonicalHostName()方法获取hostname(该参数可以通过/etc/hostname来找到其配置),在容器中hostname默认为容器id,所以我们通过添加advertised.host.name的参数为kubernetes.docker.internal域名,即可使宿主机得到的host为kubernetes.docker.internal,从而通过映射出去的端口找到kafka容器</p>
 <p>注:不同版本获取的参数或者获取参数的顺序或位置可能不同,但基本原理一致</p>
-
+</center></center></center></center></center></center>
       
     </div>
 
