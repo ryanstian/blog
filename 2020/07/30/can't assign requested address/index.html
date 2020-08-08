@@ -92,13 +92,18 @@
 
 
 
-  <meta property="og:type" content="website">
-<meta property="og:title" content="柠檬不酸的博客">
-<meta property="og:url" content="https://qq616023844.github.io/tags/模型/index.html">
+  <meta name="description" content="状况一:can’t assign requested addressgo用了mysql连接池,高并发压测时出现该报错分析:该报错是由于mac自身fd句柄打开数限制,并且mysql连接池并非一开始就创建出连接,而是随着请求进来才创建连接,大量并发同时进入,占满了mac的fd,导致mysql连接池无法使用fd,无法分配新的连接结论:修改mac参数限制/上服务器测临时修改方式,命令行直接输入永久修改方">
+<meta name="keywords" content="go,mac">
+<meta property="og:type" content="article">
+<meta property="og:title" content="can&#39;t assign requested address,i&#x2F;o timeout,too many open files in system">
+<meta property="og:url" content="https://qq616023844.github.io/2020/07/30/can't assign requested address/index.html">
 <meta property="og:site_name" content="柠檬不酸的博客">
+<meta property="og:description" content="状况一:can’t assign requested addressgo用了mysql连接池,高并发压测时出现该报错分析:该报错是由于mac自身fd句柄打开数限制,并且mysql连接池并非一开始就创建出连接,而是随着请求进来才创建连接,大量并发同时进入,占满了mac的fd,导致mysql连接池无法使用fd,无法分配新的连接结论:修改mac参数限制/上服务器测临时修改方式,命令行直接输入永久修改方">
 <meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2020-08-08T15:57:57.031Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="柠檬不酸的博客">
+<meta name="twitter:title" content="can&#39;t assign requested address,i&#x2F;o timeout,too many open files in system">
+<meta name="twitter:description" content="状况一:can’t assign requested addressgo用了mysql连接池,高并发压测时出现该报错分析:该报错是由于mac自身fd句柄打开数限制,并且mysql连接池并非一开始就创建出连接,而是随着请求进来才创建连接,大量并发同时进入,占满了mac的fd,导致mysql连接池无法使用fd,无法分配新的连接结论:修改mac参数限制/上服务器测临时修改方式,命令行直接输入永久修改方">
 
 
 
@@ -106,7 +111,7 @@
 
   
   
-  <link rel="canonical" href="https://qq616023844.github.io/tags/模型/">
+  <link rel="canonical" href="https://qq616023844.github.io/2020/07/30/can't assign requested address/">
 
 
 
@@ -116,7 +121,7 @@
   };
 </script>
 
-  <title>Tag: 模型 | 柠檬不酸的博客</title>
+  <title>can't assign requested address,i/o timeout,too many open files in system | 柠檬不酸的博客</title>
   
 
 
@@ -164,7 +169,7 @@
     
   
 
-  <div class="container sidebar-position-left ">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -221,7 +226,7 @@
         
         
           
-          <li class="menu-item menu-item-tags menu-item-active">
+          <li class="menu-item menu-item-tags">
 
     
     
@@ -319,80 +324,241 @@
           
             
 
-    
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-    
-
-  
-
-
           
           <div id="content" class="content">
             
 
-  
-  
-  
-  <div class="post-block tag">
+  <div id="posts" class="posts-expand">
+    
 
-    <div id="posts" class="posts-collapse">
-      <div class="collection-title">
-        <h1>模型<small>Tag</small>
-        </h1>
-      </div>
+  
 
-      
-        
+  
+  
+  
+
+  
 
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://qq616023844.github.io/2020/07/30/can't assign requested address/">
 
-      <h2 class="post-title">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Lemon Sour">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="柠檬不酸的博客">
+    </span>
+
+    
+      <header class="post-header">
+
         
-          <a class="post-title-link" href="/2019/08/17/线程模型/" itemprop="url">
-            
-              <span itemprop="name">线程模型</span>
-            
-          </a>
         
-      </h2>
+          <h1 class="post-title" itemprop="name headline">can't assign requested address,i/o timeout,too many open files in system
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-08-17T23:25:00+08:00" content="2019-08-17">
-          08-17
-        </time>
-      </div>
+              
+            
+          </h1>
+        
 
-    </header>
-  </article>
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2020-07-30 00:05:00" itemprop="dateCreated datePublished" datetime="2020-07-30T00:05:00+08:00">2020-07-30</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2020-08-08 23:57:57" itemprop="dateModified" datetime="2020-08-08T23:57:57+08:00">2020-08-08</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/BUG/" itemprop="url" rel="index"><span itemprop="name">BUG</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <a id="more"></a>
+<p>状况一:can’t assign requested address<br>go用了mysql连接池,高并发压测时出现该报错<br>分析:该报错是由于mac自身fd句柄打开数限制,并且mysql连接池并非一开始就创建出连接,而是随着请求进来才创建连接,大量并发同时进入,占满了mac的fd,导致mysql连接池无法使用fd,无法分配新的连接<br>结论:修改mac参数限制/上服务器测<br>临时修改方式,命令行直接输入<br>永久修改方式,写入/etc/sysctl.conf后重启<br>sysctl kern.maxfiles 查看系统所能打开的最大文件数（文件描述符）(全局)<br>sudo sysctl -w kern.maxfiles 修改<br>sysctl kern.maxfilesperproc 查看系统所能打开的最大文件数（文件描述符）(一个进程)<br>sudo sysctl -w kern.maxfilesperproc 修改<br>ulimit －n 查看shell能打开的最大文件数<br>ulimit -n 123123 修改(123123为任意值,但不得大于kern.maxfilesperproc)<br>sysctl net.inet.ip.portrange 查看端口范围<br>sysctl -w net.inet.ip.portrange.first=32768 修改</p>
+<p>状况二:dial tcp 127.0.0.1:3306:i/o timeout<br>分析:待补充<br>结论:解决方式同状况一</p>
+<p>状况三:too many open files in system<br>分析:原因同状况一<br>结论:解决方式同状况一</p>
+
+      
+    </div>
+
+    
+
+    
+    <div>
+      
+          
+<div class="my_post_copyright">
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+  
+  <!-- JS库 sweetalert 可修改路径 -->
+  <script type="text/javascript" src="http://jslibs.wuxubj.cn/sweetalert_mini/jquery-1.7.1.min.js"></script>
+  <script src="http://jslibs.wuxubj.cn/sweetalert_mini/sweetalert.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="http://jslibs.wuxubj.cn/sweetalert_mini/sweetalert.mini.css">
+
+  <p><span>本文作者:</span> Lemon Sour</p>  
+  <p><span>本文链接:</span><a href="/2020/07/30/can't assign requested address/" title="can't assign requested address,i/o timeout,too many open files in system">https://lemonsour.me/2020/07/30/can't assign requested address/</a></p>
+  <p><span>许可协议:</span>本站博文均采用 <a href="http://creativecommons.org/licenses/by-nc-sa/3.0/cn/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0 CN</a> 许可协议，转载请注明出处及原文作者并置顶！</p>  
+</div>
 
 
       
     </div>
 
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        
+          
+        
+        <div class="post-tags">
+          
+            <a href="/tags/go/" rel="tag"># go</a>
+          
+            <a href="/tags/mac/" rel="tag"># mac</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/11/30/mysql事务/" rel="next" title="mysql事务">
+                <i class="fa fa-chevron-left"></i> mysql事务
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/07/30/go_mac_http_fd/" rel="prev" title="TCP[IP]PORT->[IP]PORT (CLOSED)/(ESTABLISHED)">
+                TCP[IP]PORT->[IP]PORT (CLOSED)/(ESTABLISHED) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
 
+  </div>
 
 
           </div>
           
+
+  
+
+
 
         </div>
         
@@ -714,6 +880,10 @@
 
 
   
+  <script src="/js/scrollspy.js?v=7.1.2"></script>
+<script src="/js/post-details.js?v=7.1.2"></script>
+
+
 
   
 
@@ -729,6 +899,8 @@
 
   
 
+
+  
 
 
   
