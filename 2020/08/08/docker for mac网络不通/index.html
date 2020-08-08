@@ -107,7 +107,7 @@
 <meta property="og:image" content="http://188.131.252.235:8888/docker for mac网络不通/图2-2.png">
 <meta property="og:image" content="http://188.131.252.235:8888/docker for mac网络不通/图2-3.png">
 <meta property="og:image" content="http://188.131.252.235:8888/docker for mac网络不通/图2-4.png">
-<meta property="og:updated_time" content="2020-08-08T16:50:29.162Z">
+<meta property="og:updated_time" content="2020-08-08T16:54:53.268Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="docker for mac网络不通">
 <meta name="twitter:description" content="现象:docker安装在linux上一切正常,安装在mac上,宿主机无法ping通容器ip经常出现在宿主机连接容器kafka集群的情况下,无法连通">
@@ -412,7 +412,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2020-08-09 00:50:29" itemprop="dateModified" datetime="2020-08-09T00:50:29+08:00">2020-08-09</time>
+                <time title="Modified: 2020-08-09 00:54:53" itemprop="dateModified" datetime="2020-08-09T00:54:53+08:00">2020-08-09</time>
               
             
           </span>
@@ -475,21 +475,23 @@
 <h2 id="宿主机与容器访问的解决方案"><a href="#宿主机与容器访问的解决方案" class="headerlink" title="宿主机与容器访问的解决方案"></a>宿主机与容器访问的解决方案</h2><h4 id="对于图2的结构"><a href="#对于图2的结构" class="headerlink" title="对于图2的结构"></a>对于图2的结构</h4><p>我们即使在docker run时指定了-p,也无法在宿主机通过端口访问到。</p>
 <p>因为此时的映射如下图,仅仅将docker容器端口映射到了linux虚拟机上</p>
 <p>所以我们如果想要从宿主机通过localhost:post访问到对应容器,还需要手动将linux虚拟机的对应端口映射到宿主机上(当然,在docker中的几个容器如果没有设置防火墙可以互相通过各自内网ip访问,因为他们在同一网域)</p>
-<img src="http://188.131.252.235:8888/docker for mac网络不通/图2-1.png" text-align:center alt="如果图片失效,请邮件联系作者补图">
 <center>docker端口映射<center>
+<img src="http://188.131.252.235:8888/docker for mac网络不通/图2-1.png" text-align:center alt="如果图片失效,请邮件联系作者补图">
 
-<img src="http://188.131.252.235:8888/docker for mac网络不通/图2-2.png" text-align:center alt="如果图片失效,请邮件联系作者补图">
+
 <center>docker+虚拟机端口映射<center>
+<img src="http://188.131.252.235:8888/docker for mac网络不通/图2-2.png" text-align:center alt="如果图片失效,请邮件联系作者补图">
+
 
 <p>刚才我们说了宿主机主动访问容器的方法,那么接下来说容器中访问宿主机的方法。</p>
 <p>方法一:如果宿主机连接了外网/局域网,可以通过宿主机ip来访问,具体数据流向如下图</p>
-<img src="http://188.131.252.235:8888/docker for mac网络不通/图2-3.png" text-align:center alt="如果图片失效,请邮件联系作者补图">
 <center>网络结构2,容器中访问宿主机方法一数据流向<center>
+<img src="http://188.131.252.235:8888/docker for mac网络不通/图2-3.png" text-align:center alt="如果图片失效,请邮件联系作者补图">
 <br>
 
 <p>方法二:由于linux虚拟机既可以通过网桥一访问宿主机,又可以通过网桥二访问容器,那么我们在linux虚拟机中做vpn,将容器的流量传输到宿主机中</p>
-<img src="http://188.131.252.235:8888/docker for mac网络不通/图2-4.png" text-align:center alt="如果图片失效,请邮件联系作者补图">
 <center>网络结构2,容器中访问宿主机方法二数据流向</center>
+<img src="http://188.131.252.235:8888/docker for mac网络不通/图2-4.png" text-align:center alt="如果图片失效,请邮件联系作者补图">
 <br>
 
 <p>方法三(并不确定Docker Toolbox是否提供该功能):通过docker提供的域名来访问宿主机</p>
