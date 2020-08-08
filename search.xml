@@ -37,18 +37,6 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[TCP[IP]PORT->[IP]PORT (CLOSED)/(ESTABLISHED)]]></title>
-    <url>%2F2020%2F07%2F30%2Fgo_mac_http_fd%2F</url>
-    <content type="text"><![CDATA[状况一: TCP[IP]PORT-&gt;[IP]PORT (CLOSED)用jmeter压测go web项目时突然新的请求被阻塞无法被执行,通过命令lsof -nP -i -l查看,发现大量类似这样信息,此时jmeter已经stop,客户端与服务端之间并不存在存活的请求分析:待补充结论:由于服务端未设置超时时间 状况二:TCP[IP]PORT-&gt;[IP]PORT (ESTABLISHED)结论:正常现象,表示连接状态的socket]]></content>
-      <categories>
-        <category>BUG</category>
-      </categories>
-      <tags>
-        <tag>mac</tag>
-        <tag>go</tag>
-      </tags>
-  </entry>
-  <entry>
     <title><![CDATA[mysql事务]]></title>
     <url>%2F2019%2F11%2F30%2Fmysql%E4%BA%8B%E5%8A%A1%2F</url>
     <content type="text"><![CDATA[ps:这篇文章本来写了一半,然后突然没了,没了!心态爆炸!写文章一定要及时保存! 下面我所提到的mysql事务,均是基于InnoDB引擎(平时我们常用的引擎),千万不要将对InnoDB的理解代入其他的引擎 &emsp;提到mysql,对于业务场景来说,肯定是需要懂一些mysql事务方面的内容,那么本篇就来谈一下关于mysql事务的问题 &emsp;说到事务,我们就会问了,何时要用到事务?又或者事务是用来做什么的?其实,在我看来,事务是用来将一系列的非原子性操作封装成某种程度上外部感知上的原子性操作(这里要注意,事务并不是将所有操作压缩起来,类似redis中LUA脚本那样,而是你每句sql是确实的被执行了的,数据库也确实发生了修改的,只是用了某种技巧使得其可以支持事务失败时的回滚,以及其对其他外部行为可见性等,这个我们后面会讲到) &emsp;以汇款行为为例,我们需要从A账户中取出金额,放到B账户下,在这两个行为的过程中,可能会发生各种意外导致数字货币的丢失,那么为了防止这种情况发生,我们就需要想办法将其打包成原子性操作,其中一种方式就是用mysql事务(当然,这仅仅是数据库层面上的方式,我们当然还有其他可选方式,但这不在本次讨论范围内) &emsp;下面我们先来简单介绍一下mysql事务的几种隔离级别(这里要解释一下为什么会有隔离级别这个东西,因为上文我们提到过,mysql事务的原子性并不是将我们所要进行的操作压缩在一起执行,而是每次的sql语句确实的被mysql执行了,那么如果两个事务同时进行,那么我们如何保证一个事务所做的修改对于另一个事务而言的可见性呢?这就涉及到了事务隔离级别)。事务隔离级别分为以下几种,后面我会再详细的分析隔离级别是如何实现的 Read uncommitted 从名字可以看出这种模式可以允许你读取另一个事务已经执行但是未进行commit之前的修改 Read committed 同理,这个模式只能读取另一个事务已经commit的修改 Repeatable read 在提到这种模式之前,我们先思考下之前的两种模式(我们此时要注意换位思考,即假设A,B两个事务同时运行,我们要分别从AB的角度去看待原子性) Read uncommitted显而易见,如果是当A读取,B修改(这里我们把它想象成连续修改可能更容易理解)时,对于A而言他看到的B事务并不是原子性的(即如果A连续读,会发现B造成的修改是在不断变动的) Read committed可以说他的一部分已经开始向原子性靠拢了,还是当A读取,B连续修改这种情况下,对于从A的角度而言B的修改是原子性的,从B的角度而言A的修改也是原子性的(即B只能看到A事务开启前或提交后的值),如果你认为这就已经达到了原子性,那么恭喜你漏了一个很重要的一点。在这种情况下,从A的角度而言A自身并不是原子性的,我这么说或许大家会感到奇怪,那么首先我们再来看一下对原子性的理解。何为原子性?即如果A,B两个行为,他们互相看对方是原子性的,并且A看A也必须是原子性的(即在他们动作执行开始到结束,在他们的眼里整个世界是停滞的,只有他们自己在活跃)。好,理解了这一点,我们再回来看,假设A事务正在执行,B事务也在执行,那么如果B不提交A就已经执行完了,在这种情况下,A认为整个世界只有他在活跃,那么如果A事务执行时B提交了呢?那么在A眼里整个世界就不是停滞的,还有B的存在,B的种种行为都会影响到A的判断,具体会有何种影响我们后面再说 让我们回到Repeatable read,理解了上面的,我们就很容易理解Repeatable read这种模式,字面上来看,就是可重复读,那么他的作用是什么呢,拿上面的举例来说,即A执行(严格来讲并不是执行,而是只在第一次select操作时,后面我会说明原因)的一瞬间,在他看来整个世界对他停滞了,即时外界有任何事务的提交,也不会影响他,直到他完成自己的工作,而在mysql中,这也是默认的隔离级别。这里有个提示,所有的命令都是活跃在事务中的,即时你只有单条sql语句,mysql也会默认给你包装为一个事务,那么平时我们单条sql语句并不需要执行commit是因为有个属性autocommit=1自动帮我们执行了commit Serializable 这种模式就比较简单粗暴了,每次读取数据时都会获取表级共享锁(这里不明白的同学可以简单的将其理解为被获取共享锁的对象只能看不能动),由于直接给你表套了个共享锁,所以其他事务对于本事务都是原子性的(其他事务连动数据都动不了,更别提原子性不原子性的问题了。如果其他事务的修改操作先于本串行化事务开始时,由于排他锁会阻止加共享锁,所以直到加排他锁的事务commit,本Serializable的事务根本无法执行,反之也同理,连修改都无法进行,还谈什么修改可见不可见的问题呢) &emsp;在这里我并不会总结几种隔离级别和脏读不可重复度幻读等的关系,因为在搜资料的过程中发现大家对这些概念说法有一定的差别,当然这并不意味谁的理解是错的,只是站在不同角度而已,下面以两个版本来说 &emsp;先说网上的各种教程的版本 脏读 读到了其他事务未提交的数据,在Read uncommitted模式下会发生 不可重复读 一个事务中两次select获取的数据不一样,在Read committed,Read uncommitted模式下会发生 幻读 同一个事物中连续读两次发现读到的行(该行可能以前存在也可能不存在)不一样,在Read committed,Read uncommitted,Repeatable read模式下均会发生 &emsp;再说下自己的理解(在看接下来内容之前先看下这篇,) &emsp;看完MVCC机制之后,我们可以思考这么一个问题,假如AB两个事务(Repeatable read模式),A先全表读一次,B插入一条数据(事务并未提交),A全表update一次,A再读一次,那么他读出来的跟第一次读出来的一样吗? &emsp;如果仔细看过刚才MVCC机制的文章,会发现,其实刚才的那个问题,A两次读取出的已经不一样了,那么仔细思考一下,这算不算脏读呢?这算不算重复读呢?这算不算幻读呢?(对于幻读当然你也可以把条件定义为其他事务的改变对于本事务来说不可见而不是当前事务的修改对自身不可见,但在这里我并不想纠结于文字)其实我也分不清。在很多情况下我们死记脏读,不可重复读,幻读是毫无意义的,不如直接去弄清他的原理,根据具体需要去分析 &emsp;接下来我们再仔细想一下之前的MVCC和前三种隔离级别(最后一种串行化隔离级别我们可以把它放到锁那部分来讨论了,这里提他并没有意义),我们不难感觉出,有哪里怪怪的,我们看到的和实际操作的是不一样的。那在这里,让我们再引入两个概念,当前读和快照读(请自行搜索),现在我们不难看出,无论是MVCC还是三种隔离级别都是针对于读(select)这一行为而言,他们并没有规定insert,update,delete等操作,看过MVCC我们知道,update和delete是由undo log来维护的,并且会置入操作他们的事务的id(insert也会置入id,但是网上说他不由undo log维护,具体我还要再去验证),虽然读会受此id影响,但是修改(这里泛指增删改)并不会走MVCC判断事务id,也就是说,你只要有方式能触碰到该条记录(例如update where id=),则这条记录会被你修改,并且事务id会置为你的事务id,那么以后的select,就会受MVCC影响而可以查询出来这条数据,当然还有很多情况,这里随便列举一个 事务A读了一下表发现了abc三条数据,事务B读了一下表发现了abc三条数据,事务A插入了一条数据d,事务B再读表发现还是abc三条数据,那么事务B插入了一条数据d(注意,此时跟事务A刚才插入的主键重复),那么插入失败。 &emsp;到这里mysql事务的介绍差不多就结束了,仅靠MVCC是不足以支撑我们对原子性的要求的,事实上大部分情况都是MVCC与锁配合来达到我们的期望(好吧,其实我本来想用需求这个词来表达,但是不禁想到了产品提需求的噩梦,相信很多人都对此深有感触) &emsp;最后提一点题外话,如果你想测试mysql的事务,千万不要在springboot或者hibernate框架中测试,他们自身的事务管理机制会扰乱你的测试,在下面的几篇(可能要鸽一阵子,毕竟这俩框架体量比较庞大)会分析一下为何他们会扰乱你的测试 ps:其实在进行测试时,有一个地方暂时没搞清楚,假设事务AB(Repeatable read模式均为),B全表读一次,A删除一条数据并提交,B全表读一次。第一次读取和第二次读取出的行记录(仅仅是少了一行,每行的数据是符合RR的)在mysql workbench 8.0CE模式下是不同的(事务A的删除对B可见),而在navicat premium 12和mysql命令行模式下两次读取出是相同的(事务A的删除对事务B不可见),有人可以指点下吗]]></content>
@@ -192,6 +180,18 @@
       </tags>
   </entry>
   <entry>
+    <title><![CDATA[TCP[IP]PORT->[IP]PORT (CLOSED)/(ESTABLISHED)]]></title>
+    <url>%2F2019%2F07%2F30%2Fgo_mac_http_fd%2F</url>
+    <content type="text"><![CDATA[状况一: TCP[IP]PORT-&gt;[IP]PORT (CLOSED)用jmeter压测go web项目时突然新的请求被阻塞无法被执行,通过命令lsof -nP -i -l查看,发现大量类似这样信息,此时jmeter已经stop,客户端与服务端之间并不存在存活的请求分析:待补充结论:由于服务端未设置超时时间 状况二:TCP[IP]PORT-&gt;[IP]PORT (ESTABLISHED)结论:正常现象,表示连接状态的socket]]></content>
+      <categories>
+        <category>BUG</category>
+      </categories>
+      <tags>
+        <tag>mac</tag>
+        <tag>go</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[前端添加数据后动态刷新时获取获取后端数据是旧的]]></title>
     <url>%2F2019%2F07%2F05%2F%E5%89%8D%E7%AB%AF%E6%B7%BB%E5%8A%A0%E6%95%B0%E6%8D%AE%E5%90%8E%E5%8A%A8%E6%80%81%E5%88%B7%E6%96%B0%E6%97%B6%E8%8E%B7%E5%8F%96%E8%8E%B7%E5%8F%96%E5%90%8E%E7%AB%AF%E6%95%B0%E6%8D%AE%E6%98%AF%E6%97%A7%E7%9A%84%2F</url>
     <content type="text"><![CDATA[情况一(后端缓存)第一种情况是由于后端使用了缓存,且添加数据后由于后端代码问题导致缓存刷新不及时产生的 情况二(前端异步请求)由于服务器响应请求总会有延迟,前端前后相差几毫秒发出了修改请求和查询请求。这种情况下由于网络问题,前端会出现有时可以刷新成功,有时旧数据的情况。解决方法就是前端同步下请求,收到第一个请求的返回后再发送下一个请求]]></content>
@@ -222,9 +222,9 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[AtomicLong]]></title>
-    <url>%2F2019%2F07%2F02%2FAtomicLong%2F</url>
-    <content type="text"><![CDATA[正文一.AtomicLong是做什么用的首先我们可以先看一下我的另一篇文章i++不是原子性操作 此时,我们通常选择会是进行这样的操作 123456789101112131415161718192021public class CasStudy01 &#123; private static int count = 0; private synchronized static void add()&#123; count++; &#125; public static void main(String[] args) throws InterruptedException &#123; Runnable runnable = new Runnable() &#123; @Override public void run() &#123; add(); &#125; &#125;; for (int i = 0; i &lt; 10000; i++) &#123; new Thread(runnable).start(); &#125; Thread.sleep(1000); System.out.println(count); &#125;&#125; 我们将count++操作放在了一个带锁的方法里面,来保证其线程安全性。然而,我们知道,加锁解锁操作会造成性能的消耗,在并发量不算太高的情况下,我们可以考虑采用AtomicLong(无锁的方式,采用/2019/07/02/CAS机制/)来保证线程安全性 二.AtomicLong的实现AtomicLong在源码中持有Unsafe类的实例,其大部分操作都是交付给Unsafe类来完成的(Unsafe中大多是本地方法,虽然我们可以通过反射来调用,但是官方强烈不建议我们这么做) AtomicLong里面持有一个long类型的valueOffset变量,这个变量表示的是其value值的内存偏移量(详见JVM内存模型),当我们调用incrementAndGet时,会交付Unsafe类来进行操作 123public final long incrementAndGet() &#123; return unsafe.getAndAddLong(this, valueOffset, 1L) + 1L;&#125; 我们传入本类的实例,value的偏移量,以及增加量 12345678public final long getAndAddLong(Object var1, long var2, long var4) &#123; long var6; do &#123; var6 = this.getLongVolatile(var1, var2); &#125; while(!this.compareAndSwapLong(var1, var2, var6, var6 + var4)); return var6;&#125; 在Unsafe中就会进行CAS操作,使得value增加1,这是线程安全的 三.AtomicLong的缺点当并发量极大的时候,由于CAS机制本身的原因,导致CAS失败率极高,从而拖慢性能。此时,我们可以考虑使用LongAdder(待补充)]]></content>
+    <title><![CDATA[CAS机制]]></title>
+    <url>%2F2019%2F07%2F02%2FCAS%E6%9C%BA%E5%88%B6%2F</url>
+    <content type="text"><![CDATA[正文一.什么是CAS机制CAS机制的全名叫做compare and swap让我们来看一行代码 1public final native boolean compareAndSwapLong(Object var1, long var2, long var4, long var6); 这行代码源于Unsafe类(待补充),参数var1和var2我们先不考虑,var4表示旧值,var6表示新值,这行代码的作用是,如果var4的值等于内存中的现有值,那么将内存中的值替换为var6同时返回true,否则返回false。这就是CAS机制,同时也是其在Java中的体现 二.为什么要使用CAS/有哪些好处一般情况下,当我们并发访问同一个int变量时,我们往往需要加锁操作,但每次加锁会造成大量的开销,影响性能,所以就有了CAS机制,可以让我们在不加锁的情况下做到线程安全 三.CAS机制存在哪些问题1.ABA问题先看一段代码,代码源于Unsafe类①这一步的意义是得到内存中的现有值(参数可忽略) 12345678public final long getAndAddLong(Object var1, long var2, long var4) &#123; long var6; do &#123; var6 = this.getLongVolatile(var1, var2);① &#125; while(!this.compareAndSwapLong(var1, var2, var6, var6 + var4)); return var6; &#125; ABA问题简述:如代码所示,假设存在线程1,2。线程1运行了①之后等待,线程2开始运行,线程2将A改变为B,再将B改变为A,线程2结束,线程1继续运行,此时,线程1会认为A依旧是原来他读取到的A,期间并没有改变,并且将他按照正常流程改变为B。当然,在正常情况下,变量加减方面这并不会造成什么影响,但是若将CAS用在堆栈或者链表上(网上搜索一下有很多这种ABA问题的例子),或由于业务错误,同时发出了两次修改金钱100为50的操作,但是此时又加入了一个修改金钱50为100的操作(参考自漫画：什么是CAS机制？（进阶篇）),那么就会出现严重的问题解决方案:最常见的ABA问题的解决方案就是诸如java并发包中的AtomicStampedReference类,其内部实现类似于。不同点是,其内部维护了一个内部类Pair,采用记录版本号的方式来避免ABA问题,不过每次在更改时都会new一个新的Pair来进行CAS,如果对性能有极高的要求,那么需要谨慎选择 2.由于在使用CAS时,往往使用的是重试机制,即在while循环中一直重试CAS直到成功为止,所以在极高并发情况下,CAS的失败率将增大,会导致严重的性能问题,对于这个问题,很多时候解决方案是在一般程度并发时采取CAS,极高并发时进行排队。LongAddr钟采用了分治的办法,拥有多个计数器,在高并发时将计数任务分配到多个计数器中,分担压力]]></content>
       <categories>
         <category>java</category>
       </categories>
@@ -233,9 +233,9 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[CAS机制]]></title>
-    <url>%2F2019%2F07%2F02%2FCAS%E6%9C%BA%E5%88%B6%2F</url>
-    <content type="text"><![CDATA[正文一.什么是CAS机制CAS机制的全名叫做compare and swap让我们来看一行代码 1public final native boolean compareAndSwapLong(Object var1, long var2, long var4, long var6); 这行代码源于Unsafe类(待补充),参数var1和var2我们先不考虑,var4表示旧值,var6表示新值,这行代码的作用是,如果var4的值等于内存中的现有值,那么将内存中的值替换为var6同时返回true,否则返回false。这就是CAS机制,同时也是其在Java中的体现 二.为什么要使用CAS/有哪些好处一般情况下,当我们并发访问同一个int变量时,我们往往需要加锁操作,但每次加锁会造成大量的开销,影响性能,所以就有了CAS机制,可以让我们在不加锁的情况下做到线程安全 三.CAS机制存在哪些问题1.ABA问题先看一段代码,代码源于Unsafe类①这一步的意义是得到内存中的现有值(参数可忽略) 12345678public final long getAndAddLong(Object var1, long var2, long var4) &#123; long var6; do &#123; var6 = this.getLongVolatile(var1, var2);① &#125; while(!this.compareAndSwapLong(var1, var2, var6, var6 + var4)); return var6; &#125; ABA问题简述:如代码所示,假设存在线程1,2。线程1运行了①之后等待,线程2开始运行,线程2将A改变为B,再将B改变为A,线程2结束,线程1继续运行,此时,线程1会认为A依旧是原来他读取到的A,期间并没有改变,并且将他按照正常流程改变为B。当然,在正常情况下,变量加减方面这并不会造成什么影响,但是若将CAS用在堆栈或者链表上(网上搜索一下有很多这种ABA问题的例子),或由于业务错误,同时发出了两次修改金钱100为50的操作,但是此时又加入了一个修改金钱50为100的操作(参考自漫画：什么是CAS机制？（进阶篇）),那么就会出现严重的问题解决方案:最常见的ABA问题的解决方案就是诸如java并发包中的AtomicStampedReference类,其内部实现类似于。不同点是,其内部维护了一个内部类Pair,采用记录版本号的方式来避免ABA问题,不过每次在更改时都会new一个新的Pair来进行CAS,如果对性能有极高的要求,那么需要谨慎选择 2.由于在使用CAS时,往往使用的是重试机制,即在while循环中一直重试CAS直到成功为止,所以在极高并发情况下,CAS的失败率将增大,会导致严重的性能问题,对于这个问题,很多时候解决方案是在一般程度并发时采取CAS,极高并发时进行排队。LongAddr钟采用了分治的办法,拥有多个计数器,在高并发时将计数任务分配到多个计数器中,分担压力]]></content>
+    <title><![CDATA[AtomicLong]]></title>
+    <url>%2F2019%2F07%2F02%2FAtomicLong%2F</url>
+    <content type="text"><![CDATA[正文一.AtomicLong是做什么用的首先我们可以先看一下我的另一篇文章i++不是原子性操作 此时,我们通常选择会是进行这样的操作 123456789101112131415161718192021public class CasStudy01 &#123; private static int count = 0; private synchronized static void add()&#123; count++; &#125; public static void main(String[] args) throws InterruptedException &#123; Runnable runnable = new Runnable() &#123; @Override public void run() &#123; add(); &#125; &#125;; for (int i = 0; i &lt; 10000; i++) &#123; new Thread(runnable).start(); &#125; Thread.sleep(1000); System.out.println(count); &#125;&#125; 我们将count++操作放在了一个带锁的方法里面,来保证其线程安全性。然而,我们知道,加锁解锁操作会造成性能的消耗,在并发量不算太高的情况下,我们可以考虑采用AtomicLong(无锁的方式,采用/2019/07/02/CAS机制/)来保证线程安全性 二.AtomicLong的实现AtomicLong在源码中持有Unsafe类的实例,其大部分操作都是交付给Unsafe类来完成的(Unsafe中大多是本地方法,虽然我们可以通过反射来调用,但是官方强烈不建议我们这么做) AtomicLong里面持有一个long类型的valueOffset变量,这个变量表示的是其value值的内存偏移量(详见JVM内存模型),当我们调用incrementAndGet时,会交付Unsafe类来进行操作 123public final long incrementAndGet() &#123; return unsafe.getAndAddLong(this, valueOffset, 1L) + 1L;&#125; 我们传入本类的实例,value的偏移量,以及增加量 12345678public final long getAndAddLong(Object var1, long var2, long var4) &#123; long var6; do &#123; var6 = this.getLongVolatile(var1, var2); &#125; while(!this.compareAndSwapLong(var1, var2, var6, var6 + var4)); return var6;&#125; 在Unsafe中就会进行CAS操作,使得value增加1,这是线程安全的 三.AtomicLong的缺点当并发量极大的时候,由于CAS机制本身的原因,导致CAS失败率极高,从而拖慢性能。此时,我们可以考虑使用LongAdder(待补充)]]></content>
       <categories>
         <category>java</category>
       </categories>

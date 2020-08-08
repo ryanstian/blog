@@ -92,18 +92,18 @@
 
 
 
-  <meta name="description" content="1.此篇记录简单的mysql存储过程,意在分表,将1个数据库表根据id分为多个表,用于数据迁移。然而实测速度极慢(本地1000W条数据分表,1分钟分了5W条),根据搜集资料显示,瓶颈疑似出现在游标,google回答建议采用临时表代替游标 2.根据搜集资料,现阶段不建议使用存储过程,而是在业务层写脚本来处理数据。因为存储过程极其依赖数据库,难以迁移,且现阶段多为分布式数据库,存储过程难以运行于分布式">
-<meta name="keywords" content="mysql,存储过程">
+  <meta name="description" content="状况一: TCP[IP]PORT-&amp;gt;[IP]PORT (CLOSED)用jmeter压测go web项目时突然新的请求被阻塞无法被执行,通过命令lsof -nP -i -l查看,发现大量类似这样信息,此时jmeter已经stop,客户端与服务端之间并不存在存活的请求分析:待补充结论:由于服务端未设置超时时间 状况二:TCP[IP]PORT-&amp;gt;[IP]PORT (ESTABLISHED">
+<meta name="keywords" content="mac,go">
 <meta property="og:type" content="article">
-<meta property="og:title" content="mysql存储过程">
-<meta property="og:url" content="https://qq616023844.github.io/2020/08/04/mysql存储过程/index.html">
+<meta property="og:title" content="TCP[IP]PORT-&gt;[IP]PORT (CLOSED)&#x2F;(ESTABLISHED)">
+<meta property="og:url" content="https://qq616023844.github.io/2019/07/30/go_mac_http_fd/index.html">
 <meta property="og:site_name" content="柠檬不酸的博客">
-<meta property="og:description" content="1.此篇记录简单的mysql存储过程,意在分表,将1个数据库表根据id分为多个表,用于数据迁移。然而实测速度极慢(本地1000W条数据分表,1分钟分了5W条),根据搜集资料显示,瓶颈疑似出现在游标,google回答建议采用临时表代替游标 2.根据搜集资料,现阶段不建议使用存储过程,而是在业务层写脚本来处理数据。因为存储过程极其依赖数据库,难以迁移,且现阶段多为分布式数据库,存储过程难以运行于分布式">
+<meta property="og:description" content="状况一: TCP[IP]PORT-&amp;gt;[IP]PORT (CLOSED)用jmeter压测go web项目时突然新的请求被阻塞无法被执行,通过命令lsof -nP -i -l查看,发现大量类似这样信息,此时jmeter已经stop,客户端与服务端之间并不存在存活的请求分析:待补充结论:由于服务端未设置超时时间 状况二:TCP[IP]PORT-&amp;gt;[IP]PORT (ESTABLISHED">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2020-08-08T15:22:41.313Z">
+<meta property="og:updated_time" content="2020-08-08T15:52:55.477Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="mysql存储过程">
-<meta name="twitter:description" content="1.此篇记录简单的mysql存储过程,意在分表,将1个数据库表根据id分为多个表,用于数据迁移。然而实测速度极慢(本地1000W条数据分表,1分钟分了5W条),根据搜集资料显示,瓶颈疑似出现在游标,google回答建议采用临时表代替游标 2.根据搜集资料,现阶段不建议使用存储过程,而是在业务层写脚本来处理数据。因为存储过程极其依赖数据库,难以迁移,且现阶段多为分布式数据库,存储过程难以运行于分布式">
+<meta name="twitter:title" content="TCP[IP]PORT-&gt;[IP]PORT (CLOSED)&#x2F;(ESTABLISHED)">
+<meta name="twitter:description" content="状况一: TCP[IP]PORT-&amp;gt;[IP]PORT (CLOSED)用jmeter压测go web项目时突然新的请求被阻塞无法被执行,通过命令lsof -nP -i -l查看,发现大量类似这样信息,此时jmeter已经stop,客户端与服务端之间并不存在存活的请求分析:待补充结论:由于服务端未设置超时时间 状况二:TCP[IP]PORT-&amp;gt;[IP]PORT (ESTABLISHED">
 
 
 
@@ -111,7 +111,7 @@
 
   
   
-  <link rel="canonical" href="https://qq616023844.github.io/2020/08/04/mysql存储过程/">
+  <link rel="canonical" href="https://qq616023844.github.io/2019/07/30/go_mac_http_fd/">
 
 
 
@@ -121,7 +121,7 @@
   };
 </script>
 
-  <title>mysql存储过程 | 柠檬不酸的博客</title>
+  <title>TCP[IP]PORT->[IP]PORT (CLOSED)/(ESTABLISHED) | 柠檬不酸的博客</title>
   
 
 
@@ -344,7 +344,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://qq616023844.github.io/2020/08/04/mysql存储过程/">
+    <link itemprop="mainEntityOfPage" href="https://qq616023844.github.io/2019/07/30/go_mac_http_fd/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Lemon Sour">
@@ -361,7 +361,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">mysql存储过程
+          <h1 class="post-title" itemprop="name headline">TCP[IP]PORT->[IP]PORT (CLOSED)/(ESTABLISHED)
 
               
             
@@ -387,7 +387,7 @@
                 
               
 
-              <time title="Created: 2020-08-04 23:19:00" itemprop="dateCreated datePublished" datetime="2020-08-04T23:19:00+08:00">2020-08-04</time>
+              <time title="Created: 2019-07-30 00:05:00" itemprop="dateCreated datePublished" datetime="2019-07-30T00:05:00+08:00">2019-07-30</time>
             
 
             
@@ -404,7 +404,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2020-08-08 23:22:41" itemprop="dateModified" datetime="2020-08-08T23:22:41+08:00">2020-08-08</time>
+                <time title="Modified: 2020-08-08 23:52:55" itemprop="dateModified" datetime="2020-08-08T23:52:55+08:00">2020-08-08</time>
               
             
           </span>
@@ -421,7 +421,7 @@
                 <span class="post-meta-item-text">In</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/mysql/" itemprop="url" rel="index"><span itemprop="name">mysql</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/BUG/" itemprop="url" rel="index"><span itemprop="name">BUG</span></a></span>
 
                 
                 
@@ -456,11 +456,10 @@
       
 
       
-        <p>1.此篇记录简单的mysql存储过程,意在分表,将1个数据库表根据id分为多个表,用于数据迁移。然而实测速度极慢(本地1000W条数据分表,1分钟分了5W条),根据搜集资料显示,瓶颈疑似出现在游标,google回答建议采用临时表代替游标</p>
-<p>2.根据搜集资料,现阶段不建议使用存储过程,而是在业务层写脚本来处理数据。因为存储过程极其依赖数据库,难以迁移,且现阶段多为分布式数据库,存储过程难以运行于分布式环境,存储过程难以调试维护,存储过程会加重数据库负担,数据库应该仅承担数据存储职责而非业务职责</p>
-<a id="more"></a>
+        <a id="more"></a>
+<p>状况一: TCP[IP]PORT-&gt;[IP]PORT (CLOSED)<br>用jmeter压测go web项目时突然新的请求被阻塞无法被执行,通过命令lsof -nP -i -l查看,发现大量类似这样信息,此时jmeter已经stop,客户端与服务端之间并不存在存活的请求<br>分析:待补充<br>结论:由于服务端未设置超时时间</p>
+<p>状况二:TCP[IP]PORT-&gt;[IP]PORT (ESTABLISHED)<br>结论:正常现象,表示连接状态的socket</p>
 
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line">注意,如果mysql窗口是打开的mysql这一层级,则需要选择数据库才可继续接下来操作,否则会提示选择数据库</span><br><span class="line"></span><br><span class="line">//将结束符暂时更改为//,以免被程序中的语句分隔符;影响</span><br><span class="line">DELIMITER //</span><br><span class="line">//创建存储过程,如果本身已存在同名存储过程,则创建失败</span><br><span class="line">CREATE PROCEDURE wk()</span><br><span class="line">//开始写存储过程</span><br><span class="line">BEGIN</span><br><span class="line">    //语法1:变量声明必须在所有函数之前</span><br><span class="line">    declare i int;</span><br><span class="line">    declare tmp varchar(100);</span><br><span class="line">    declare userId int;</span><br><span class="line">    declare nickname varchar(32);</span><br><span class="line">    declare phone varchar(13);</span><br><span class="line">    declare addr varchar(100);</span><br><span class="line">    declare email varchar(50);</span><br><span class="line">    declare profile_photo_number varchar(50);</span><br><span class="line">    declare tabl varchar(32);</span><br><span class="line">    declare myvar text;</span><br><span class="line">    //语法1:该语句已经属于函数部分,所以变量声明需要在这之前,否则报错</span><br><span class="line">    DECLARE cur CURSOR FOR SELECT * FROM et_user_profile;</span><br><span class="line">    //语法2:set语句给变量赋值</span><br><span class="line">    set i = 0;</span><br><span class="line">    //语法3:while循环语句</span><br><span class="line">    while i &lt; 100 do</span><br><span class="line">        //语法4:此处CONCAT拼接字符串,给分表添加后缀</span><br><span class="line">        SET tmp = CONCAT(&apos;et_user_profile_&apos;,i);</span><br><span class="line">        //语法5:由于mysql存储过程中的sql语句不支持动态变量,所以只能先拼接出最终字符串,再将字符串转换为执行语句执行</span><br><span class="line">        //语法6:set @语句可以免于提前声明变量,相当于声明+赋值语句</span><br><span class="line">        SET @STMT :=CONCAT(&apos;CREATE TABLE IF NOT EXISTS &apos;,tmp,&apos; (</span><br><span class="line">            `id` INT UNSIGNED PRIMARY KEY COMMENT &quot;id follow et_user.id&quot;,</span><br><span class="line">            `nickname` VARCHAR(32) NOT NULL COMMENT &quot;nickname&quot;,</span><br><span class="line">            `phone` VARCHAR(13) NOT NULL COMMENT &quot;phone&quot;,</span><br><span class="line">            `addr` VARCHAR(100) NOT NULL COMMENT &quot;address&quot;,</span><br><span class="line">            `email` VARCHAR(50) NOT NULL COMMENT &quot;email&quot;,</span><br><span class="line">            `profile_photo_number` VARCHAR(50) NOT NULL COMMENT &quot;profile_photo_number&quot;</span><br><span class="line">        );&apos;);</span><br><span class="line">        PREPARE STMT FROM @STMT;</span><br><span class="line">        EXECUTE STMT;</span><br><span class="line">        set i = i +1;</span><br><span class="line">    end while;</span><br><span class="line">    //语法7:打开之前声明的游标</span><br><span class="line">    OPEN cur;</span><br><span class="line">        //语法8:设置循环点</span><br><span class="line">        myloop: LOOP</span><br><span class="line">            //语法9:从游标中提取数据(一次一行,可理解为迭代)</span><br><span class="line">            FETCH cur INTO userId,nickname,phone,addr,email,profile_photo_number;</span><br><span class="line">            //语法10:if语句</span><br><span class="line">            IF done=1 THEN</span><br><span class="line">                //语法11:离开循环点</span><br><span class="line">                LEAVE myloop;</span><br><span class="line">            END IF;</span><br><span class="line">            set tabl = CONCAT(&apos;et_user_profile_&apos;,floor(userId%100));</span><br><span class="line">            SET @STMT2 := CONCAT(&apos;insert into &apos;,tabl,&apos; values(&apos;,userId,&apos;,&apos;,&apos;&quot;&quot;&apos;,&apos;,&apos;,&apos;&quot;&quot;&apos;,&apos;,&apos;,&apos;&quot;&quot;&apos;,&apos;,&apos;,&apos;&quot;&quot;&apos;,&apos;,&apos;,&apos;&quot;&quot;&apos;,&apos;);&apos;);</span><br><span class="line">            PREPARE STMT2 FROM @STMT2;</span><br><span class="line">            EXECUTE STMT2;</span><br><span class="line">        END LOOP myloop;</span><br><span class="line">    CLOSE cur;</span><br><span class="line">//语法12:存储过程结束</span><br><span class="line">END //</span><br><span class="line">//语法13:将结束符改回</span><br><span class="line">DELIMITER ;</span><br><span class="line">//语法14:调用刚才创建的存储过程,由于存储过程直接存于mysql中,故可以后重复使用,不必立刻调用</span><br><span class="line">call wk();</span><br></pre></td></tr></table></figure>
       
     </div>
 
@@ -479,7 +478,7 @@
   <link rel="stylesheet" type="text/css" href="http://jslibs.wuxubj.cn/sweetalert_mini/sweetalert.mini.css">
 
   <p><span>本文作者:</span> Lemon Sour</p>  
-  <p><span>本文链接:</span><a href="/2020/08/04/mysql存储过程/" title="mysql存储过程">https://lemonsour.me/2020/08/04/mysql存储过程/</a></p>
+  <p><span>本文链接:</span><a href="/2019/07/30/go_mac_http_fd/" title="TCP[IP]PORT->[IP]PORT (CLOSED)/(ESTABLISHED)">https://lemonsour.me/2019/07/30/go_mac_http_fd/</a></p>
   <p><span>许可协议:</span>本站博文均采用 <a href="http://creativecommons.org/licenses/by-nc-sa/3.0/cn/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0 CN</a> 许可协议，转载请注明出处及原文作者并置顶！</p>  
 </div>
 
@@ -507,9 +506,9 @@
         
         <div class="post-tags">
           
-            <a href="/tags/mysql/" rel="tag"># mysql</a>
+            <a href="/tags/mac/" rel="tag"># mac</a>
           
-            <a href="/tags/存储过程/" rel="tag"># 存储过程</a>
+            <a href="/tags/go/" rel="tag"># go</a>
           
         </div>
       
@@ -522,8 +521,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/11/30/mysql事务/" rel="next" title="mysql事务">
-                <i class="fa fa-chevron-left"></i> mysql事务
+              <a href="/2019/07/05/前端添加数据后动态刷新时获取获取后端数据是旧的/" rel="next" title="前端添加数据后动态刷新时获取获取后端数据是旧的">
+                <i class="fa fa-chevron-left"></i> 前端添加数据后动态刷新时获取获取后端数据是旧的
               </a>
             
           </div>
@@ -532,8 +531,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2020/08/04/go 语法/" rel="prev" title="go语法">
-                go语法 <i class="fa fa-chevron-right"></i>
+              <a href="/2019/08/14/Tomcat源码笔记/" rel="prev" title="Tomcat源码笔记">
+                Tomcat源码笔记 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
