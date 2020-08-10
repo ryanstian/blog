@@ -92,18 +92,18 @@
 
 
 
-  <meta name="description" content="####什么是锁?&amp;emsp;锁是一个多方可以共同访问的元素,各个访问者通过对该元素的信息的判断,按照一定事先约定的行为进行协调的功能。这个元素可以是任何的东西,根据事先约定的行为的不同也会随之变化。 &amp;emsp;例如,一个队列,如果来访者发现自己的id在该队列的头部,那么就认为自己拥有了锁,可以执行某些逻辑,这时候这个队列就相当于一个锁。锁也可以是一个boolean类型的对象,当他为true或者">
+  <meta name="description" content="什么是锁?&amp;emsp;锁是一个多方可以共同访问的元素,各个访问者通过对该元素的信息的判断,按照一定事先约定的行为进行协调的功能。这个元素可以是任何的东西,根据事先约定的行为的不同也会随之变化。 &amp;emsp;例如,一个队列,如果来访者发现自己的id在该队列的头部,那么就认为自己拥有了锁,可以执行某些逻辑,这时候这个队列就相当于一个锁。锁也可以是一个boolean类型的对象,当他为true或者fals">
 <meta name="keywords" content="distributed-lock">
 <meta property="og:type" content="article">
 <meta property="og:title" content="分布式锁">
 <meta property="og:url" content="https://qq616023844.github.io/2019/08/28/分布式锁/index.html">
 <meta property="og:site_name" content="柠檬不酸的博客">
-<meta property="og:description" content="####什么是锁?&amp;emsp;锁是一个多方可以共同访问的元素,各个访问者通过对该元素的信息的判断,按照一定事先约定的行为进行协调的功能。这个元素可以是任何的东西,根据事先约定的行为的不同也会随之变化。 &amp;emsp;例如,一个队列,如果来访者发现自己的id在该队列的头部,那么就认为自己拥有了锁,可以执行某些逻辑,这时候这个队列就相当于一个锁。锁也可以是一个boolean类型的对象,当他为true或者">
+<meta property="og:description" content="什么是锁?&amp;emsp;锁是一个多方可以共同访问的元素,各个访问者通过对该元素的信息的判断,按照一定事先约定的行为进行协调的功能。这个元素可以是任何的东西,根据事先约定的行为的不同也会随之变化。 &amp;emsp;例如,一个队列,如果来访者发现自己的id在该队列的头部,那么就认为自己拥有了锁,可以执行某些逻辑,这时候这个队列就相当于一个锁。锁也可以是一个boolean类型的对象,当他为true或者fals">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2020-07-29T16:24:04.757Z">
+<meta property="og:updated_time" content="2020-08-10T15:55:51.562Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="分布式锁">
-<meta name="twitter:description" content="####什么是锁?&amp;emsp;锁是一个多方可以共同访问的元素,各个访问者通过对该元素的信息的判断,按照一定事先约定的行为进行协调的功能。这个元素可以是任何的东西,根据事先约定的行为的不同也会随之变化。 &amp;emsp;例如,一个队列,如果来访者发现自己的id在该队列的头部,那么就认为自己拥有了锁,可以执行某些逻辑,这时候这个队列就相当于一个锁。锁也可以是一个boolean类型的对象,当他为true或者">
+<meta name="twitter:description" content="什么是锁?&amp;emsp;锁是一个多方可以共同访问的元素,各个访问者通过对该元素的信息的判断,按照一定事先约定的行为进行协调的功能。这个元素可以是任何的东西,根据事先约定的行为的不同也会随之变化。 &amp;emsp;例如,一个队列,如果来访者发现自己的id在该队列的头部,那么就认为自己拥有了锁,可以执行某些逻辑,这时候这个队列就相当于一个锁。锁也可以是一个boolean类型的对象,当他为true或者fals">
 
 
 
@@ -404,7 +404,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2020-07-30 00:24:04" itemprop="dateModified" datetime="2020-07-30T00:24:04+08:00">2020-07-30</time>
+                <time title="Modified: 2020-08-10 23:55:51" itemprop="dateModified" datetime="2020-08-10T23:55:51+08:00">2020-08-10</time>
               
             
           </span>
@@ -456,9 +456,9 @@
       
 
       
-        <p>####什么是锁?<br>&emsp;锁是一个多方可以共同访问的元素,各个访问者通过对该元素的信息的判断,按照一定事先约定的行为进行协调的功能。这个元素可以是任何的东西,根据事先约定的行为的不同也会随之变化。</p>
+        <h4 id="什么是锁"><a href="#什么是锁" class="headerlink" title="什么是锁?"></a>什么是锁?</h4><p>&emsp;锁是一个多方可以共同访问的元素,各个访问者通过对该元素的信息的判断,按照一定事先约定的行为进行协调的功能。这个元素可以是任何的东西,根据事先约定的行为的不同也会随之变化。</p>
 <p>&emsp;例如,一个队列,如果来访者发现自己的id在该队列的头部,那么就认为自己拥有了锁,可以执行某些逻辑,这时候这个队列就相当于一个锁。锁也可以是一个boolean类型的对象,当他为true或者false时,其他线程可以来竞争使得boolean状态改变,从而认为自己获取了锁(当然需要考虑使用场景)。锁也可以是一个信号量,也可以是一个节点,例如zookeeper中,一个节点存在与否就意味着是否可以竞争锁(当然行为是我们自己来定的,zookeeper和redis仅仅是提供了一个放置锁的地方)。当然,最重要的一点就是原子性,我们在加锁和解锁的时候,要充分考虑使用场景来决定对锁的判断策略</p>
-<p>####redis锁的实现<br>&emsp;对于redis分布式锁来说,常用的莫过于SETNX,SET,DEL这几个函数了<br>tip:现在SET函数可以传递参数,例如隐式的过期时间(由redis负责,无需手工维护),在已存在值时的反应,对于添加成功或者失败的返回值这几个元素,所以SET已经完全可以取代SETNX,甚至说比SETNX表现更好。因为SETNX在加锁时还要额外添加过期时间字段,需要由客户端根据这个字段来判断锁是否过期,这样一牵扯到非原子性的问题,就会十分复杂</p>
+<h4 id="redis锁的实现"><a href="#redis锁的实现" class="headerlink" title="redis锁的实现"></a>redis锁的实现</h4><p>&emsp;对于redis分布式锁来说,常用的莫过于SETNX,SET,DEL这几个函数了<br>tip:现在SET函数可以传递参数,例如隐式的过期时间(由redis负责,无需手工维护),在已存在值时的反应,对于添加成功或者失败的返回值这几个元素,所以SET已经完全可以取代SETNX,甚至说比SETNX表现更好。因为SETNX在加锁时还要额外添加过期时间字段,需要由客户端根据这个字段来判断锁是否过期,这样一牵扯到非原子性的问题,就会十分复杂</p>
 <p>&emsp;最简单的加锁解锁代码如下,由于在解锁时,伴随着锁过期的可能,我们需要先判断锁是否是本客户端加的,再去解锁,否则A加锁,A过期,B加锁,A完成任务解锁,就把B加的锁解掉了。解锁操作我们可以想象,他是先查询再操作,不是原子性,所以我们需要封装LUA脚本来使这两条语句具备原子性<br>具体SET参数意义可以自行搜索</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* Non-blocking try to hold a lock</span></span><br><span class="line"><span class="comment">* if true,the work must be finished within millisecond,else the distributed-lock is meaningless</span></span><br><span class="line"><span class="comment">* <span class="doctag">@param</span> key the key of lock</span></span><br><span class="line"><span class="comment">* <span class="doctag">@param</span> value a unique String,it will be used When release</span></span><br><span class="line"><span class="comment">* <span class="doctag">@param</span> expiration it will expirate after now+expiration</span></span><br><span class="line"><span class="comment">* <span class="doctag">@return</span> true if access,else false</span></span><br><span class="line"><span class="comment">* */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">tryLock</span><span class="params">(String key,String value,<span class="keyword">long</span> expiration)</span></span>&#123;</span><br><span class="line">    <span class="comment">//try to create a record if not exist</span></span><br><span class="line">    Object res = redisTemplate.execute((RedisCallback) redisConnection -&gt; &#123;</span><br><span class="line">        JedisCommands connect = (JedisCommands) redisConnection.getNativeConnection();</span><br><span class="line">        <span class="comment">//SETNX can be replace by SET from Redis 2.6.12 version</span></span><br><span class="line">        <span class="keyword">return</span> connect.set(key,value,<span class="string">"NX"</span>,<span class="string">"PX"</span>,expiration);</span><br><span class="line">    &#125;);</span><br><span class="line">    <span class="keyword">return</span> res!=<span class="keyword">null</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* Non-blocking release a lock,if lock has expiration,nothing happen</span></span><br><span class="line"><span class="comment">* <span class="doctag">@param</span> key the key of lock</span></span><br><span class="line"><span class="comment">* <span class="doctag">@param</span> value the String you set When try to hold a lock</span></span><br><span class="line"><span class="comment">* */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">relaseLock</span><span class="params">(String key,String value)</span></span>&#123;</span><br><span class="line">    redisTemplate.execute((RedisCallback) redisConnection -&gt; &#123;</span><br><span class="line">        Object obj = redisConnection.getNativeConnection();</span><br><span class="line">        System.out.println(obj.getClass().getName());</span><br><span class="line">        <span class="keyword">if</span> (obj <span class="keyword">instanceof</span> JedisCluster) &#123;</span><br><span class="line">            JedisCluster connection = (JedisCluster) obj;</span><br><span class="line">            <span class="keyword">return</span> connection.eval(LUA,Collections.singletonList(key),Collections.singletonList(value));</span><br><span class="line">        &#125;<span class="keyword">else</span> <span class="keyword">if</span> (obj <span class="keyword">instanceof</span> Jedis)&#123;</span><br><span class="line">            Jedis connection = (Jedis) obj;</span><br><span class="line">            <span class="keyword">return</span> connection.eval(LUA,Collections.singletonList(key),Collections.singletonList(value));</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;) ;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
@@ -585,8 +585,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
 
-      <div class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <div class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -601,7 +610,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">31</span>
+                    <span class="site-state-item-count">34</span>
                     <span class="site-state-item-name">posts</span>
                   </a>
                 </div>
@@ -650,7 +659,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">16</span>
+                      
+                    
+                    <span class="site-state-item-count">17</span>
                     <span class="site-state-item-name">categories</span>
                   </a>
                 </div>
@@ -709,7 +720,13 @@
                     
                       
                     
-                    <span class="site-state-item-count">21</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">24</span>
                     <span class="site-state-item-name">tags</span>
                   </a>
                 </div>
@@ -762,6 +779,23 @@
         </div>
       </div>
 
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#什么是锁"><span class="nav-number">1.</span> <span class="nav-text">什么是锁?</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#redis锁的实现"><span class="nav-number">2.</span> <span class="nav-text">redis锁的实现</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
       
 
       

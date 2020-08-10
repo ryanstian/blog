@@ -92,18 +92,18 @@
 
 
 
-  <meta name="description" content="状况一:can’t assign requested addressgo用了mysql连接池,高并发压测时出现该报错分析:该报错是由于mac自身fd句柄打开数限制,并且mysql连接池并非一开始就创建出连接,而是随着请求进来才创建连接,大量并发同时进入,占满了mac的fd,导致mysql连接池无法使用fd,无法分配新的连接结论:修改mac参数限制/上服务器测临时修改方式,命令行直接输入永久修改方">
+  <meta name="description" content="状况一:can’t assign requested addressgo用了mysql连接池,高并发压测时出现该报错 分析:该报错是由于mac自身fd句柄打开数限制,并且mysql连接池并非一开始就创建出连接,而是随着请求进来才创建连接,大量并发同时进入,占满了mac的fd,导致mysql连接池无法使用fd,无法分配新的连接 结论:修改mac参数限制/上服务器测临时修改方式,命令行直接输入永久修">
 <meta name="keywords" content="go,mac">
 <meta property="og:type" content="article">
 <meta property="og:title" content="can&#39;t assign requested address,i&#x2F;o timeout,too many open files in system">
 <meta property="og:url" content="https://qq616023844.github.io/2020/07/30/can't assign requested address/index.html">
 <meta property="og:site_name" content="柠檬不酸的博客">
-<meta property="og:description" content="状况一:can’t assign requested addressgo用了mysql连接池,高并发压测时出现该报错分析:该报错是由于mac自身fd句柄打开数限制,并且mysql连接池并非一开始就创建出连接,而是随着请求进来才创建连接,大量并发同时进入,占满了mac的fd,导致mysql连接池无法使用fd,无法分配新的连接结论:修改mac参数限制/上服务器测临时修改方式,命令行直接输入永久修改方">
+<meta property="og:description" content="状况一:can’t assign requested addressgo用了mysql连接池,高并发压测时出现该报错 分析:该报错是由于mac自身fd句柄打开数限制,并且mysql连接池并非一开始就创建出连接,而是随着请求进来才创建连接,大量并发同时进入,占满了mac的fd,导致mysql连接池无法使用fd,无法分配新的连接 结论:修改mac参数限制/上服务器测临时修改方式,命令行直接输入永久修">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2020-08-08T15:57:57.031Z">
+<meta property="og:updated_time" content="2020-08-10T15:46:06.719Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="can&#39;t assign requested address,i&#x2F;o timeout,too many open files in system">
-<meta name="twitter:description" content="状况一:can’t assign requested addressgo用了mysql连接池,高并发压测时出现该报错分析:该报错是由于mac自身fd句柄打开数限制,并且mysql连接池并非一开始就创建出连接,而是随着请求进来才创建连接,大量并发同时进入,占满了mac的fd,导致mysql连接池无法使用fd,无法分配新的连接结论:修改mac参数限制/上服务器测临时修改方式,命令行直接输入永久修改方">
+<meta name="twitter:description" content="状况一:can’t assign requested addressgo用了mysql连接池,高并发压测时出现该报错 分析:该报错是由于mac自身fd句柄打开数限制,并且mysql连接池并非一开始就创建出连接,而是随着请求进来才创建连接,大量并发同时进入,占满了mac的fd,导致mysql连接池无法使用fd,无法分配新的连接 结论:修改mac参数限制/上服务器测临时修改方式,命令行直接输入永久修">
 
 
 
@@ -404,7 +404,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2020-08-08 23:57:57" itemprop="dateModified" datetime="2020-08-08T23:57:57+08:00">2020-08-08</time>
+                <time title="Modified: 2020-08-10 23:46:06" itemprop="dateModified" datetime="2020-08-10T23:46:06+08:00">2020-08-10</time>
               
             
           </span>
@@ -457,9 +457,16 @@
 
       
         <a id="more"></a>
-<p>状况一:can’t assign requested address<br>go用了mysql连接池,高并发压测时出现该报错<br>分析:该报错是由于mac自身fd句柄打开数限制,并且mysql连接池并非一开始就创建出连接,而是随着请求进来才创建连接,大量并发同时进入,占满了mac的fd,导致mysql连接池无法使用fd,无法分配新的连接<br>结论:修改mac参数限制/上服务器测<br>临时修改方式,命令行直接输入<br>永久修改方式,写入/etc/sysctl.conf后重启<br>sysctl kern.maxfiles 查看系统所能打开的最大文件数（文件描述符）(全局)<br>sudo sysctl -w kern.maxfiles 修改<br>sysctl kern.maxfilesperproc 查看系统所能打开的最大文件数（文件描述符）(一个进程)<br>sudo sysctl -w kern.maxfilesperproc 修改<br>ulimit －n 查看shell能打开的最大文件数<br>ulimit -n 123123 修改(123123为任意值,但不得大于kern.maxfilesperproc)<br>sysctl net.inet.ip.portrange 查看端口范围<br>sysctl -w net.inet.ip.portrange.first=32768 修改</p>
-<p>状况二:dial tcp 127.0.0.1:3306:i/o timeout<br>分析:待补充<br>结论:解决方式同状况一</p>
-<p>状况三:too many open files in system<br>分析:原因同状况一<br>结论:解决方式同状况一</p>
+<h4 id="状况一-can’t-assign-requested-address"><a href="#状况一-can’t-assign-requested-address" class="headerlink" title="状况一:can’t assign requested address"></a>状况一:can’t assign requested address</h4><p>go用了mysql连接池,高并发压测时出现该报错</p>
+<p>分析:该报错是由于mac自身fd句柄打开数限制,并且mysql连接池并非一开始就创建出连接,而是随着请求进来才创建连接,大量并发同时进入,占满了mac的fd,导致mysql连接池无法使用fd,无法分配新的连接</p>
+<p>结论:修改mac参数限制/上服务器测<br>临时修改方式,命令行直接输入<br>永久修改方式,写入/etc/sysctl.conf后重启</p>
+<p>参数详情(懂的话建议按需修改,不需要全改):</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">sysctl kern.maxfiles 查看系统所能打开的最大文件数（文件描述符）(全局)</span><br><span class="line">sudo sysctl -w kern.maxfiles 修改</span><br><span class="line">sysctl kern.maxfilesperproc 查看系统所能打开的最大文件数（文件描述符）(一个进程)</span><br><span class="line">sudo sysctl -w kern.maxfilesperproc 修改</span><br><span class="line">ulimit －n 查看shell能打开的最大文件数</span><br><span class="line">ulimit -n 123123 修改(123123为任意值,但不得大于kern.maxfilesperproc)</span><br><span class="line">sysctl net.inet.ip.portrange 查看端口范围</span><br><span class="line">sysctl -w net.inet.ip.portrange.first=32768 修改</span><br></pre></td></tr></table></figure>
+
+<h4 id="状况二-dial-tcp-127-0-0-1-3306-i-o-timeout"><a href="#状况二-dial-tcp-127-0-0-1-3306-i-o-timeout" class="headerlink" title="状况二:dial tcp 127.0.0.1:3306:i/o timeout"></a>状况二:dial tcp 127.0.0.1:3306:i/o timeout</h4><p>分析:待补充</p>
+<p>结论:解决方式同状况一</p>
+<h4 id="状况三-too-many-open-files-in-system"><a href="#状况三-too-many-open-files-in-system" class="headerlink" title="状况三:too many open files in system"></a>状况三:too many open files in system</h4><p>分析:原因同状况一</p>
+<p>结论:解决方式同状况一</p>
 
       
     </div>
@@ -578,8 +585,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
 
-      <div class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <div class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -594,7 +610,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">31</span>
+                    <span class="site-state-item-count">34</span>
                     <span class="site-state-item-name">posts</span>
                   </a>
                 </div>
@@ -643,7 +659,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">16</span>
+                      
+                    
+                    <span class="site-state-item-count">17</span>
                     <span class="site-state-item-name">categories</span>
                   </a>
                 </div>
@@ -702,7 +720,13 @@
                     
                       
                     
-                    <span class="site-state-item-count">21</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">24</span>
                     <span class="site-state-item-name">tags</span>
                   </a>
                 </div>
@@ -755,6 +779,23 @@
         </div>
       </div>
 
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#状况一-can’t-assign-requested-address"><span class="nav-number">1.</span> <span class="nav-text">状况一:can’t assign requested address</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#状况二-dial-tcp-127-0-0-1-3306-i-o-timeout"><span class="nav-number">2.</span> <span class="nav-text">状况二:dial tcp 127.0.0.1:3306:i/o timeout</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#状况三-too-many-open-files-in-system"><span class="nav-number">3.</span> <span class="nav-text">状况三:too many open files in system</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
       
 
       

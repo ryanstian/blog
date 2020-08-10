@@ -340,6 +340,579 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://qq616023844.github.io/2019/10/05/ThreadPoolExecutor源码分析/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Lemon Sour">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="柠檬不酸的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2019/10/05/ThreadPoolExecutor源码分析/" class="post-title-link" itemprop="url">ThreadPoolExecutor源码分析</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2019-10-05 18:11:00" itemprop="dateCreated datePublished" datetime="2019-10-05T18:11:00+08:00">2019-10-05</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2020-08-10 23:55:51" itemprop="dateModified" datetime="2020-08-10T23:55:51+08:00">2020-08-10</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/源码/" itemprop="url" rel="index"><span itemprop="name">源码</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>看到网上讲线程池源码的文章一堆大坑,只能自己扒源码扒篇文章出来了,坐标jdk8</p>
+<p>最重要的一个坑放在前面</p>
+<p>假如你设置的核心线程数=2,最大线程数=4。很多人都讲向线程池添加任务时会先扩充到最大线程数,多出来的再向队列添加,我只想说,<font color="red">根据源码分析并不是这样</font></p>
+<p>看如下代码,在添加任务时,从源码或从注释中明确表示分了三步</p>
+<p>1.如果现存线程数小于核心线程数,则创建线程,添加的任务直接在该线程运行</p>
+<p>2.如果核心线程数满了,则add到队列中</p>
+<p>3.如果队列满了,则尝试扩充线程,任务在新创建的线程中运行</p>
+<p>那我们结合之前提到的错误方式来看,如果这一步理解错了会发生什么。如果我们采用的是无界队列,那会直接导致我们的任务被无限制的添加到队列中而不会主动去扩充线程数,如果核心线程消费速度小于生产速度,会直接导致OOM,这点我们务必要确认清楚</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> c = ctl.get();</span><br><span class="line"><span class="keyword">if</span> (workerCountOf(c) &lt; corePoolSize) &#123;</span><br><span class="line">    <span class="keyword">if</span> (addWorker(command, <span class="keyword">true</span>))</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    c = ctl.get();</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span> (isRunning(c) &amp;&amp; workQueue.offer(command)) &#123;</span><br><span class="line">    <span class="keyword">int</span> recheck = ctl.get();</span><br><span class="line">    <span class="keyword">if</span> (! isRunning(recheck) &amp;&amp; remove(command))</span><br><span class="line">        reject(command);</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (workerCountOf(recheck) == <span class="number">0</span>)</span><br><span class="line">        addWorker(<span class="keyword">null</span>, <span class="keyword">false</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">else</span> <span class="keyword">if</span> (!addWorker(command, <span class="keyword">false</span>))</span><br><span class="line">    reject(command);</span><br></pre></td></tr></table></figure>
+
+<p>强调完一个巨坑以后,我们来看一下线程池源码</p>
+<p>关于线程池源码的几个特点:</p>
+<p>1.之前提到的三步添加任务的坑</p>
+<p>2.为了方便读取,采用了位运算将线程池状态和工作线程数整合到了一个AtomicInteger中,高位代表状态,低位代表工作现场数</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//这是整合了线程池状态和工作线程数的AtomicInteger</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> AtomicInteger ctl = <span class="keyword">new</span> AtomicInteger(ctlOf(RUNNING, <span class="number">0</span>));</span><br><span class="line"><span class="comment">//这是解析ctl线程池状态和工作线程数的几个方法</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">runStateOf</span><span class="params">(<span class="keyword">int</span> c)</span>     </span>&#123; <span class="keyword">return</span> c &amp; ~CAPACITY; &#125;</span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">workerCountOf</span><span class="params">(<span class="keyword">int</span> c)</span>  </span>&#123; <span class="keyword">return</span> c &amp; CAPACITY; &#125;</span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">ctlOf</span><span class="params">(<span class="keyword">int</span> rs, <span class="keyword">int</span> wc)</span> </span>&#123; <span class="keyword">return</span> rs | wc; &#125;</span><br></pre></td></tr></table></figure>
+
+<p>3.执行任务的行为:我们可以通过runWorker方法(该方法被Worker中的run调用,一个Worker即可以当作一个封装好的工作线程)看到,该方法中有一个while循环调用,条件分为两种情况,如果是该线程运行的首个任务,会直接接收任务运行(该任务被封装在Worker中),如果是后续任务,则会从队列中取得任务进行(在getTask方法中会对我们设置的线程超时时间来进行判断,从而起到当非核心线程超时时,返回false使其跳出while循环,从而终止该线程)</p>
+<p>4.核心线程和非核心线程其实并无区别,AtomicInteger大家都知道,可以做到原子性操作,当工作线程数大于核心线程数且超时时,会同时请求减少工作线程数,竞争到的则作为非核心线程而关闭,没有竞争到的作为核心线程继续运行。可见,两种线程仅仅是称呼上的不同</p>
+<p>5.无处不在的双重检查,即时用了双重检查,但是由于两行代码之间并不是原子性的,我们无法保证双重检查一定可以避免并发操作产生的时间间隙,但确实可以避免一些并发造成的间隙。但是既然线程池是如此操作的,那么很大概率上可能编程人员对此进行过测试,认为双重检查有助于提高效率。另外双重检查也有预防一些因时间间隙产生的BUG的作用,下文会讲到</p>
+<p>6.类似beforeExecute这种方法,里面没有做什么事情,这是留给子类来实现的钩子函数</p>
+<p>讲完了特点这里列出几个最重要的函数来说一下,其他的自己看就可以了</p>
+<p>addWorker函数主要分为两个部分,第一部分是增加工作线程计数,第二部分是创建工作线程,详细可以看代码块中我的注释</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">boolean</span> <span class="title">addWorker</span><span class="params">(Runnable firstTask, <span class="keyword">boolean</span> core)</span> </span>&#123;</span><br><span class="line">    retry:</span><br><span class="line">    <span class="comment">//for循环内的这部分是增加工作线程计数</span></span><br><span class="line">    <span class="keyword">for</span> (;;) &#123;</span><br><span class="line">        <span class="keyword">int</span> c = ctl.get();</span><br><span class="line">        <span class="keyword">int</span> rs = runStateOf(c);</span><br><span class="line">        <span class="comment">/*</span></span><br><span class="line"><span class="comment">        这里还是双重检测的作用,即时在调用addWorker之前已经检查过一遍了,比较有趣的是if中的逻辑判断</span></span><br><span class="line"><span class="comment">        有点绕这里来解释下,意思为:如果线程池已经SHUTDOWN了,那么它将不再接受新的任务开启工作线程</span></span><br><span class="line"><span class="comment">        (这里我们之前提到过,如果工作线程小于核心线程时,添加的任务会直接在新创建的线程执行)</span></span><br><span class="line"><span class="comment">        但是有一种情况除外,那就是在SHUTDOWN状态下,firstTask等于null且队列中仍有任务(从文章一开始的三步</span></span><br><span class="line"><span class="comment">        添加任务中可以看到,如果第一步判断时工作线程大于等于核心线程数,但是在判断结束之后工作线程全部</span></span><br><span class="line"><span class="comment">        结束了(如果核心线程数设置为0或者线程池被结束了(当线程池被结束时,已经添加进来的任务不会被结束而是</span></span><br><span class="line"><span class="comment">        等待其执行完毕)),那么如果后续没有任务再添加,我们现在队列中的任务将永远不会被执行</span></span><br><span class="line"><span class="comment">        所以在三步添加任务的第二步中的双重检查,有防止这个问题发生的作用,他通过给addWorker传递一个值</span></span><br><span class="line"><span class="comment">        为null的firstTask,促使其创建出一个工作线程继续完成队列中的任务)</span></span><br><span class="line"><span class="comment">        */</span></span><br><span class="line">        <span class="keyword">if</span> (rs &gt;= SHUTDOWN &amp;&amp;</span><br><span class="line">            ! (rs == SHUTDOWN &amp;&amp;</span><br><span class="line">                firstTask == <span class="keyword">null</span> &amp;&amp;</span><br><span class="line">                ! workQueue.isEmpty()))</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (;;) &#123;</span><br><span class="line">            <span class="keyword">int</span> wc = workerCountOf(c);</span><br><span class="line">            <span class="keyword">if</span> (wc &gt;= CAPACITY ||</span><br><span class="line">                wc &gt;= (core ? corePoolSize : maximumPoolSize))</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">            <span class="keyword">if</span> (compareAndIncrementWorkerCount(c))</span><br><span class="line">                <span class="keyword">break</span> retry;</span><br><span class="line">            c = ctl.get();  <span class="comment">// Re-read ctl</span></span><br><span class="line">            <span class="keyword">if</span> (runStateOf(c) != rs)</span><br><span class="line">                <span class="keyword">continue</span> retry;</span><br><span class="line">            <span class="comment">// else CAS failed due to workerCount change; retry inner loop</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//接下来的为创建工作线程</span></span><br><span class="line">    <span class="keyword">boolean</span> workerStarted = <span class="keyword">false</span>;</span><br><span class="line">    <span class="keyword">boolean</span> workerAdded = <span class="keyword">false</span>;</span><br><span class="line">    Worker w = <span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        w = <span class="keyword">new</span> Worker(firstTask);</span><br><span class="line">        <span class="keyword">final</span> Thread t = w.thread;</span><br><span class="line">        <span class="keyword">if</span> (t != <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="comment">//这里采用锁,个人认为是为了防止设置largestPoolSize时出现并发问题</span></span><br><span class="line">            <span class="keyword">final</span> ReentrantLock mainLock = <span class="keyword">this</span>.mainLock;</span><br><span class="line">            mainLock.lock();</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                <span class="comment">// Recheck while holding lock.</span></span><br><span class="line">                <span class="comment">// Back out on ThreadFactory failure or if</span></span><br><span class="line">                <span class="comment">// shut down before lock acquired.</span></span><br><span class="line">                <span class="keyword">int</span> rs = runStateOf(ctl.get());</span><br><span class="line"></span><br><span class="line">                <span class="keyword">if</span> (rs &lt; SHUTDOWN ||</span><br><span class="line">                    (rs == SHUTDOWN &amp;&amp; firstTask == <span class="keyword">null</span>)) &#123;</span><br><span class="line">                    <span class="keyword">if</span> (t.isAlive()) <span class="comment">// precheck that t is startable</span></span><br><span class="line">                        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalThreadStateException();</span><br><span class="line">                    workers.add(w);</span><br><span class="line">                    <span class="keyword">int</span> s = workers.size();</span><br><span class="line">                    <span class="keyword">if</span> (s &gt; largestPoolSize)</span><br><span class="line">                        largestPoolSize = s;</span><br><span class="line">                    workerAdded = <span class="keyword">true</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">                mainLock.unlock();</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (workerAdded) &#123;</span><br><span class="line">                t.start();</span><br><span class="line">                workerStarted = <span class="keyword">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (! workerStarted)</span><br><span class="line">            <span class="comment">//如果创建失败,会减少工作线程计数</span></span><br><span class="line">            addWorkerFailed(w);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> workerStarted;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>运行任务的方法,这个方法有个特点是,如果线程池结束,他仅仅会interrupt标识一下(这里有必要说明,interrupt并不是强制终止线程,而是做标记,具体线程的反应依赖于其代码实现),而不会做出任何反应,其终止仅仅依赖于getTask()的返回值</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">final</span> <span class="keyword">void</span> <span class="title">runWorker</span><span class="params">(Worker w)</span> </span>&#123;</span><br><span class="line">    Thread wt = Thread.currentThread();</span><br><span class="line">    Runnable task = w.firstTask;</span><br><span class="line">    w.firstTask = <span class="keyword">null</span>;</span><br><span class="line">    w.unlock(); <span class="comment">// allow interrupts</span></span><br><span class="line">    <span class="keyword">boolean</span> completedAbruptly = <span class="keyword">true</span>;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="comment">//根据上文,如果传入的任务为null,或者如果第一个任务执行完了,则会去队列中获取任务</span></span><br><span class="line">        <span class="keyword">while</span> (task != <span class="keyword">null</span> || (task = getTask()) != <span class="keyword">null</span>) &#123;</span><br><span class="line">            w.lock();</span><br><span class="line">            <span class="comment">// If pool is stopping, ensure thread is interrupted;</span></span><br><span class="line">            <span class="comment">// if not, ensure thread is not interrupted.  This</span></span><br><span class="line">            <span class="comment">// requires a recheck in second case to deal with</span></span><br><span class="line">            <span class="comment">// shutdownNow race while clearing interrupt</span></span><br><span class="line">            <span class="keyword">if</span> ((runStateAtLeast(ctl.get(), STOP) ||</span><br><span class="line">                    (Thread.interrupted() &amp;&amp;</span><br><span class="line">                    runStateAtLeast(ctl.get(), STOP))) &amp;&amp;</span><br><span class="line">                !wt.isInterrupted())</span><br><span class="line">                <span class="comment">//这里仅仅做标记,并无法真正的终止线程</span></span><br><span class="line">                wt.interrupt();</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                beforeExecute(wt, task);</span><br><span class="line">                Throwable thrown = <span class="keyword">null</span>;</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    <span class="comment">//真正执行用户定义的任务</span></span><br><span class="line">                    task.run();</span><br><span class="line">                &#125; <span class="keyword">catch</span> (RuntimeException x) &#123;</span><br><span class="line">                    <span class="comment">//抛出异常并不会造成终止,而是被本方法中外围的try捕获了,这一点可以参考FutureTask类中的操作,会将异常放置到一个对象中</span></span><br><span class="line">                    thrown = x; <span class="keyword">throw</span> x;</span><br><span class="line">                &#125; <span class="keyword">catch</span> (Error x) &#123;</span><br><span class="line">                    thrown = x; <span class="keyword">throw</span> x;</span><br><span class="line">                &#125; <span class="keyword">catch</span> (Throwable x) &#123;</span><br><span class="line">                    thrown = x; <span class="keyword">throw</span> <span class="keyword">new</span> Error(x);</span><br><span class="line">                &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">                    afterExecute(task, thrown);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">                task = <span class="keyword">null</span>;</span><br><span class="line">                w.completedTasks++;</span><br><span class="line">                w.unlock();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        completedAbruptly = <span class="keyword">false</span>;</span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">        processWorkerExit(w, completedAbruptly);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>getTask方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> Runnable <span class="title">getTask</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">boolean</span> timedOut = <span class="keyword">false</span>; <span class="comment">// Did the last poll() time out?</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (;;) &#123;</span><br><span class="line">        <span class="keyword">int</span> c = ctl.get();</span><br><span class="line">        <span class="keyword">int</span> rs = runStateOf(c);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Check if queue empty only if necessary.</span></span><br><span class="line">        <span class="keyword">if</span> (rs &gt;= SHUTDOWN &amp;&amp; (rs &gt;= STOP || workQueue.isEmpty())) &#123;</span><br><span class="line">            decrementWorkerCount();</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span> wc = workerCountOf(c);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Are workers subject to culling?</span></span><br><span class="line">        <span class="keyword">boolean</span> timed = allowCoreThreadTimeOut || wc &gt; corePoolSize;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> ((wc &gt; maximumPoolSize || (timed &amp;&amp; timedOut))</span><br><span class="line">            &amp;&amp; (wc &gt; <span class="number">1</span> || workQueue.isEmpty())) &#123;</span><br><span class="line">            <span class="keyword">if</span> (compareAndDecrementWorkerCount(c))</span><br><span class="line">            <span class="comment">/*</span></span><br><span class="line"><span class="comment">            此处就是之前提到的,CAS竞争从而停掉非核心线程,这里要强调一下,如果竞争失败,则会超时等待从</span></span><br><span class="line"><span class="comment">            队列中获取任务,如果超时,则进行下一轮竞争请求返回null从而停掉本线程,直到工作线程等于核心</span></span><br><span class="line"><span class="comment">            线程数才会一直阻塞等待从队列获取任务(前提是allowCoreThreadTimeOut==false,当然他的默认</span></span><br><span class="line"><span class="comment">            值就是false,除非你主动对其进行了改变)</span></span><br><span class="line"><span class="comment">            */</span></span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">            <span class="keyword">continue</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            Runnable r = timed ?</span><br><span class="line">                workQueue.poll(keepAliveTime, TimeUnit.NANOSECONDS) :</span><br><span class="line">                workQueue.take();</span><br><span class="line">            <span class="keyword">if</span> (r != <span class="keyword">null</span>)</span><br><span class="line">                <span class="keyword">return</span> r;</span><br><span class="line">            timedOut = <span class="keyword">true</span>;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (InterruptedException retry) &#123;</span><br><span class="line">            timedOut = <span class="keyword">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+          
+        
+      
+    </div>
+
+    
+
+    
+    <div>
+      
+    </div>
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://qq616023844.github.io/2019/10/05/如何使用Unsafe类方法/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Lemon Sour">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="柠檬不酸的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2019/10/05/如何使用Unsafe类方法/" class="post-title-link" itemprop="url">如何使用Unsafe类方法</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2019-10-05 18:11:00" itemprop="dateCreated datePublished" datetime="2019-10-05T18:11:00+08:00">2019-10-05</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2020-07-30 00:24:04" itemprop="dateModified" datetime="2020-07-30T00:24:04+08:00">2020-07-30</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java/" itemprop="url" rel="index"><span itemprop="name">java</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>首先Unsafe类是不建议被使用的,因为他面向底层,可能在每一代jdk版本中发生变化,除非你有把握在在每一次升级jdk时维护你的项目</p>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2019/10/05/如何使用Unsafe类方法/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    <div>
+      
+    </div>
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://qq616023844.github.io/2019/09/15/IDEA修改java版本号/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Lemon Sour">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="柠檬不酸的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2019/09/15/IDEA修改java版本号/" class="post-title-link" itemprop="url">IDEA修改java版本号</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2019-09-15 18:56:00" itemprop="dateCreated datePublished" datetime="2019-09-15T18:56:00+08:00">2019-09-15</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2020-07-30 00:24:04" itemprop="dateModified" datetime="2020-07-30T00:24:04+08:00">2020-07-30</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/IDEA/" itemprop="url" rel="index"><span itemprop="name">IDEA</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>总共有4处需要修改,直接上图(在后面),如果懒得每次改版本号,也可以利用maven插件</p>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2019/09/15/IDEA修改java版本号/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    <div>
+      
+    </div>
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://qq616023844.github.io/2019/09/15/隧道连接redis集群报错/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -402,7 +975,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2020-07-30 00:24:04" itemprop="dateModified" datetime="2020-07-30T00:24:04+08:00">2020-07-30</time>
+                <time title="Modified: 2020-08-10 23:55:51" itemprop="dateModified" datetime="2020-08-10T23:55:51+08:00">2020-08-10</time>
               
             
           </span>
@@ -455,7 +1028,7 @@
 
       
         
-          <p>####问题描述<br>&emsp;java springboot程序访问redis,由于redis集群分布于多个目标服务器上,且均有防火墙阻拦,平时调试都是通过tunnel建立隧道来访问。单个redis通过隧道访问成功,但是redis集群通过隧道访问失败。</p>
+          <h4 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h4><p>&emsp;java springboot程序访问redis,由于redis集群分布于多个目标服务器上,且均有防火墙阻拦,平时调试都是通过tunnel建立隧道来访问。单个redis通过隧道访问成功,但是redis集群通过隧道访问失败。</p>
           <!--noindex-->
           
             <div class="post-button text-center">
@@ -586,7 +1159,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2020-07-30 00:24:04" itemprop="dateModified" datetime="2020-07-30T00:24:04+08:00">2020-07-30</time>
+                <time title="Modified: 2020-08-10 23:55:51" itemprop="dateModified" datetime="2020-08-10T23:55:51+08:00">2020-08-10</time>
               
             
           </span>
@@ -959,7 +1532,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2020-07-30 00:24:04" itemprop="dateModified" datetime="2020-07-30T00:24:04+08:00">2020-07-30</time>
+                <time title="Modified: 2020-08-10 23:55:51" itemprop="dateModified" datetime="2020-08-10T23:55:51+08:00">2020-08-10</time>
               
             
           </span>
@@ -1013,9 +1586,9 @@
       
         
           
-            <p>####什么是锁?<br>&emsp;锁是一个多方可以共同访问的元素,各个访问者通过对该元素的信息的判断,按照一定事先约定的行为进行协调的功能。这个元素可以是任何的东西,根据事先约定的行为的不同也会随之变化。</p>
+            <h4 id="什么是锁"><a href="#什么是锁" class="headerlink" title="什么是锁?"></a>什么是锁?</h4><p>&emsp;锁是一个多方可以共同访问的元素,各个访问者通过对该元素的信息的判断,按照一定事先约定的行为进行协调的功能。这个元素可以是任何的东西,根据事先约定的行为的不同也会随之变化。</p>
 <p>&emsp;例如,一个队列,如果来访者发现自己的id在该队列的头部,那么就认为自己拥有了锁,可以执行某些逻辑,这时候这个队列就相当于一个锁。锁也可以是一个boolean类型的对象,当他为true或者false时,其他线程可以来竞争使得boolean状态改变,从而认为自己获取了锁(当然需要考虑使用场景)。锁也可以是一个信号量,也可以是一个节点,例如zookeeper中,一个节点存在与否就意味着是否可以竞争锁(当然行为是我们自己来定的,zookeeper和redis仅仅是提供了一个放置锁的地方)。当然,最重要的一点就是原子性,我们在加锁和解锁的时候,要充分考虑使用场景来决定对锁的判断策略</p>
-<p>####redis锁的实现<br>&emsp;对于redis分布式锁来说,常用的莫过于SETNX,SET,DEL这几个函数了<br>tip:现在SET函数可以传递参数,例如隐式的过期时间(由redis负责,无需手工维护),在已存在值时的反应,对于添加成功或者失败的返回值这几个元素,所以SET已经完全可以取代SETNX,甚至说比SETNX表现更好。因为SETNX在加锁时还要额外添加过期时间字段,需要由客户端根据这个字段来判断锁是否过期,这样一牵扯到非原子性的问题,就会十分复杂</p>
+<h4 id="redis锁的实现"><a href="#redis锁的实现" class="headerlink" title="redis锁的实现"></a>redis锁的实现</h4><p>&emsp;对于redis分布式锁来说,常用的莫过于SETNX,SET,DEL这几个函数了<br>tip:现在SET函数可以传递参数,例如隐式的过期时间(由redis负责,无需手工维护),在已存在值时的反应,对于添加成功或者失败的返回值这几个元素,所以SET已经完全可以取代SETNX,甚至说比SETNX表现更好。因为SETNX在加锁时还要额外添加过期时间字段,需要由客户端根据这个字段来判断锁是否过期,这样一牵扯到非原子性的问题,就会十分复杂</p>
 <p>&emsp;最简单的加锁解锁代码如下,由于在解锁时,伴随着锁过期的可能,我们需要先判断锁是否是本客户端加的,再去解锁,否则A加锁,A过期,B加锁,A完成任务解锁,就把B加的锁解掉了。解锁操作我们可以想象,他是先查询再操作,不是原子性,所以我们需要封装LUA脚本来使这两条语句具备原子性<br>具体SET参数意义可以自行搜索</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* Non-blocking try to hold a lock</span></span><br><span class="line"><span class="comment">* if true,the work must be finished within millisecond,else the distributed-lock is meaningless</span></span><br><span class="line"><span class="comment">* <span class="doctag">@param</span> key the key of lock</span></span><br><span class="line"><span class="comment">* <span class="doctag">@param</span> value a unique String,it will be used When release</span></span><br><span class="line"><span class="comment">* <span class="doctag">@param</span> expiration it will expirate after now+expiration</span></span><br><span class="line"><span class="comment">* <span class="doctag">@return</span> true if access,else false</span></span><br><span class="line"><span class="comment">* */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">tryLock</span><span class="params">(String key,String value,<span class="keyword">long</span> expiration)</span></span>&#123;</span><br><span class="line">    <span class="comment">//try to create a record if not exist</span></span><br><span class="line">    Object res = redisTemplate.execute((RedisCallback) redisConnection -&gt; &#123;</span><br><span class="line">        JedisCommands connect = (JedisCommands) redisConnection.getNativeConnection();</span><br><span class="line">        <span class="comment">//SETNX can be replace by SET from Redis 2.6.12 version</span></span><br><span class="line">        <span class="keyword">return</span> connect.set(key,value,<span class="string">"NX"</span>,<span class="string">"PX"</span>,expiration);</span><br><span class="line">    &#125;);</span><br><span class="line">    <span class="keyword">return</span> res!=<span class="keyword">null</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* Non-blocking release a lock,if lock has expiration,nothing happen</span></span><br><span class="line"><span class="comment">* <span class="doctag">@param</span> key the key of lock</span></span><br><span class="line"><span class="comment">* <span class="doctag">@param</span> value the String you set When try to hold a lock</span></span><br><span class="line"><span class="comment">* */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">relaseLock</span><span class="params">(String key,String value)</span></span>&#123;</span><br><span class="line">    redisTemplate.execute((RedisCallback) redisConnection -&gt; &#123;</span><br><span class="line">        Object obj = redisConnection.getNativeConnection();</span><br><span class="line">        System.out.println(obj.getClass().getName());</span><br><span class="line">        <span class="keyword">if</span> (obj <span class="keyword">instanceof</span> JedisCluster) &#123;</span><br><span class="line">            JedisCluster connection = (JedisCluster) obj;</span><br><span class="line">            <span class="keyword">return</span> connection.eval(LUA,Collections.singletonList(key),Collections.singletonList(value));</span><br><span class="line">        &#125;<span class="keyword">else</span> <span class="keyword">if</span> (obj <span class="keyword">instanceof</span> Jedis)&#123;</span><br><span class="line">            Jedis connection = (Jedis) obj;</span><br><span class="line">            <span class="keyword">return</span> connection.eval(LUA,Collections.singletonList(key),Collections.singletonList(value));</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;) ;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
@@ -1149,7 +1722,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2020-07-30 00:24:04" itemprop="dateModified" datetime="2020-07-30T00:24:04+08:00">2020-07-30</time>
+                <time title="Modified: 2020-08-11 00:16:42" itemprop="dateModified" datetime="2020-08-11T00:16:42+08:00">2020-08-11</time>
               
             
           </span>
@@ -1203,7 +1776,9 @@
       
         
           
-            <p>今天用到了metricbeat组件diskio.iostat部分,突然看到一个比较在意的点,对于system.diskio.iostat.read.request.per_sec这个字段,有的描述是每秒读取的扇区数,有的被描述成每秒访问磁盘数。<br>一开始以为是翻译问题,突然联想到磁盘访问原理,我们对磁盘访问的最小单位是扇区,也就是每秒访问扇区数在这个场景下是可以等同理解为每秒访问磁盘次数的</p>
+            <a id="more"></a>
+
+<p>今天用到了metricbeat组件diskio.iostat部分,突然看到一个比较在意的点,对于system.diskio.iostat.read.request.per_sec这个字段,有的描述是每秒读取的扇区数,有的被描述成每秒访问磁盘数。<br>一开始以为是翻译问题,突然联想到磁盘访问原理,我们对磁盘访问的最小单位是扇区,也就是每秒访问扇区数在这个场景下是可以等同理解为每秒访问磁盘次数的</p>
 
           
         
@@ -1507,7 +2082,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2020-07-30 00:24:04" itemprop="dateModified" datetime="2020-07-30T00:24:04+08:00">2020-07-30</time>
+                <time title="Modified: 2020-08-10 23:55:51" itemprop="dateModified" datetime="2020-08-10T23:55:51+08:00">2020-08-10</time>
               
             
           </span>
@@ -1564,29 +2139,40 @@
             <a id="more"></a>
 <p>首先我们来谈一谈java中常见的几种IO线程模型</p>
 <p>我们知道一般io(socket)都是由accept,read,write,close几种状态组成</p>
-<p>####同步阻塞(bio)<br>在read时需要无限等待直到消息到达,就是阻塞,同步则指的是每一步都需要等待上一步完成然后被调用<br><img src="http://188.131.252.235:8888/线程模型/同步阻塞io.png" text-align:center alt="如果图片失效,请邮件联系作者补图"></p>
+<h4 id="同步阻塞-bio"><a href="#同步阻塞-bio" class="headerlink" title="同步阻塞(bio)"></a>同步阻塞(bio)</h4><p>在read时需要无限等待直到消息到达,就是阻塞,同步则指的是每一步都需要等待上一步完成然后被调用<br><img src="http://188.131.252.235:8888/线程模型/同步阻塞io.png" text-align:center alt="如果图片失效,请邮件联系作者补图"></p>
 <center></center>
 
-<p>####同步非阻塞()<br>同步阻塞和同步非阻塞的区别就在于,在read时无论是否有数据,立刻返回。那么或许有人会问了,这样有什么意义,还需要自己写while循环包裹来促使其不断访问直到数据到达。其实针对这一点,如果一个程序在底层进入了阻塞状态,也就意味着我们失去了对其控制,对于socket来说,我们只能通过close来使其断开连接离开阻塞状态,而如果我们是非阻塞的情况下,我们发现read数据未到达,可以先允许该线程去做其他工作,过一会再来read一次检测下消息是否到达,同时我们也可以通过标记位来控制其后续行为<br><img src="http://188.131.252.235:8888/线程模型/同步非阻塞io.png" text-align:center alt="如果图片失效,请邮件联系作者补图"></p>
+<h4 id="同步非阻塞"><a href="#同步非阻塞" class="headerlink" title="同步非阻塞()"></a>同步非阻塞()</h4><p>同步阻塞和同步非阻塞的区别就在于,在read时无论是否有数据,立刻返回。那么或许有人会问了,这样有什么意义,还需要自己写while循环包裹来促使其不断访问直到数据到达。其实针对这一点,如果一个程序在底层进入了阻塞状态,也就意味着我们失去了对其控制,对于socket来说,我们只能通过close来使其断开连接离开阻塞状态,而如果我们是非阻塞的情况下,我们发现read数据未到达,可以先允许该线程去做其他工作,过一会再来read一次检测下消息是否到达,同时我们也可以通过标记位来控制其后续行为<br><img src="http://188.131.252.235:8888/线程模型/同步非阻塞io.png" text-align:center alt="如果图片失效,请邮件联系作者补图"></p>
 <center></center>
 
 
 
-<p>####io多路复用(nio)<br>其实nio也被算作同步非阻塞,不过我们不必拘泥于这些分类,在发展中,是先有的模型,后来才被分类,所以很多情况下分类是模棱两可的。<br>io多路复用跟之前说的同步非阻塞有点关系,io多路复用的read也是非阻塞的,跟之前的最大区别在于,他采用了Selector选择器负责监听每一个socket的各种行为,当该行为被激活的时候,通知后续线程去处理。<br>我们可以想象,此时有巨量的socket链接进来,我们需要为每一个socket创建一个线程来read(即使是使用线程池减少了创建线程的消耗,那么大量的线程也依旧会在while(){//read}上浪费掉),此时我们就需要一个方案来解放这些线程无意义的循环read<br>一个管理者,来管理所有的Socket,这也就诞生了Selector选择器,由Selector负责检测是否有accept,read,write行为,并且通知其他线程来处理,这样我们可以节约大量线程,配合线程池我们就可以用有限的资源处理大量的连接<br><font color="red">假设我们将流程分类为,io监听和io接收,业务处理三部分,那么nio的核心就是在于将io监听给提取出来单独管理</font><br><img src="http://188.131.252.235:8888/线程模型/io多路复用.png" text-align:center alt="如果图片失效,请邮件联系作者补图"></p>
+<h4 id="io多路复用-nio"><a href="#io多路复用-nio" class="headerlink" title="io多路复用(nio)"></a>io多路复用(nio)</h4><p>其实nio也被算作同步非阻塞,不过我们不必拘泥于这些分类,在发展中,是先有的模型,后来才被分类,所以很多情况下分类是模棱两可的。</p>
+<p>io多路复用跟之前说的同步非阻塞有点关系,io多路复用的read也是非阻塞的,跟之前的最大区别在于,他采用了Selector选择器负责监听每一个socket的各种行为,当该行为被激活的时候,通知后续线程去处理。</p>
+<p>我们可以想象,此时有巨量的socket链接进来,我们需要为每一个socket创建一个线程来read(即使是使用线程池减少了创建线程的消耗,那么大量的线程也依旧会在while(){//read}上浪费掉),此时我们就需要一个方案来解放这些线程无意义的循环read</p>
+<p>一个管理者,来管理所有的Socket,这也就诞生了Selector选择器,由Selector负责检测是否有accept,read,write行为,并且通知其他线程来处理,这样我们可以节约大量线程,配合线程池我们就可以用有限的资源处理大量的连接</p>
+<p><font color="red">假设我们将流程分类为,io监听和io接收,业务处理三部分,那么nio的核心就是在于将io监听给提取出来单独管理</font><br><img src="http://188.131.252.235:8888/线程模型/io多路复用.png" text-align:center alt="如果图片失效,请邮件联系作者补图"></p>
 <center></center>
 
-<p>####异步<br>说到异步,阻塞与非阻塞的界限更为模糊。<br>下面让我们来看一段代码,这段代码并不是异步,他只是一个回调雏形,后面我会谈到</p>
+<h4 id="异步"><a href="#异步" class="headerlink" title="异步"></a>异步</h4><p>说到异步,阻塞与非阻塞的界限更为模糊。</p>
+<p>下面让我们来看一段代码,这段代码并不是异步,他只是一个回调雏形,后面我会谈到</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">CallBack</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">callback</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Main</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">work</span><span class="params">(CallBack callBack)</span></span>&#123;</span><br><span class="line">        <span class="comment">//业务代码省略...</span></span><br><span class="line">        callBack.callback();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Main main = <span class="keyword">new</span> Main();</span><br><span class="line">        System.out.println(<span class="number">1</span>);</span><br><span class="line">        main.work(<span class="keyword">new</span> CallBack() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">callback</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                System.out.println(<span class="number">2</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">        System.out.println(<span class="number">3</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>如果你对代理模式比较熟悉,那么这里你肯定会产生疑问:这不就是代理模式么?<br>嗯,没错,这个东西在我眼里就是代理模式,这里我们传入了自定义的代码,这就是回调的雏形</p>
-<p>你肯定会问,这有什么用?还不如直接在一个方法里从头到尾写下来。<br>这是因为我们还没有引入其他的模型,假设我们引入多线程,那么我们的代码就成了这样</p>
+<p>如果你对代理模式比较熟悉,那么这里你肯定会产生疑问:这不就是代理模式么?</p>
+<p>嗯,没错,这个东西在我眼里就是代理模式,这里我们传入了自定义的代码,这就是回调的雏形</p>
+<p>你肯定会问,这有什么用?还不如直接在一个方法里从头到尾写下来。</p>
+<p>这是因为我们还没有引入其他的模型,假设我们引入多线程,那么我们的代码就成了这样</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">CallBack</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">callback</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Main</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">work</span><span class="params">(CallBack callBack)</span></span>&#123;</span><br><span class="line">        <span class="comment">//业务代码</span></span><br><span class="line">        callBack.callback();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Main main = <span class="keyword">new</span> Main();</span><br><span class="line">        System.out.println(<span class="number">1</span>);</span><br><span class="line">        <span class="keyword">new</span> Thread(<span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                main.work(<span class="keyword">new</span> CallBack() &#123;</span><br><span class="line">                    <span class="meta">@Override</span></span><br><span class="line">                    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">callback</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                        System.out.println(<span class="number">2</span>);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;).start();</span><br><span class="line">        System.out.println(<span class="number">3</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>通过对比,我们发现,引入了线程的概念后,他的意义就完全改变,变成了一种近似异步(不必在乎这些概念,你重点关注的应该是是否对于性能有真正的提升)的实现。<br>假设我们面对这样一个场景(此处我们先以非阻塞为例,否则引入自变量过的多不宜于理解),两个socket AB互相长期通信,且每次通信在业务上(我们先将流程简单的分为为io,业务两部分)所需要耗费的时间是不确定的,假若说我们采用同步的方式,每一次A发往B,因B只有一根线程,需要顺序的处理读io,业务操作,写io后才可继续处理A的后续请求。<br>而现在,我们将双方模型改为异步,A只要有请求就向B发送,无需等待B响应,当B读取完消息后(你可能会问A一直在发送消息,B怎么知道A是发送到一个请求还是两个请求,这一点你可以去了解粘包拆包的问题),将消息封装为一个任务,递交给线程池执行(执行完毕后会将执行回调函数来决定接下来的操作,由于任务耗时的不确定性,如果返回消息的话,消息的先后顺序也是不确定的,所以A在请求时需要附带消息的序列号),并立刻返回A一条消息表示自己已经接收到了请求。</p>
+<p>通过对比,我们发现,引入了线程的概念后,他的意义就完全改变,变成了一种近似异步(不必在乎这些概念,你重点关注的应该是是否对于性能有真正的提升)的实现。</p>
+<p>假设我们面对这样一个场景(此处我们先以非阻塞为例,否则引入自变量过的多不宜于理解),两个socket AB互相长期通信,且每次通信在业务上(我们先将流程简单的分为为io,业务两部分)所需要耗费的时间是不确定的,假若说我们采用同步的方式,每一次A发往B,因B只有一根线程,需要顺序的处理读io,业务操作,写io后才可继续处理A的后续请求。</p>
+<p>而现在,我们将双方模型改为异步,A只要有请求就向B发送,无需等待B响应,当B读取完消息后(你可能会问A一直在发送消息,B怎么知道A是发送到一个请求还是两个请求,这一点你可以去了解粘包拆包的问题),将消息封装为一个任务,递交给线程池执行(执行完毕后会将执行回调函数来决定接下来的操作,由于任务耗时的不确定性,如果返回消息的话,消息的先后顺序也是不确定的,所以A在请求时需要附带消息的序列号),并立刻返回A一条消息表示自己已经接收到了请求。</p>
 <p>到这里你会觉得一切豁然开朗,你仿佛明白了同步异步,阻塞非阻塞。但是,我刚才做的将同步改为异步的操作,真的提高了性能么,假设我线程池只设置一根线程,那么性能跟io和业务在同一根线程有区别么,这真的是异步带来的福利,还是仅仅是多线程带来的福利?我只不过是让A提前知道了,B已经接收到了来自A的消息,但是实际如果线程池只有一根线程的话,业务处理时间是不会改变的。那么异步的意义何在?仅仅是为了利用起多线程并发处理业务这个效果么?</p>
 <p>…<br>…<br>…</p>
 <p>答案:<br>&emsp;异步确实起到了利用多线程的作用,这里的异步我们要明确,异步并非是一个确切的概念,而是一个抽象宏观的概念,是针对于观察点而不断变化的,例如在当前这个场景中,如果A只有当收到B的处理结果才会继续发送,那么B的异步还算是真正的异步吗?我们当然可以说B是异步的,但是对于整体来说,他又是同步的,B在此时的是无法体现其性能优势的。假如说在这个基础上,有许许多多的A连接同一个B向其发送消息,此时B针对每一个连接起一个io线程(这里当然可以用Selector选择器配合io线程池),接到消息后扔到线程池(即使线程池只有一根线程,但是由于io是并发的,省去了io时间)去处理,这时候B又能体现他的性能优势了</p>
-<p>那么接下来我们抛开异步同步阻塞非阻塞这个问题,从性能方面总结一下,之前我们提到的线程模型,变化繁多,那么他们为了性能所做的改变都有什么共同点呢?<br><font color="red">将职责精细划分,对于每一部分职责分别进行深度优化,使得每一部分职责成为一个组件,各组件之间相互通信,以避免某一组件因为另一组件的原因而造成无意义的等待</font><br>在并发量低的环境下,由于我们机器可以开足够的线程来处理消息,即使义务处理因为io产生了等待,其他的消息也可以选择其他线程去处理。而当并发量增高,此时如果我们线程随之增高的话,会产生大量的线程上下文切换开销,所以我们不得不把控线程的数目,转而通过技巧来充分利用起每一条线程(例如线程池,组件功能划分等方式),这也就是这些线程模型存在并逐渐演化的原因</p>
+<p>那么接下来我们抛开异步同步阻塞非阻塞这个问题,从性能方面总结一下,之前我们提到的线程模型,变化繁多,那么他们为了性能所做的改变都有什么共同点呢?</p>
+<p><font color="red">将职责精细划分,对于每一部分职责分别进行深度优化,使得每一部分职责成为一个组件,各组件之间相互通信,以避免某一组件因为另一组件的原因而造成无意义的等待</font></p>
+<p>在并发量低的环境下,由于我们机器可以开足够的线程来处理消息,即使义务处理因为io产生了等待,其他的消息也可以选择其他线程去处理。而当并发量增高,此时如果我们线程随之增高的话,会产生大量的线程上下文切换开销,所以我们不得不把控线程的数目,转而通过技巧来充分利用起每一条线程(例如线程池,组件功能划分等方式),这也就是这些线程模型存在并逐渐演化的原因</p>
 <p>拓展:</p>
 <a href="/2019/08/14/Tomcat源码笔记/" title="Tomcat源码笔记">Tomcat源码笔记</a>最尾处的Tomcat线程模型
 
@@ -1594,604 +2180,6 @@
 <p>待续</p>
 
           
-        
-      
-    </div>
-
-    
-
-    
-    <div>
-      
-    </div>
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://qq616023844.github.io/2019/08/14/Tomcat源码笔记/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Lemon Sour">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="柠檬不酸的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2019/08/14/Tomcat源码笔记/" class="post-title-link" itemprop="url">Tomcat源码笔记</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-
-              
-                
-              
-
-              <time title="Created: 2019-08-14 23:24:00" itemprop="dateCreated datePublished" datetime="2019-08-14T23:24:00+08:00">2019-08-14</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">Edited on</span>
-                
-                <time title="Modified: 2020-07-30 00:24:04" itemprop="dateModified" datetime="2020-07-30T00:24:04+08:00">2020-07-30</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/源码/" itemprop="url" rel="index"><span itemprop="name">源码</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p><strong>ps:由于图片过大,所以限制了在博客中显示大小,大家可以右键查看图片看原图</strong><br><strong>本系列均是基于9.0.21版本</strong><br>&emsp;本章我们不会涉及代码,而是笼统的分析Tomcat的实现原理,让大家对全局有一定的掌控,后面几章我会带大家分析代码</p>
-<p>####Tomcat是什么?<br>&emsp;在我看来,Tomcat是利用各种模型和设计方式对socket的深度封装,做到适配各种协议同时达到一定性能的代码组,同时给我们写的各种业务代码(Servlet)提供了容器(也可以理解为tomcat可以将以对象的形式使用我们写的Servlet业务),这是Tomcat的核心。当然,Tomcat还实现了一些其他的比如生命周期管理,但是这些都是为了核心而服务的</p>
-<p>&emsp;我们第一次接触Tomcat,相信大多数人都是Hello World。想想当时我们是怎么做的:首先我们建立了个项目,按照网上的教程建好了项目里面的文件夹,导入servlet包,然后开始编写xml配置文件,继承Servlet编写Get,Post代码,然后导出war包放到tomcat下的webapps文件夹,启动tomcat。so easy,然后我们就可以通过浏览器访问我们之前写好的接口了。</p>
-<p>&emsp;但是,我们有没有想过是为什么,为什么我们GET中的代码会被调用,为什么我们访问一个网址会执行我们的代码,他又是怎么执行的。这一切,我们将从Servlet与Tomcat的源码解析中找到答案</p>
-<p>####消息接收<br>&emsp;首先,消息是如何接收的。这里,我要阐述下自己的理解,在网络传输的世界里面,一切都是消息,消息是指什么?消息可以理解为一串二进制,一串byte或者字符串,当然,在网络模型的最底层,这些都会被转换为二进制来传输。</p>
-<p>&emsp;协议又是什么?协议是一种事先约定的规范,规定了消息格式,消息处理方式等等各种机制,例如我们编写servlet最常用到的http协议,他的可视化表示就如同下面这些内容,其实,每一行后面都跟着\r\n,不过这是换行符,所以在屏幕上展现出来就是一行一行的数据</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">GET / HTTP/1.1</span><br><span class="line">Host: localhost:8080</span><br><span class="line">User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101 Firefox/68.0</span><br><span class="line">Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8</span><br><span class="line">Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Connection: keep-alive</span><br><span class="line">Upgrade-Insecure-Requests: 1</span><br></pre></td></tr></table></figure>
-
-<p>&emsp;了解了这些以后,我们就可以继续进行了,既然一切都是消息,那么当我们发送一个http请求的时候,Tomcat最开始接收到的也是一串像是上面这种的字符串,java中接收消息用的就是socket,Tomcat也不例外。所以我在文章最开始的时候说到,Tomcat实质就是对socket的深度封装。在获取到socket套接字以后,Tomcat开始解析,根据传入内容标明协议的不同,按照在代码中定义好的各种协议模板来解析这个字符串,解析完成后封装到Request和Response中交给Servlet执行用户自定义的业务代码,最后再由socket发送响应,这就是Tomcat最浅显的流程</p>
-<h4 id="生命周期"><a href="#生命周期" class="headerlink" title="生命周期"></a>生命周期</h4><p>Tomcat的各个组件也是有生命周期的,这个生命周期由一种设计模式(状态机)来控制,下面让我们了解一下</p>
-<p>首先要介绍的是LifecycleMBeanBase类,下面是这个类的类图<br><img src="http://188.131.252.235:8888/Tomcat源码解析/LifecycleMBeanBase继承图.png" text-align:center width="352" height="236" alt="如果图片失效,请邮件联系作者补图"></p>
-<center></center>
-
-<p>我们从Lifecycle接口开始了解,Lifecycle定义了一个状态机,下面是Lifecycle的原注释</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">*            start()</span><br><span class="line">*  -----------------------------</span><br><span class="line">*  |                           |</span><br><span class="line">*  | init()                    |</span><br><span class="line">* NEW -»-- INITIALIZING        |</span><br><span class="line">* | |           |              |     ------------------«-----------------------</span><br><span class="line">* | |           |auto          |     |                                        |</span><br><span class="line">* | |          \|/    start() \|/   \|/     auto          auto         stop() |</span><br><span class="line">* | |      INITIALIZED --»-- STARTING_PREP --»- STARTING --»- STARTED --»---  |</span><br><span class="line">* | |         |                                                            |  |</span><br><span class="line">* | |destroy()|                                                            |  |</span><br><span class="line">* | --»-----«--    ------------------------«--------------------------------  ^</span><br><span class="line">* |     |          |                                                          |</span><br><span class="line">* |     |         \|/          auto                 auto              start() |</span><br><span class="line">* |     |     STOPPING_PREP ----»---- STOPPING ------»----- STOPPED -----»-----</span><br><span class="line">* |    \|/                               ^                     |  ^</span><br><span class="line">* |     |               stop()           |                     |  |</span><br><span class="line">* |     |       --------------------------                     |  |</span><br><span class="line">* |     |       |                                              |  |</span><br><span class="line">* |     |       |    destroy()                       destroy() |  |</span><br><span class="line">* |     |    FAILED ----»------ DESTROYING ---«-----------------  |</span><br><span class="line">* |     |                        ^     |                          |</span><br><span class="line">* |     |     destroy()          |     |auto                      |</span><br><span class="line">* |     --------»-----------------    \|/                         |</span><br><span class="line">* |                                 DESTROYED                     |</span><br><span class="line">* |                                                               |</span><br><span class="line">* |                            stop()                             |</span><br><span class="line">* ----»-----------------------------»------------------------------</span><br></pre></td></tr></table></figure>
-
-<p>我们可以看到,这是一种状态机设计模式,规定了组件生命周期的状态转换,可以方便的进行组件生命周期的管理,从下图我们可以看到,从Server开始几乎每一个组件间接继承/实现了该状态机<br><img src="http://188.131.252.235:8888/Tomcat源码解析/Lifecycle接口实现列表.png" text-align:center width="1108" height="590" alt="如果图片失效,请邮件联系作者补图"></p>
-<center></center>
-
-<p>接下来让我们看LifecycleBase,这是一个抽象类,实现了fireLifecycleEvent,init,start…等方法<br>fireLifecycleEvent的设计其实是根据观察者模式<br>init,start等方法仅仅是用来控制其生命周期的,每个方法例如init,在内部还会调用initInternal(),Tomcat的很多组件的业务代码全部都在xxxInternal()中,由子类负责实现</p>
-<p>LifecycleMBeanBase则对LifecycleBase进行了进一步的实现,我们从他的图中可以看到<br><img src="http://188.131.252.235:8888/Tomcat源码解析/LifecycleMBeanBase类图.png" text-align:center width="437" height="520" alt="如果图片失效,请邮件联系作者补图"></p>
-<center></center>
-其中最关键的是initInternal()和destroyInternal(),主要实现了委托Register类来将子类(类如StandardServer等)注册到bean容器中。如果在看源码过程中大家对ManagedBean或者MBeanServer抱有疑惑,可以先去学习一下JMX规范再回来看容器部分代码,不过即使跳过容器部分,也不影响接下来的部分
-
-<h4 id="Tomcat初始化流程-仅需有个印象即可-想要学到东西的话还是要自己去研究代码"><a href="#Tomcat初始化流程-仅需有个印象即可-想要学到东西的话还是要自己去研究代码" class="headerlink" title="Tomcat初始化流程(仅需有个印象即可,想要学到东西的话还是要自己去研究代码)"></a>Tomcat初始化流程(仅需有个印象即可,想要学到东西的话还是要自己去研究代码)</h4><p>Tomcat工作主要有几个流程:init(负责new各级对象,组件依赖关系,加载配置文件),start(这一步完成时可以正常接收请求开始处理),处理消息,结束<br>首先放一张tomcat init的流程图(简化版)</p>
-<img src="http://188.131.252.235:8888/Tomcat源码解析/tomcat时序图init.png" text-align:center width="510" height="160" alt="如果图片失效,请邮件联系作者补图">
-<center></center>
-
-<p>Bootstrap:是入口,例如命令行输入service tomcat start等操作时,便是由这个类来解析,这个类均通过反射操作来调用Catalina</p>
-<p>Catalina:提供了操控Tomcat启停等行为的方法</p>
-<p>LifecycleBase:状态机设计模式,我们后文会提及,StandardServer等大部分组件都会实现该状态机</p>
-<p>StandardServer:顶级容器,一个Tomcat对应唯一一个Server,负责管理多个service的启停等行为</p>
-<p>StandardService:可以完整执行功能的最小单元容器(如果不明白可以先继续看),下面是一个server.xml文件去掉注释后的内容,根据xml我们可以清楚的看到其构建逻辑,Server包含Service,Service包含Connector和Engine,Engine包含host。假如我们现在面临一个问题,有两个同名的项目需要发布或者希望不同项目部署在不同的端口,那么我们就可以在后面新增一个service</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">Server</span> <span class="attr">port</span>=<span class="string">"8005"</span> <span class="attr">shutdown</span>=<span class="string">"SHUTDOWN"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">Listener</span> <span class="attr">className</span>=<span class="string">"org.apache.catalina.startup.VersionLoggerListener"</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">Listener</span> <span class="attr">className</span>=<span class="string">"org.apache.catalina.core.AprLifecycleListener"</span> <span class="attr">SSLEngine</span>=<span class="string">"on"</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">Listener</span> <span class="attr">className</span>=<span class="string">"org.apache.catalina.core.JreMemoryLeakPreventionListener"</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">Listener</span> <span class="attr">className</span>=<span class="string">"org.apache.catalina.mbeans.GlobalResourcesLifecycleListener"</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">Listener</span> <span class="attr">className</span>=<span class="string">"org.apache.catalina.core.ThreadLocalLeakPreventionListener"</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">GlobalNamingResources</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">Resource</span> <span class="attr">name</span>=<span class="string">"UserDatabase"</span> <span class="attr">auth</span>=<span class="string">"Container"</span></span></span><br><span class="line"><span class="tag">              <span class="attr">type</span>=<span class="string">"org.apache.catalina.UserDatabase"</span></span></span><br><span class="line"><span class="tag">              <span class="attr">description</span>=<span class="string">"User database that can be updated and saved"</span></span></span><br><span class="line"><span class="tag">              <span class="attr">factory</span>=<span class="string">"org.apache.catalina.users.MemoryUserDatabaseFactory"</span></span></span><br><span class="line"><span class="tag">              <span class="attr">pathname</span>=<span class="string">"conf/tomcat-users.xml"</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">GlobalNamingResources</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">Service</span> <span class="attr">name</span>=<span class="string">"Catalina"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">Connector</span> <span class="attr">port</span>=<span class="string">"8080"</span> <span class="attr">protocol</span>=<span class="string">"HTTP/1.1"</span></span></span><br><span class="line"><span class="tag">               <span class="attr">connectionTimeout</span>=<span class="string">"20000"</span></span></span><br><span class="line"><span class="tag">               <span class="attr">redirectPort</span>=<span class="string">"8443"</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">Connector</span> <span class="attr">port</span>=<span class="string">"8009"</span> <span class="attr">protocol</span>=<span class="string">"AJP/1.3"</span> <span class="attr">redirectPort</span>=<span class="string">"8443"</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">Engine</span> <span class="attr">name</span>=<span class="string">"Catalina"</span> <span class="attr">defaultHost</span>=<span class="string">"localhost"</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">Realm</span> <span class="attr">className</span>=<span class="string">"org.apache.catalina.realm.LockOutRealm"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">Realm</span> <span class="attr">className</span>=<span class="string">"org.apache.catalina.realm.UserDatabaseRealm"</span></span></span><br><span class="line"><span class="tag">               <span class="attr">resourceName</span>=<span class="string">"UserDatabase"</span>/&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">Realm</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">Host</span> <span class="attr">name</span>=<span class="string">"localhost"</span>  <span class="attr">appBase</span>=<span class="string">"webapps"</span></span></span><br><span class="line"><span class="tag">            <span class="attr">unpackWARs</span>=<span class="string">"true"</span> <span class="attr">autoDeploy</span>=<span class="string">"true"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">Valve</span> <span class="attr">className</span>=<span class="string">"org.apache.catalina.valves.AccessLogValve"</span> <span class="attr">directory</span>=<span class="string">"logs"</span></span></span><br><span class="line"><span class="tag">               <span class="attr">prefix</span>=<span class="string">"localhost_access_log"</span> <span class="attr">suffix</span>=<span class="string">".txt"</span></span></span><br><span class="line"><span class="tag">               <span class="attr">pattern</span>=<span class="string">"%h %l %u %t &amp;quot;%r&amp;quot; %s %b"</span> /&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">Host</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">Engine</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">Service</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">Server</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p>ScheduledThreadPoolExecutor:线程池,后面我在讲述线程模型的时候会讲到</p>
-<p>Container容器模块,呈现包含关系,之间以责任链形式调用,这里注意一点,虽然方法名是invoke,但实际上并不是通过反射来调用,类似的在tomcat中也有很多继承了Runnable但是有些模块用不到start而是使用run的情况<br>{
-  Engine{<br>    Host{<br>      Context{<br>        Wrapper<br>      }<br>    }<br>  }<br>}</p>
-<p>Endpoint:核心部分,后面讲线程模型我会提到</p>
-<p>Tomcat的start流程其实跟init流程类似,在宏观上几乎没有改动,因此省略</p>
-<p>####Tomcat接收消息流程<br>这里我认为一张图足以<br><img src="http://188.131.252.235:8888/Tomcat源码解析/tomcatNIO接收请求逻辑图.png" text-align:center width="700" height="400" alt="如果图片失效,请邮件联系作者补图"></p>
-<center></center>
-
-<p>####一些关键的节点<br>这里将提供一些消息在Tomcat中传递的关键节点,可以帮助大家通过全局搜索快速定位到源码</p>
-<p>init时:<br>&emsp;这里有人会疑惑类的初始化和注入依赖在哪里,答案是digester.parse。这种感觉就像是我们写springMVC时配置的xml一样,在这里xml就是server.xml,digester会根据这个xml来解析并注入依赖</p>
-<p>NIO接收消息时:<br>&emsp;关键类Acceptor,其run方法是核心,endpoint.setSocketOptions是转折点,随后一系列操作将accept到的封装为PollerEvent加入队列<br>&emsp;关键类Poller,从队列取处PollerEvent注册到socketChannel的Selector选择器中,并且负责轮询读写事件,将其封装后扔到线程池中<br>&emsp;关键类SocketProcessor,被上文封装的Runnable,负责接下来的读取解析处理返回操作<br>&emsp;关键类Http11Processor,inputBuffer.parseRequestLine获取并解析请求,如果是文件传输类型,那么不会解析消息体,如果是表格那种文本的,就会一起读取出来<br>&emsp;具体从socket读取消息的地方:Http11InputBuffer类的socketWrapper.read。NioSocketWrapper类的nRead = fillReadBuffer(block, to)<br>&emsp;关键类Http11Processor。inputBuffer.parseHeaders将读取出的消息解析为消息头</p>
-<p>####这里我们讲Tomcat线程模型</p>
-<p>基础知识:<a href="/2019/08/17/线程模型/" title="线程模型">线程模型</a></p>
-<p>TomcatNIO的线程模型其实非常简单,简单到什么程度?让我们看图<br><img src="http://188.131.252.235:8888/Tomcat源码解析/TomcatNIO线程模型.png" alt="如果图片失效,请邮件联系作者补图"></p>
-<center></center>
-甚至于io操作和业务操作在同一根线程上进行,没有经过分离,poller的职责仅仅是检测事件,并不负责io操作,
-<font color="red">注意这仅仅是NIO模式,不包括另外两种NIO2和APR模式</font>
-我们看server.xml配置文档的时候可以看到允许我们设置一些参数,这里之前tomcatNIO接收请求逻辑图已经描述过,不再赘述。
-至于Poller,你在看旧文章时有人会说允许最大值不超过2个。没错,在之前的版本是这样,但是在9.0,我们看到注释文档中有句话,在NIO下Poller被改为仅有一个
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;update&gt;</span><br><span class="line">    Remove &lt;code&gt;pollerThreadCount&lt;/code&gt; Connector attribute for NIO,</span><br><span class="line">    one poller thread is sufficient. (remm)</span><br><span class="line">&lt;/update&gt;</span><br></pre></td></tr></table></figure>
-
-<p>通过这些,我们可以分析到,Tomcat NIO模式下,是通过粗暴的增加线程来处理请求,如果同时请求数过多,会被ServerSocketChannel阻拦掉,如果交给线程池的read达到线程池上限,那么就会加入队列中进行排队,这也就是Tomcat无法承受大量并发的原因所在</p>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    <div>
-      
-    </div>
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://qq616023844.github.io/2019/07/05/前端添加数据后动态刷新时获取获取后端数据是旧的/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Lemon Sour">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="柠檬不酸的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2019/07/05/前端添加数据后动态刷新时获取获取后端数据是旧的/" class="post-title-link" itemprop="url">前端添加数据后动态刷新时获取获取后端数据是旧的</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-
-              
-                
-              
-
-              <time title="Created: 2019-07-05 14:47:00" itemprop="dateCreated datePublished" datetime="2019-07-05T14:47:00+08:00">2019-07-05</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">Edited on</span>
-                
-                <time title="Modified: 2020-07-30 00:24:04" itemprop="dateModified" datetime="2020-07-30T00:24:04+08:00">2020-07-30</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/未分类/" itemprop="url" rel="index"><span itemprop="name">未分类</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <a id="more"></a>
-<h4 id="情况一-后端缓存"><a href="#情况一-后端缓存" class="headerlink" title="情况一(后端缓存)"></a>情况一(后端缓存)</h4><p>第一种情况是由于后端使用了缓存,且添加数据后由于后端代码问题导致缓存刷新不及时产生的</p>
-<h4 id="情况二-前端异步请求"><a href="#情况二-前端异步请求" class="headerlink" title="情况二(前端异步请求)"></a>情况二(前端异步请求)</h4><p>由于服务器响应请求总会有延迟,前端前后相差几毫秒发出了修改请求和查询请求。这种情况下由于网络问题,前端会出现有时可以刷新成功,有时旧数据的情况。解决方法就是前端同步下请求,收到第一个请求的返回后再发送下一个请求</p>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    <div>
-      
-    </div>
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://qq616023844.github.io/2019/07/02/mysql大小写问题/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Lemon Sour">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="柠檬不酸的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2019/07/02/mysql大小写问题/" class="post-title-link" itemprop="url">mysql大小写问题</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-
-              
-                
-              
-
-              <time title="Created: 2019-07-02 12:31:00" itemprop="dateCreated datePublished" datetime="2019-07-02T12:31:00+08:00">2019-07-02</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">Edited on</span>
-                
-                <time title="Modified: 2020-07-30 00:24:04" itemprop="dateModified" datetime="2020-07-30T00:24:04+08:00">2020-07-30</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/mysql/" itemprop="url" rel="index"><span itemprop="name">mysql</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>直接上报错,简单来讲就是报错说表没找到</p>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2019/07/02/mysql大小写问题/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
         
       
     </div>
@@ -2282,7 +2270,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">31</span>
+                    <span class="site-state-item-count">34</span>
                     <span class="site-state-item-name">posts</span>
                   </a>
                 </div>
@@ -2331,7 +2319,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">16</span>
+                      
+                    
+                    <span class="site-state-item-count">17</span>
                     <span class="site-state-item-name">categories</span>
                   </a>
                 </div>
@@ -2390,7 +2380,13 @@
                     
                       
                     
-                    <span class="site-state-item-count">21</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">24</span>
                     <span class="site-state-item-name">tags</span>
                   </a>
                 </div>

@@ -92,18 +92,18 @@
 
 
 
-  <meta name="description" content="####问题描述&amp;emsp;java springboot程序访问redis,由于redis集群分布于多个目标服务器上,且均有防火墙阻拦,平时调试都是通过tunnel建立隧道来访问。单个redis通过隧道访问成功,但是redis集群通过隧道访问失败。">
+  <meta name="description" content="问题描述&amp;emsp;java springboot程序访问redis,由于redis集群分布于多个目标服务器上,且均有防火墙阻拦,平时调试都是通过tunnel建立隧道来访问。单个redis通过隧道访问成功,但是redis集群通过隧道访问失败。">
 <meta name="keywords" content="redis">
 <meta property="og:type" content="article">
 <meta property="og:title" content="隧道连接redis集群报错">
 <meta property="og:url" content="https://qq616023844.github.io/2019/09/15/隧道连接redis集群报错/index.html">
 <meta property="og:site_name" content="柠檬不酸的博客">
-<meta property="og:description" content="####问题描述&amp;emsp;java springboot程序访问redis,由于redis集群分布于多个目标服务器上,且均有防火墙阻拦,平时调试都是通过tunnel建立隧道来访问。单个redis通过隧道访问成功,但是redis集群通过隧道访问失败。">
+<meta property="og:description" content="问题描述&amp;emsp;java springboot程序访问redis,由于redis集群分布于多个目标服务器上,且均有防火墙阻拦,平时调试都是通过tunnel建立隧道来访问。单个redis通过隧道访问成功,但是redis集群通过隧道访问失败。">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2020-07-29T16:24:04.758Z">
+<meta property="og:updated_time" content="2020-08-10T15:55:51.562Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="隧道连接redis集群报错">
-<meta name="twitter:description" content="####问题描述&amp;emsp;java springboot程序访问redis,由于redis集群分布于多个目标服务器上,且均有防火墙阻拦,平时调试都是通过tunnel建立隧道来访问。单个redis通过隧道访问成功,但是redis集群通过隧道访问失败。">
+<meta name="twitter:description" content="问题描述&amp;emsp;java springboot程序访问redis,由于redis集群分布于多个目标服务器上,且均有防火墙阻拦,平时调试都是通过tunnel建立隧道来访问。单个redis通过隧道访问成功,但是redis集群通过隧道访问失败。">
 
 
 
@@ -404,7 +404,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2020-07-30 00:24:04" itemprop="dateModified" datetime="2020-07-30T00:24:04+08:00">2020-07-30</time>
+                <time title="Modified: 2020-08-10 23:55:51" itemprop="dateModified" datetime="2020-08-10T23:55:51+08:00">2020-08-10</time>
               
             
           </span>
@@ -456,7 +456,7 @@
       
 
       
-        <p>####问题描述<br>&emsp;java springboot程序访问redis,由于redis集群分布于多个目标服务器上,且均有防火墙阻拦,平时调试都是通过tunnel建立隧道来访问。单个redis通过隧道访问成功,但是redis集群通过隧道访问失败。</p>
+        <h4 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h4><p>&emsp;java springboot程序访问redis,由于redis集群分布于多个目标服务器上,且均有防火墙阻拦,平时调试都是通过tunnel建立隧道来访问。单个redis通过隧道访问成功,但是redis集群通过隧道访问失败。</p>
 <a id="more"></a>
 <p>使用的jar包如下</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</span><br><span class="line">&lt;artifactId&gt;spring-boot-starter-data-redis&lt;/artifactId&gt;</span><br></pre></td></tr></table></figure>
@@ -470,7 +470,7 @@
 <p>按照单个redis连接配置时正常连接,按照集群配置时报错</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">org.springframework.data.redis.ClusterStateFailureException: Could not retrieve cluster information. CLUSTER NODES returned with error.</span><br><span class="line">	- ipA:端口A failed: Could not get a resource from the pool</span><br><span class="line">	- ipB:端口B failed: Could not get a resource from the pool</span><br><span class="line">	- ipC:端口C failed: Could not get a resource from the pool</span><br><span class="line">	- ipD:端口D failed: Could not get a resource from the pool</span><br><span class="line">	- ipE:端口E failed: Could not get a resource from the pool</span><br><span class="line">	- ipF:端口F failed: Could not get a resource from the pool</span><br></pre></td></tr></table></figure>
 
-<p>####问题排查<br>因为配置文件配置了生成环境开发环境测试环境等一系列的环境,分别对应不同的集群配置,因为当时只配置了一个ip端口,以为是读取配置文件出现错乱,所以在这方面排查了一段时间</p>
+<h4 id="问题排查"><a href="#问题排查" class="headerlink" title="问题排查"></a>问题排查</h4><p>因为配置文件配置了生成环境开发环境测试环境等一系列的环境,分别对应不同的集群配置,因为当时只配置了一个ip端口,以为是读取配置文件出现错乱,所以在这方面排查了一段时间</p>
 <p>后来通过分析源码发现了问题,我们在配置文件中配置的服务器ip和端口,在集群模式下仅仅相当于入口的作用。即,先与配置文件中的ip端口建立socket链接,然后发送cluster获取集群信息命令,然后断开该socket链接,转而直接跟各个集群服务器建立socket链接,从而导致后续请求不会走我们配置的隧道。也就出现了之前我们只配置了一个ip和端口缺出现了和6个redis均连接失败的情况,误以为时配置读取问题</p>
 
       
@@ -588,8 +588,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
 
-      <div class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <div class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -604,7 +613,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">31</span>
+                    <span class="site-state-item-count">34</span>
                     <span class="site-state-item-name">posts</span>
                   </a>
                 </div>
@@ -653,7 +662,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">16</span>
+                      
+                    
+                    <span class="site-state-item-count">17</span>
                     <span class="site-state-item-name">categories</span>
                   </a>
                 </div>
@@ -712,7 +723,13 @@
                     
                       
                     
-                    <span class="site-state-item-count">21</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">24</span>
                     <span class="site-state-item-name">tags</span>
                   </a>
                 </div>
@@ -765,6 +782,23 @@
         </div>
       </div>
 
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#问题描述"><span class="nav-number">1.</span> <span class="nav-text">问题描述</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#问题排查"><span class="nav-number">2.</span> <span class="nav-text">问题排查</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
       
 
       
