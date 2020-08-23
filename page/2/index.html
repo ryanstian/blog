@@ -340,6 +340,426 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://qq616023844.github.io/2019/11/30/mysql事务/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Lemon Sour">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="柠檬不酸的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2019/11/30/mysql事务/" class="post-title-link" itemprop="url">mysql事务</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2019-11-30 21:06:00" itemprop="dateCreated datePublished" datetime="2019-11-30T21:06:00+08:00">2019-11-30</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2020-07-30 00:24:04" itemprop="dateModified" datetime="2020-07-30T00:24:04+08:00">2020-07-30</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/mysql/" itemprop="url" rel="index"><span itemprop="name">mysql</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <a id="more"></a>
+<p>ps:这篇文章本来写了一半,然后突然没了,没了!心态爆炸!写文章一定要及时保存!</p>
+<p>下面我所提到的mysql事务,均是基于InnoDB引擎(平时我们常用的引擎),千万不要将对InnoDB的理解代入其他的引擎</p>
+<p>&emsp;提到mysql,对于业务场景来说,肯定是需要懂一些mysql事务方面的内容,那么本篇就来谈一下关于mysql事务的问题</p>
+<p>&emsp;说到事务,我们就会问了,何时要用到事务?又或者事务是用来做什么的?其实,在我看来,事务是用来将一系列的非原子性操作封装成某种程度上外部感知上的原子性操作(这里要注意,事务并不是将所有操作压缩起来,类似redis中LUA脚本那样,而是你每句sql是确实的被执行了的,数据库也确实发生了修改的,只是用了某种技巧使得其可以支持事务失败时的回滚,以及其对其他外部行为可见性等,这个我们后面会讲到)</p>
+<p>&emsp;以汇款行为为例,我们需要从A账户中取出金额,放到B账户下,在这两个行为的过程中,可能会发生各种意外导致数字货币的丢失,那么为了防止这种情况发生,我们就需要想办法将其打包成原子性操作,其中一种方式就是用mysql事务(当然,这仅仅是数据库层面上的方式,我们当然还有其他可选方式,但这不在本次讨论范围内)</p>
+<p>&emsp;下面我们先来简单介绍一下mysql事务的几种隔离级别(这里要解释一下为什么会有隔离级别这个东西,因为上文我们提到过,mysql事务的原子性并不是将我们所要进行的操作压缩在一起执行,而是每次的sql语句确实的被mysql执行了,那么如果两个事务同时进行,那么我们如何保证一个事务所做的修改对于另一个事务而言的可见性呢?这就涉及到了事务隔离级别)。事务隔离级别分为以下几种,后面我会再详细的分析隔离级别是如何实现的</p>
+<ul>
+<li>Read uncommitted<ul>
+<li>从名字可以看出这种模式可以允许你读取另一个事务已经执行但是未进行commit之前的修改</li>
+</ul>
+</li>
+<li>Read committed<ul>
+<li>同理,这个模式只能读取另一个事务已经commit的修改</li>
+</ul>
+</li>
+<li>Repeatable read<ul>
+<li>在提到这种模式之前,我们先思考下之前的两种模式(我们此时要注意换位思考,即假设A,B两个事务同时运行,我们要分别从AB的角度去看待原子性)</li>
+<li>Read uncommitted显而易见,如果是当A读取,B修改(这里我们把它想象成连续修改可能更容易理解)时,对于A而言他看到的B事务并不是原子性的(即如果A连续读,会发现B造成的修改是在不断变动的)</li>
+<li>Read committed可以说他的一部分已经开始向原子性靠拢了,还是当A读取,B连续修改这种情况下,对于从A的角度而言B的修改是原子性的,从B的角度而言A的修改也是原子性的(即B只能看到A事务开启前或提交后的值),如果你认为这就已经达到了原子性,那么恭喜你漏了一个很重要的一点。在这种情况下,从A的角度而言A自身并不是原子性的,我这么说或许大家会感到奇怪,那么首先我们再来看一下对原子性的理解。何为原子性?即如果A,B两个行为,他们互相看对方是原子性的,并且A看A也必须是原子性的(即在他们动作执行开始到结束,在他们的眼里整个世界是停滞的,只有他们自己在活跃)。好,理解了这一点,我们再回来看,假设A事务正在执行,B事务也在执行,那么如果B不提交A就已经执行完了,在这种情况下,A认为整个世界只有他在活跃,那么如果A事务执行时B提交了呢?那么在A眼里整个世界就不是停滞的,还有B的存在,B的种种行为都会影响到A的判断,具体会有何种影响我们后面再说</li>
+<li>让我们回到Repeatable read,理解了上面的,我们就很容易理解Repeatable read这种模式,字面上来看,就是可重复读,那么他的作用是什么呢,拿上面的举例来说,即A执行(严格来讲并不是执行,而是只在第一次select操作时,后面我会说明原因)的一瞬间,在他看来整个世界对他停滞了,即时外界有任何事务的提交,也不会影响他,直到他完成自己的工作,而在mysql中,这也是默认的隔离级别。这里有个提示,所有的命令都是活跃在事务中的,即时你只有单条sql语句,mysql也会默认给你包装为一个事务,那么平时我们单条sql语句并不需要执行commit是因为有个属性autocommit=1自动帮我们执行了commit</li>
+</ul>
+</li>
+<li>Serializable<ul>
+<li>这种模式就比较简单粗暴了,每次读取数据时都会获取表级共享锁(这里不明白的同学可以简单的将其理解为被获取共享锁的对象只能看不能动),由于直接给你表套了个共享锁,所以其他事务对于本事务都是原子性的(其他事务连动数据都动不了,更别提原子性不原子性的问题了。如果其他事务的修改操作先于本串行化事务开始时,由于排他锁会阻止加共享锁,所以直到加排他锁的事务commit,本Serializable的事务根本无法执行,反之也同理,连修改都无法进行,还谈什么修改可见不可见的问题呢)</li>
+</ul>
+</li>
+</ul>
+<p>&emsp;在这里我并不会总结几种隔离级别和脏读不可重复度幻读等的关系,因为在搜资料的过程中发现大家对这些概念说法有一定的差别,当然这并不意味谁的理解是错的,只是站在不同角度而已,下面以两个版本来说</p>
+<p>&emsp;先说网上的各种教程的版本</p>
+<ul>
+<li>脏读<ul>
+<li>读到了其他事务未提交的数据,在Read uncommitted模式下会发生</li>
+</ul>
+</li>
+<li>不可重复读<ul>
+<li>一个事务中两次select获取的数据不一样,在Read committed,Read uncommitted模式下会发生</li>
+</ul>
+</li>
+<li>幻读<ul>
+<li>同一个事物中连续读两次发现读到的行(该行可能以前存在也可能不存在)不一样,在Read committed,Read uncommitted,Repeatable read模式下均会发生</li>
+</ul>
+</li>
+</ul>
+<p>&emsp;再说下自己的理解(在看接下来内容之前先看下这篇,)</p>
+<p>&emsp;看完MVCC机制之后,我们可以思考这么一个问题,假如AB两个事务(Repeatable read模式),A先全表读一次,B插入一条数据(事务并未提交),A全表update一次,A再读一次,那么他读出来的跟第一次读出来的一样吗?</p>
+<p>&emsp;如果仔细看过刚才MVCC机制的文章,会发现,其实刚才的那个问题,A两次读取出的已经不一样了,那么仔细思考一下,这算不算脏读呢?这算不算重复读呢?这算不算幻读呢?(对于幻读当然你也可以把条件定义为其他事务的改变对于本事务来说不可见而不是当前事务的修改对自身不可见,但在这里我并不想纠结于文字)其实我也分不清。在很多情况下我们死记脏读,不可重复读,幻读是毫无意义的,不如直接去弄清他的原理,根据具体需要去分析</p>
+<p>&emsp;接下来我们再仔细想一下之前的MVCC和前三种隔离级别(最后一种串行化隔离级别我们可以把它放到锁那部分来讨论了,这里提他并没有意义),我们不难感觉出,有哪里怪怪的,我们看到的和实际操作的是不一样的。那在这里,让我们再引入两个概念,当前读和快照读(请自行搜索),现在我们不难看出,无论是MVCC还是三种隔离级别都是针对于读(select)这一行为而言,他们并没有规定insert,update,delete等操作,看过MVCC我们知道,update和delete是由undo log来维护的,并且会置入操作他们的事务的id(insert也会置入id,但是网上说他不由undo log维护,具体我还要再去验证),虽然读会受此id影响,但是修改(这里泛指增删改)并不会走MVCC判断事务id,也就是说,你只要有方式能触碰到该条记录(例如update where id=),则这条记录会被你修改,并且事务id会置为你的事务id,那么以后的select,就会受MVCC影响而可以查询出来这条数据,当然还有很多情况,这里随便列举一个</p>
+<ul>
+<li>事务A读了一下表发现了abc三条数据,事务B读了一下表发现了abc三条数据,事务A插入了一条数据d,事务B再读表发现还是abc三条数据,那么事务B插入了一条数据d(注意,此时跟事务A刚才插入的主键重复),那么插入失败。</li>
+</ul>
+<p>&emsp;到这里mysql事务的介绍差不多就结束了,仅靠MVCC是不足以支撑我们对原子性的要求的,事实上大部分情况都是MVCC与锁配合来达到我们的期望(好吧,其实我本来想用需求这个词来表达,但是不禁想到了产品提需求的噩梦,相信很多人都对此深有感触)</p>
+<p>&emsp;最后提一点题外话,如果你想测试mysql的事务,千万不要在springboot或者hibernate框架中测试,他们自身的事务管理机制会扰乱你的测试,在下面的几篇(可能要鸽一阵子,毕竟这俩框架体量比较庞大)会分析一下为何他们会扰乱你的测试</p>
+<p>ps:其实在进行测试时,有一个地方暂时没搞清楚,假设事务AB(Repeatable read模式均为),B全表读一次,A删除一条数据并提交,B全表读一次。第一次读取和第二次读取出的行记录(仅仅是少了一行,每行的数据是符合RR的)在mysql workbench 8.0CE模式下是不同的(事务A的删除对B可见),而在navicat premium 12和mysql命令行模式下两次读取出是相同的(事务A的删除对事务B不可见),有人可以指点下吗</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    <div>
+      
+    </div>
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://qq616023844.github.io/2019/10/05/FutureTask源码分析/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Lemon Sour">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="柠檬不酸的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2019/10/05/FutureTask源码分析/" class="post-title-link" itemprop="url">FutureTask源码分析</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2019-10-05 18:11:00" itemprop="dateCreated datePublished" datetime="2019-10-05T18:11:00+08:00">2019-10-05</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2020-07-30 00:24:04" itemprop="dateModified" datetime="2020-07-30T00:24:04+08:00">2020-07-30</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/源码/" itemprop="url" rel="index"><span itemprop="name">源码</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>FutureTask直接继承了RunnableFuture,间接继承了Future,Runnable。当我们使用Runnable时,是无法获得返回值的,而RunnableFuture则是为了解决这一个问题而存在</p>
+<p>在该类中,有一点你会发现,他用到了自定义的链表,并且在get阻塞等待以及任务完成时都会操作该链表,例如awaitDone(boolean timed, long nanos)方法中的这些操作,该链表的作用是,如果多个线程同时get阻塞等待该任务,这些线程的信息分别保存在链表上的一个节点中,那么当任务完成时可以通过该操作来即时唤醒这些线程,超时的被从链表中移除,例如下面代码demo</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test42</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">        <span class="comment">//构造FutureTask</span></span><br><span class="line">        FutureTask futureTask = <span class="keyword">new</span> FutureTask(() -&gt; &#123;</span><br><span class="line">            Thread.sleep(<span class="number">5000</span>);</span><br><span class="line">            System.out.println(<span class="string">"callable has run"</span>);</span><br><span class="line">            <span class="keyword">return</span> <span class="string">"123"</span>;</span><br><span class="line">        &#125;);</span><br><span class="line">        <span class="comment">//运行FutureTask中传入的任务</span></span><br><span class="line">        <span class="keyword">new</span> Thread(() -&gt; futureTask.run()).start();</span><br><span class="line">        <span class="comment">//开启第一个get</span></span><br><span class="line">        <span class="keyword">new</span> Thread(() -&gt; &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                System.out.println(<span class="string">"Thread one:"</span>+futureTask.get());</span><br><span class="line">            &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125; <span class="keyword">catch</span> (ExecutionException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;).start();</span><br><span class="line">        <span class="comment">//开启第二个get</span></span><br><span class="line">        <span class="keyword">new</span> Thread(() -&gt; &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                System.out.println(<span class="string">"Thread two:"</span>+futureTask.get());</span><br><span class="line">            &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125; <span class="keyword">catch</span> (ExecutionException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;).start();</span><br><span class="line">        <span class="comment">//主线程睡眠等待其他线程结束</span></span><br><span class="line">        Thread.sleep(<span class="number">10000</span>);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>在该类中有一处代码,这里保存该任务的状态,这种方式很常见,也可以方便的通过比较大小等方式来判断其状态范围</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">int</span> state;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> NEW          = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> COMPLETING   = <span class="number">1</span>;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> NORMAL       = <span class="number">2</span>;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> EXCEPTIONAL  = <span class="number">3</span>;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> CANCELLED    = <span class="number">4</span>;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> INTERRUPTING = <span class="number">5</span>;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> INTERRUPTED  = <span class="number">6</span>;</span><br></pre></td></tr></table></figure>
+
+<p>callable是接到的任务,即使构造时采用的Future也会为了统一而被封装为Callable,outcome是返回值,如果任务执行过程中出现异常,那么outcome中保存的则是异常信息,waitNode则是刚刚提到的链表,runner是运行该任务的线程信息,在本类中常被用来做CAS操作,只有当其为null,run()才可被调用,避免连续调用两次run()导致重复运行任务</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/** The underlying callable; nulled out after running */</span></span><br><span class="line"><span class="keyword">private</span> Callable&lt;V&gt; callable;</span><br><span class="line"><span class="comment">/** The result to return or exception to throw from get() */</span></span><br><span class="line"><span class="keyword">private</span> Object outcome; <span class="comment">// non-volatile, protected by state reads/writes</span></span><br><span class="line"><span class="comment">/** The thread running the callable; CASed during run() */</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">volatile</span> Thread runner;</span><br><span class="line"><span class="comment">/** Treiber stack of waiting threads */</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">volatile</span> WaitNode waiters;</span><br></pre></td></tr></table></figure>
+
+<p>finishCompletion()方法就是之前提到的唤醒链表上所有get阻塞的线程<br>LockSupport.unpark和park可以理解为信号量<br>runAndReset()这是个protected方法,作用是,通过不改变state的状态使其可以运行多次,普通的run()运行一次以后state状态就改变了</p>
+<p>其他的代码没啥难度,看下源码附带的注释就能理解了</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    <div>
+      
+    </div>
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://qq616023844.github.io/2019/10/05/ThreadPoolExecutor源码分析/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1825,405 +2245,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://qq616023844.github.io/2019/08/25/kafka Exception thrown when sending a message with key='null'/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Lemon Sour">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="柠檬不酸的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2019/08/25/kafka Exception thrown when sending a message with key='null'/" class="post-title-link" itemprop="url">Exception thrown when sending a message with key='null'</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-
-              
-                
-              
-
-              <time title="Created: 2019-08-25 22:16:00" itemprop="dateCreated datePublished" datetime="2019-08-25T22:16:00+08:00">2019-08-25</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">Edited on</span>
-                
-                <time title="Modified: 2020-07-30 00:24:04" itemprop="dateModified" datetime="2020-07-30T00:24:04+08:00">2020-07-30</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/kafka/" itemprop="url" rel="index"><span itemprop="name">kafka</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h4 id="报错"><a href="#报错" class="headerlink" title="报错"></a>报错</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">2019-08-20 18:45:09 [nioEventLoopGroup-3-15] ERROR o.s.k.s.LoggingProducerListener - Exception thrown when sending a message with key=&apos;null&apos; and payload=&apos;xxxxxxxxxxxxxx&apos; to topic abc-event:</span><br><span class="line">org.apache.kafka.common.errors.TimeoutException: Failed to update metadata after 60000 ms.</span><br></pre></td></tr></table></figure>
-
-<h4 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h4><p>&emsp;连接的远程kafka,服务器防火墙没开</p>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    <div>
-      
-    </div>
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://qq616023844.github.io/2019/08/17/线程模型/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Lemon Sour">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="柠檬不酸的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2019/08/17/线程模型/" class="post-title-link" itemprop="url">线程模型</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-
-              
-                
-              
-
-              <time title="Created: 2019-08-17 23:25:00" itemprop="dateCreated datePublished" datetime="2019-08-17T23:25:00+08:00">2019-08-17</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">Edited on</span>
-                
-                <time title="Modified: 2020-08-10 23:55:51" itemprop="dateModified" datetime="2020-08-10T23:55:51+08:00">2020-08-10</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/模型/" itemprop="url" rel="index"><span itemprop="name">模型</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <a id="more"></a>
-<p>首先我们来谈一谈java中常见的几种IO线程模型</p>
-<p>我们知道一般io(socket)都是由accept,read,write,close几种状态组成</p>
-<h4 id="同步阻塞-bio"><a href="#同步阻塞-bio" class="headerlink" title="同步阻塞(bio)"></a>同步阻塞(bio)</h4><p>在read时需要无限等待直到消息到达,就是阻塞,同步则指的是每一步都需要等待上一步完成然后被调用<br><img src="http://188.131.252.235:8888/线程模型/同步阻塞io.png" text-align:center alt="如果图片失效,请邮件联系作者补图"></p>
-<center></center>
-
-<h4 id="同步非阻塞"><a href="#同步非阻塞" class="headerlink" title="同步非阻塞()"></a>同步非阻塞()</h4><p>同步阻塞和同步非阻塞的区别就在于,在read时无论是否有数据,立刻返回。那么或许有人会问了,这样有什么意义,还需要自己写while循环包裹来促使其不断访问直到数据到达。其实针对这一点,如果一个程序在底层进入了阻塞状态,也就意味着我们失去了对其控制,对于socket来说,我们只能通过close来使其断开连接离开阻塞状态,而如果我们是非阻塞的情况下,我们发现read数据未到达,可以先允许该线程去做其他工作,过一会再来read一次检测下消息是否到达,同时我们也可以通过标记位来控制其后续行为<br><img src="http://188.131.252.235:8888/线程模型/同步非阻塞io.png" text-align:center alt="如果图片失效,请邮件联系作者补图"></p>
-<center></center>
-
-
-
-<h4 id="io多路复用-nio"><a href="#io多路复用-nio" class="headerlink" title="io多路复用(nio)"></a>io多路复用(nio)</h4><p>其实nio也被算作同步非阻塞,不过我们不必拘泥于这些分类,在发展中,是先有的模型,后来才被分类,所以很多情况下分类是模棱两可的。</p>
-<p>io多路复用跟之前说的同步非阻塞有点关系,io多路复用的read也是非阻塞的,跟之前的最大区别在于,他采用了Selector选择器负责监听每一个socket的各种行为,当该行为被激活的时候,通知后续线程去处理。</p>
-<p>我们可以想象,此时有巨量的socket链接进来,我们需要为每一个socket创建一个线程来read(即使是使用线程池减少了创建线程的消耗,那么大量的线程也依旧会在while(){//read}上浪费掉),此时我们就需要一个方案来解放这些线程无意义的循环read</p>
-<p>一个管理者,来管理所有的Socket,这也就诞生了Selector选择器,由Selector负责检测是否有accept,read,write行为,并且通知其他线程来处理,这样我们可以节约大量线程,配合线程池我们就可以用有限的资源处理大量的连接</p>
-<p><font color="red">假设我们将流程分类为,io监听和io接收,业务处理三部分,那么nio的核心就是在于将io监听给提取出来单独管理</font><br><img src="http://188.131.252.235:8888/线程模型/io多路复用.png" text-align:center alt="如果图片失效,请邮件联系作者补图"></p>
-<center></center>
-
-<h4 id="异步"><a href="#异步" class="headerlink" title="异步"></a>异步</h4><p>说到异步,阻塞与非阻塞的界限更为模糊。</p>
-<p>下面让我们来看一段代码,这段代码并不是异步,他只是一个回调雏形,后面我会谈到</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">CallBack</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">callback</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Main</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">work</span><span class="params">(CallBack callBack)</span></span>&#123;</span><br><span class="line">        <span class="comment">//业务代码省略...</span></span><br><span class="line">        callBack.callback();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Main main = <span class="keyword">new</span> Main();</span><br><span class="line">        System.out.println(<span class="number">1</span>);</span><br><span class="line">        main.work(<span class="keyword">new</span> CallBack() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">callback</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                System.out.println(<span class="number">2</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">        System.out.println(<span class="number">3</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>如果你对代理模式比较熟悉,那么这里你肯定会产生疑问:这不就是代理模式么?</p>
-<p>嗯,没错,这个东西在我眼里就是代理模式,这里我们传入了自定义的代码,这就是回调的雏形</p>
-<p>你肯定会问,这有什么用?还不如直接在一个方法里从头到尾写下来。</p>
-<p>这是因为我们还没有引入其他的模型,假设我们引入多线程,那么我们的代码就成了这样</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">CallBack</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">callback</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Main</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">work</span><span class="params">(CallBack callBack)</span></span>&#123;</span><br><span class="line">        <span class="comment">//业务代码</span></span><br><span class="line">        callBack.callback();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Main main = <span class="keyword">new</span> Main();</span><br><span class="line">        System.out.println(<span class="number">1</span>);</span><br><span class="line">        <span class="keyword">new</span> Thread(<span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                main.work(<span class="keyword">new</span> CallBack() &#123;</span><br><span class="line">                    <span class="meta">@Override</span></span><br><span class="line">                    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">callback</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                        System.out.println(<span class="number">2</span>);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;).start();</span><br><span class="line">        System.out.println(<span class="number">3</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>通过对比,我们发现,引入了线程的概念后,他的意义就完全改变,变成了一种近似异步(不必在乎这些概念,你重点关注的应该是是否对于性能有真正的提升)的实现。</p>
-<p>假设我们面对这样一个场景(此处我们先以非阻塞为例,否则引入自变量过的多不宜于理解),两个socket AB互相长期通信,且每次通信在业务上(我们先将流程简单的分为为io,业务两部分)所需要耗费的时间是不确定的,假若说我们采用同步的方式,每一次A发往B,因B只有一根线程,需要顺序的处理读io,业务操作,写io后才可继续处理A的后续请求。</p>
-<p>而现在,我们将双方模型改为异步,A只要有请求就向B发送,无需等待B响应,当B读取完消息后(你可能会问A一直在发送消息,B怎么知道A是发送到一个请求还是两个请求,这一点你可以去了解粘包拆包的问题),将消息封装为一个任务,递交给线程池执行(执行完毕后会将执行回调函数来决定接下来的操作,由于任务耗时的不确定性,如果返回消息的话,消息的先后顺序也是不确定的,所以A在请求时需要附带消息的序列号),并立刻返回A一条消息表示自己已经接收到了请求。</p>
-<p>到这里你会觉得一切豁然开朗,你仿佛明白了同步异步,阻塞非阻塞。但是,我刚才做的将同步改为异步的操作,真的提高了性能么,假设我线程池只设置一根线程,那么性能跟io和业务在同一根线程有区别么,这真的是异步带来的福利,还是仅仅是多线程带来的福利?我只不过是让A提前知道了,B已经接收到了来自A的消息,但是实际如果线程池只有一根线程的话,业务处理时间是不会改变的。那么异步的意义何在?仅仅是为了利用起多线程并发处理业务这个效果么?</p>
-<p>…<br>…<br>…</p>
-<p>答案:<br>&emsp;异步确实起到了利用多线程的作用,这里的异步我们要明确,异步并非是一个确切的概念,而是一个抽象宏观的概念,是针对于观察点而不断变化的,例如在当前这个场景中,如果A只有当收到B的处理结果才会继续发送,那么B的异步还算是真正的异步吗?我们当然可以说B是异步的,但是对于整体来说,他又是同步的,B在此时的是无法体现其性能优势的。假如说在这个基础上,有许许多多的A连接同一个B向其发送消息,此时B针对每一个连接起一个io线程(这里当然可以用Selector选择器配合io线程池),接到消息后扔到线程池(即使线程池只有一根线程,但是由于io是并发的,省去了io时间)去处理,这时候B又能体现他的性能优势了</p>
-<p>那么接下来我们抛开异步同步阻塞非阻塞这个问题,从性能方面总结一下,之前我们提到的线程模型,变化繁多,那么他们为了性能所做的改变都有什么共同点呢?</p>
-<p><font color="red">将职责精细划分,对于每一部分职责分别进行深度优化,使得每一部分职责成为一个组件,各组件之间相互通信,以避免某一组件因为另一组件的原因而造成无意义的等待</font></p>
-<p>在并发量低的环境下,由于我们机器可以开足够的线程来处理消息,即使义务处理因为io产生了等待,其他的消息也可以选择其他线程去处理。而当并发量增高,此时如果我们线程随之增高的话,会产生大量的线程上下文切换开销,所以我们不得不把控线程的数目,转而通过技巧来充分利用起每一条线程(例如线程池,组件功能划分等方式),这也就是这些线程模型存在并逐渐演化的原因</p>
-<p>拓展:</p>
-<a href="/2019/08/14/Tomcat源码笔记/" title="Tomcat源码笔记">Tomcat源码笔记</a>最尾处的Tomcat线程模型
-
-
-<p>待续</p>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    <div>
-      
-    </div>
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2270,7 +2291,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">34</span>
+                    <span class="site-state-item-count">36</span>
                     <span class="site-state-item-name">posts</span>
                   </a>
                 </div>
