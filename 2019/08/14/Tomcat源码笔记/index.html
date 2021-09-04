@@ -95,21 +95,21 @@
   <meta name="description" content="本章我们不会涉及代码,而是简要的介绍Tomcat的实现原理">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Tomcat源码笔记">
-<meta property="og:url" content="https://ryanstian.github.io/2019/08/14/Tomcat源码笔记/index.html">
+<meta property="og:url" content="https://ryanstian.github.io/blog/2019/08/14/Tomcat源码笔记/index.html">
 <meta property="og:site_name" content="ryanstian的博客">
 <meta property="og:description" content="本章我们不会涉及代码,而是简要的介绍Tomcat的实现原理">
 <meta property="og:locale" content="en">
-<meta property="og:image" content="https://ryanstian.github.io/2019/08/14/Tomcat源码笔记/LifecycleMBeanBase%E7%BB%A7%E6%89%BF%E5%9B%BE.png">
-<meta property="og:image" content="https://ryanstian.github.io/2019/08/14/Tomcat源码笔记/Lifecycle%E6%8E%A5%E5%8F%A3%E5%AE%9E%E7%8E%B0%E5%88%97%E8%A1%A8.png">
-<meta property="og:image" content="https://ryanstian.github.io/2019/08/14/Tomcat源码笔记/LifecycleMBeanBase%E7%B1%BB%E5%9B%BE.png">
-<meta property="og:image" content="https://ryanstian.github.io/2019/08/14/Tomcat源码笔记/tomcat%E6%97%B6%E5%BA%8F%E5%9B%BEinit.png">
-<meta property="og:image" content="https://ryanstian.github.io/2019/08/14/Tomcat源码笔记/tomcatNIO%E6%8E%A5%E6%94%B6%E8%AF%B7%E6%B1%82%E9%80%BB%E8%BE%91%E5%9B%BE.png">
-<meta property="og:image" content="https://ryanstian.github.io/2019/08/14/Tomcat源码笔记/TomcatNIO%E7%BA%BF%E7%A8%8B%E6%A8%A1%E5%9E%8B.png">
+<meta property="og:image" content="https://ryanstian.github.io/blog/2019/08/14/Tomcat源码笔记/LifecycleMBeanBase%E7%BB%A7%E6%89%BF%E5%9B%BE.png">
+<meta property="og:image" content="https://ryanstian.github.io/blog/2019/08/14/Tomcat源码笔记/Lifecycle%E6%8E%A5%E5%8F%A3%E5%AE%9E%E7%8E%B0%E5%88%97%E8%A1%A8.png">
+<meta property="og:image" content="https://ryanstian.github.io/blog/2019/08/14/Tomcat源码笔记/LifecycleMBeanBase%E7%B1%BB%E5%9B%BE.png">
+<meta property="og:image" content="https://ryanstian.github.io/blog/2019/08/14/Tomcat源码笔记/tomcat%E6%97%B6%E5%BA%8F%E5%9B%BEinit.png">
+<meta property="og:image" content="https://ryanstian.github.io/blog/2019/08/14/Tomcat源码笔记/tomcatNIO%E6%8E%A5%E6%94%B6%E8%AF%B7%E6%B1%82%E9%80%BB%E8%BE%91%E5%9B%BE.png">
+<meta property="og:image" content="https://ryanstian.github.io/blog/2019/08/14/Tomcat源码笔记/TomcatNIO%E7%BA%BF%E7%A8%8B%E6%A8%A1%E5%9E%8B.png">
 <meta property="og:updated_time" content="2021-08-30T16:12:28.666Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Tomcat源码笔记">
 <meta name="twitter:description" content="本章我们不会涉及代码,而是简要的介绍Tomcat的实现原理">
-<meta name="twitter:image" content="https://ryanstian.github.io/2019/08/14/Tomcat源码笔记/LifecycleMBeanBase%E7%BB%A7%E6%89%BF%E5%9B%BE.png">
+<meta name="twitter:image" content="https://ryanstian.github.io/blog/2019/08/14/Tomcat源码笔记/LifecycleMBeanBase%E7%BB%A7%E6%89%BF%E5%9B%BE.png">
 
 
 
@@ -117,7 +117,7 @@
 
   
   
-  <link rel="canonical" href="https://ryanstian.github.io/2019/08/14/Tomcat源码笔记/">
+  <link rel="canonical" href="https://ryanstian.github.io/blog/2019/08/14/Tomcat源码笔记/">
 
 
 
@@ -350,7 +350,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://ryanstian.github.io/2019/08/14/Tomcat源码笔记/">
+    <link itemprop="mainEntityOfPage" href="https://ryanstian.github.io/blog/2019/08/14/Tomcat源码笔记/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Ryanstian">
@@ -492,16 +492,16 @@
 <p>所以我在文章最开始的时候说到：“Tomcat实质就是对socket的深度封装”</p>
 <p>在获取到socket套接字以后，Tomcat开始解析<br>根据传入内容标明协议的不同,按照在代码中定义好的各种协议模板来解析这个字符串。<br>解析完成后封装到Request和Response中交给Servlet执行用户自定义的业务代码,最后再由socket发送响应,这就是Tomcat大致的流程</p>
 <h2 id="生命周期"><a href="#生命周期" class="headerlink" title="生命周期"></a>生命周期</h2><p>Tomcat的各个组件也是有生命周期的,这个生命周期由一种设计模式(状态机)来控制,下面让我们了解一下</p>
-<p>首先要介绍的是LifecycleMBeanBase类,下面是这个类的类图<br><img src="//ryanstian.github.io/2019/08/14/Tomcat源码笔记/LifecycleMBeanBase%E7%BB%A7%E6%89%BF%E5%9B%BE.png" alt="如果图片失效,请邮件联系作者补图"></p>
+<p>首先要介绍的是LifecycleMBeanBase类,下面是这个类的类图<br><img src="//ryanstian.github.io/blog/2019/08/14/Tomcat源码笔记/LifecycleMBeanBase%E7%BB%A7%E6%89%BF%E5%9B%BE.png" alt="如果图片失效,请邮件联系作者补图"></p>
 <p>我们从Lifecycle接口开始了解,Lifecycle定义了一个状态机,下面是Lifecycle的原注释</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">*            start()</span><br><span class="line">*  -----------------------------</span><br><span class="line">*  |                           |</span><br><span class="line">*  | init()                    |</span><br><span class="line">* NEW -»-- INITIALIZING        |</span><br><span class="line">* | |           |              |     ------------------«-----------------------</span><br><span class="line">* | |           |auto          |     |                                        |</span><br><span class="line">* | |          \|/    start() \|/   \|/     auto          auto         stop() |</span><br><span class="line">* | |      INITIALIZED --»-- STARTING_PREP --»- STARTING --»- STARTED --»---  |</span><br><span class="line">* | |         |                                                            |  |</span><br><span class="line">* | |destroy()|                                                            |  |</span><br><span class="line">* | --»-----«--    ------------------------«--------------------------------  ^</span><br><span class="line">* |     |          |                                                          |</span><br><span class="line">* |     |         \|/          auto                 auto              start() |</span><br><span class="line">* |     |     STOPPING_PREP ----»---- STOPPING ------»----- STOPPED -----»-----</span><br><span class="line">* |    \|/                               ^                     |  ^</span><br><span class="line">* |     |               stop()           |                     |  |</span><br><span class="line">* |     |       --------------------------                     |  |</span><br><span class="line">* |     |       |                                              |  |</span><br><span class="line">* |     |       |    destroy()                       destroy() |  |</span><br><span class="line">* |     |    FAILED ----»------ DESTROYING ---«-----------------  |</span><br><span class="line">* |     |                        ^     |                          |</span><br><span class="line">* |     |     destroy()          |     |auto                      |</span><br><span class="line">* |     --------»-----------------    \|/                         |</span><br><span class="line">* |                                 DESTROYED                     |</span><br><span class="line">* |                                                               |</span><br><span class="line">* |                            stop()                             |</span><br><span class="line">* ----»-----------------------------»------------------------------</span><br></pre></td></tr></table></figure>
 
 <p>我们可以看到,这是一种状态机设计模式。规定了组件生命周期的状态转换,可以方便的进行组件生命周期的管理。  </p>
-<p>从下图我们可以看到,从Server开始几乎每一个组件间接继承/实现了该状态机<br><img src="//ryanstian.github.io/2019/08/14/Tomcat源码笔记/Lifecycle%E6%8E%A5%E5%8F%A3%E5%AE%9E%E7%8E%B0%E5%88%97%E8%A1%A8.png" alt="如果图片失效,请邮件联系作者补图"></p>
+<p>从下图我们可以看到,从Server开始几乎每一个组件间接继承/实现了该状态机<br><img src="//ryanstian.github.io/blog/2019/08/14/Tomcat源码笔记/Lifecycle%E6%8E%A5%E5%8F%A3%E5%AE%9E%E7%8E%B0%E5%88%97%E8%A1%A8.png" alt="如果图片失效,请邮件联系作者补图"></p>
 <p>接下来让我们看LifecycleBase,这是一个抽象类,实现了fireLifecycleEvent,init,start…等方法</p>
 <p>fireLifecycleEvent的设计其实是根据观察者模式</p>
 <p>init,start等方法仅仅是用来控制其生命周期的,每个方法例如init,在内部还会调用initInternal(),Tomcat的很多组件的业务代码全部都在xxxInternal()中,由子类负责实现</p>
-<p>LifecycleMBeanBase则对LifecycleBase进行了进一步的实现,我们从它的图中可以看到<br><img src="//ryanstian.github.io/2019/08/14/Tomcat源码笔记/LifecycleMBeanBase%E7%B1%BB%E5%9B%BE.png" alt="如果图片失效,请邮件联系作者补图"></p>
+<p>LifecycleMBeanBase则对LifecycleBase进行了进一步的实现,我们从它的图中可以看到<br><img src="//ryanstian.github.io/blog/2019/08/14/Tomcat源码笔记/LifecycleMBeanBase%E7%B1%BB%E5%9B%BE.png" alt="如果图片失效,请邮件联系作者补图"></p>
 <p>其中最关键的是initInternal()和destroyInternal()。<br>主要实现了委托Register类来将子类(类如StandardServer等)注册到bean容器中。</p>
 <p>如果在看源码过程中大家对ManagedBean或者MBeanServer抱有疑惑,可以先去学习一下JMX规范再回来看容器部分代码,不过即使跳过容器部分,也不影响接下来的部分</p>
 <h2 id="Tomcat初始化流程-仅需有个印象即可"><a href="#Tomcat初始化流程-仅需有个印象即可" class="headerlink" title="Tomcat初始化流程(仅需有个印象即可)"></a>Tomcat初始化流程(仅需有个印象即可)</h2><p>Tomcat工作主要有几个流程:</p>
@@ -511,7 +511,7 @@
 <li>处理消息</li>
 <li>结束</li>
 </ul>
-<p>首先放一张tomcat init的流程图(简化版)<br><img src="//ryanstian.github.io/2019/08/14/Tomcat源码笔记/tomcat%E6%97%B6%E5%BA%8F%E5%9B%BEinit.png" alt="如果图片失效,请邮件联系作者补图"></p>
+<p>首先放一张tomcat init的流程图(简化版)<br><img src="//ryanstian.github.io/blog/2019/08/14/Tomcat源码笔记/tomcat%E6%97%B6%E5%BA%8F%E5%9B%BEinit.png" alt="如果图片失效,请邮件联系作者补图"></p>
 <ul>
 <li>Bootstrap:是入口,例如命令行输入service tomcat start等操作时,便是由这个类来解析,这个类均通过反射操作来调用Catalina</li>
 <li>Catalina:提供了操控Tomcat启停等行为的方法</li>
@@ -532,7 +532,7 @@
 <li><p>Tomcat的start流程其实跟init流程类似,在宏观上几乎没有改动,因此省略</p>
 </li>
 </ul>
-<h2 id="Tomcat接收消息流程"><a href="#Tomcat接收消息流程" class="headerlink" title="Tomcat接收消息流程"></a>Tomcat接收消息流程</h2><p>这里我认为一张图足以<br><img src="//ryanstian.github.io/2019/08/14/Tomcat源码笔记/tomcatNIO%E6%8E%A5%E6%94%B6%E8%AF%B7%E6%B1%82%E9%80%BB%E8%BE%91%E5%9B%BE.png" alt="如果图片失效,请邮件联系作者补图"></p>
+<h2 id="Tomcat接收消息流程"><a href="#Tomcat接收消息流程" class="headerlink" title="Tomcat接收消息流程"></a>Tomcat接收消息流程</h2><p>这里我认为一张图足以<br><img src="//ryanstian.github.io/blog/2019/08/14/Tomcat源码笔记/tomcatNIO%E6%8E%A5%E6%94%B6%E8%AF%B7%E6%B1%82%E9%80%BB%E8%BE%91%E5%9B%BE.png" alt="如果图片失效,请邮件联系作者补图"></p>
 <h2 id="一些关键的节点"><a href="#一些关键的节点" class="headerlink" title="一些关键的节点"></a>一些关键的节点</h2><p>这里将提供一些消息在Tomcat中传递的关键节点,可以帮助大家通过全局搜索快速定位到源码</p>
 <ul>
 <li>init时:<br>这里有人会疑惑类的初始化和注入依赖在哪里,答案是digester.parse<br>这种感觉就像是我们写springMVC时配置的xml一样,在这里xml就是server.xml。digester会根据这个xml来解析并注入依赖</li>
@@ -543,7 +543,7 @@
 <li>具体从socket读取消息的地方:<br>Http11InputBuffer类的socketWrapper.read。<br>NioSocketWrapper类的nRead = fillReadBuffer(block, to)</li>
 <li>关键类Http11Processor：<br>inputBuffer.parseHeaders将读取出的消息解析为消息头</li>
 </ul>
-<h2 id="这里我们讲Tomcat线程模型"><a href="#这里我们讲Tomcat线程模型" class="headerlink" title="这里我们讲Tomcat线程模型"></a>这里我们讲Tomcat线程模型</h2><p>TomcatNIO的线程模型其实非常简单,简单到什么程度?让我们看图<br><img src="//ryanstian.github.io/2019/08/14/Tomcat源码笔记/TomcatNIO%E7%BA%BF%E7%A8%8B%E6%A8%A1%E5%9E%8B.png" alt="如果图片失效,请邮件联系作者补图"></p>
+<h2 id="这里我们讲Tomcat线程模型"><a href="#这里我们讲Tomcat线程模型" class="headerlink" title="这里我们讲Tomcat线程模型"></a>这里我们讲Tomcat线程模型</h2><p>TomcatNIO的线程模型其实非常简单,简单到什么程度?让我们看图<br><img src="//ryanstian.github.io/blog/2019/08/14/Tomcat源码笔记/TomcatNIO%E7%BA%BF%E7%A8%8B%E6%A8%A1%E5%9E%8B.png" alt="如果图片失效,请邮件联系作者补图"></p>
 <p>甚至于io操作和业务操作在同一根线程上进行,没有经过分离,poller的职责仅仅是检测事件,并不负责io操作,<br><font color="red">注意这仅仅是NIO模式,不包括另外两种NIO2和APR模式</font></p>
 <p>我们看server.xml配置文档的时候可以看到允许我们设置一些参数,这里之前tomcatNIO接收请求逻辑图已经描述过,不再赘述。</p>
 <p>至于Poller,你在看旧文章时有人会说允许最大值不超过2个。没错,在之前的版本是这样,但是在9.0,我们看到注释文档中有句话,在NIO下Poller被改为仅有一个</p>

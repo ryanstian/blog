@@ -95,18 +95,18 @@
   <meta name="description" content="我们来谈一谈java中常见的几种IO线程模型">
 <meta property="og:type" content="article">
 <meta property="og:title" content="几种线程模型">
-<meta property="og:url" content="https://ryanstian.github.io/2019/08/17/几种线程模型/index.html">
+<meta property="og:url" content="https://ryanstian.github.io/blog/2019/08/17/几种线程模型/index.html">
 <meta property="og:site_name" content="ryanstian的博客">
 <meta property="og:description" content="我们来谈一谈java中常见的几种IO线程模型">
 <meta property="og:locale" content="en">
-<meta property="og:image" content="https://ryanstian.github.io/2019/08/17/几种线程模型/%E5%90%8C%E6%AD%A5%E9%98%BB%E5%A1%9Eio.png">
-<meta property="og:image" content="https://ryanstian.github.io/2019/08/17/几种线程模型/%E5%90%8C%E6%AD%A5%E9%9D%9E%E9%98%BB%E5%A1%9Eio.png">
-<meta property="og:image" content="https://ryanstian.github.io/2019/08/17/几种线程模型/io%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8.png">
+<meta property="og:image" content="https://ryanstian.github.io/blog/2019/08/17/几种线程模型/%E5%90%8C%E6%AD%A5%E9%98%BB%E5%A1%9Eio.png">
+<meta property="og:image" content="https://ryanstian.github.io/blog/2019/08/17/几种线程模型/%E5%90%8C%E6%AD%A5%E9%9D%9E%E9%98%BB%E5%A1%9Eio.png">
+<meta property="og:image" content="https://ryanstian.github.io/blog/2019/08/17/几种线程模型/io%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8.png">
 <meta property="og:updated_time" content="2021-08-30T15:52:10.677Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="几种线程模型">
 <meta name="twitter:description" content="我们来谈一谈java中常见的几种IO线程模型">
-<meta name="twitter:image" content="https://ryanstian.github.io/2019/08/17/几种线程模型/%E5%90%8C%E6%AD%A5%E9%98%BB%E5%A1%9Eio.png">
+<meta name="twitter:image" content="https://ryanstian.github.io/blog/2019/08/17/几种线程模型/%E5%90%8C%E6%AD%A5%E9%98%BB%E5%A1%9Eio.png">
 
 
 
@@ -114,7 +114,7 @@
 
   
   
-  <link rel="canonical" href="https://ryanstian.github.io/2019/08/17/几种线程模型/">
+  <link rel="canonical" href="https://ryanstian.github.io/blog/2019/08/17/几种线程模型/">
 
 
 
@@ -347,7 +347,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://ryanstian.github.io/2019/08/17/几种线程模型/">
+    <link itemprop="mainEntityOfPage" href="https://ryanstian.github.io/blog/2019/08/17/几种线程模型/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Ryanstian">
@@ -462,11 +462,11 @@
         <p>我们来谈一谈java中常见的几种IO线程模型</p>
 <a id="more"></a>
 
-<h2 id="同步阻塞-bio"><a href="#同步阻塞-bio" class="headerlink" title="同步阻塞(bio)"></a>同步阻塞(bio)</h2><p>在read时需要无限等待直到消息到达,就是阻塞,同步则指的是每一步都需要等待上一步完成然后被调用<br><img src="//ryanstian.github.io/2019/08/17/几种线程模型/%E5%90%8C%E6%AD%A5%E9%98%BB%E5%A1%9Eio.png" alt="如果图片失效,请邮件联系作者补图"></p>
+<h2 id="同步阻塞-bio"><a href="#同步阻塞-bio" class="headerlink" title="同步阻塞(bio)"></a>同步阻塞(bio)</h2><p>在read时需要无限等待直到消息到达,就是阻塞,同步则指的是每一步都需要等待上一步完成然后被调用<br><img src="//ryanstian.github.io/blog/2019/08/17/几种线程模型/%E5%90%8C%E6%AD%A5%E9%98%BB%E5%A1%9Eio.png" alt="如果图片失效,请邮件联系作者补图"></p>
 <h2 id="同步非阻塞"><a href="#同步非阻塞" class="headerlink" title="同步非阻塞()"></a>同步非阻塞()</h2><p>同步阻塞和同步非阻塞的区别就在于,在read时无论是否有数据,立刻返回。</p>
 <p>那么或许有人会问了,这样有什么意义,还不是需要自己写while循环包裹来促使其不断访问直到数据到达？</p>
 <p>其实针对这一点,如果一个线程进入了阻塞状态,也就意味着这个线程无法用来做其他事情。</p>
-<p>如果我们是非阻塞的情况下,我们发现read数据未到达,可以先允许该线程去做其他工作,过一会再来read一次检测下消息是否到达,同时我们也可以通过标记位来控制其后续行为<br><img src="//ryanstian.github.io/2019/08/17/几种线程模型/%E5%90%8C%E6%AD%A5%E9%9D%9E%E9%98%BB%E5%A1%9Eio.png" alt="如果图片失效,请邮件联系作者补图"></p>
+<p>如果我们是非阻塞的情况下,我们发现read数据未到达,可以先允许该线程去做其他工作,过一会再来read一次检测下消息是否到达,同时我们也可以通过标记位来控制其后续行为<br><img src="//ryanstian.github.io/blog/2019/08/17/几种线程模型/%E5%90%8C%E6%AD%A5%E9%9D%9E%E9%98%BB%E5%A1%9Eio.png" alt="如果图片失效,请邮件联系作者补图"></p>
 <h2 id="io多路复用-nio"><a href="#io多路复用-nio" class="headerlink" title="io多路复用(nio)"></a>io多路复用(nio)</h2><p>其实nio也被算作同步非阻塞,不过我们不必拘泥于这些分类,在发展中,是先有的模型,后来才被分类,所以很多情况下分类是模棱两可的。</p>
 <p>io多路复用跟之前说的同步非阻塞有点关系,io多路复用的read也是非阻塞的,跟之前的最大区别在于,他采用了Selector选择器负责监听每一个socket的各种行为,当该行为被激活的时候,通知后续线程去处理。</p>
 <p>我们可以想象,此时有巨量的socket链接进来,我们需要为每一个socket创建一个线程来read</p>
@@ -475,7 +475,7 @@
 
 <p>上浪费掉,此时我们就需要一个方案来解放这些线程无意义的循环read</p>
 <p>一个管理者,来管理所有的Socket,这也就诞生了Selector选择器,由Selector负责检测是否有accept,read,write行为,并且通知其他线程来处理,这样我们可以节约大量线程,配合线程池我们就可以用有限的资源处理大量的连接</p>
-<p><font color="red">假设我们将流程分类为,io监听和io接收,业务处理三部分,那么nio的核心就是在于将io监听给提取出来单独管理</font><br><img src="//ryanstian.github.io/2019/08/17/几种线程模型/io%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8.png" alt="如果图片失效,请邮件联系作者补图"></p>
+<p><font color="red">假设我们将流程分类为,io监听和io接收,业务处理三部分,那么nio的核心就是在于将io监听给提取出来单独管理</font><br><img src="//ryanstian.github.io/blog/2019/08/17/几种线程模型/io%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8.png" alt="如果图片失效,请邮件联系作者补图"></p>
 <h2 id="异步"><a href="#异步" class="headerlink" title="异步"></a>异步</h2><p>说到异步,阻塞与非阻塞的界限更为模糊。</p>
 <p>下面让我们来看一段代码,这段代码并不是异步,他只是一个回调雏形,后面我会谈到</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">CallBack</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">callback</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Main</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">work</span><span class="params">(CallBack callBack)</span></span>&#123;</span><br><span class="line">        <span class="comment">//业务代码省略...</span></span><br><span class="line">        callBack.callback();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Main main = <span class="keyword">new</span> Main();</span><br><span class="line">        System.out.println(<span class="number">1</span>);</span><br><span class="line">        main.work(<span class="keyword">new</span> CallBack() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">callback</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                System.out.println(<span class="number">2</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">        System.out.println(<span class="number">3</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>

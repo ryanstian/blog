@@ -79,16 +79,16 @@
 <p>所以我在文章最开始的时候说到：“Tomcat实质就是对socket的深度封装”</p>
 <p>在获取到socket套接字以后，Tomcat开始解析<br>根据传入内容标明协议的不同,按照在代码中定义好的各种协议模板来解析这个字符串。<br>解析完成后封装到Request和Response中交给Servlet执行用户自定义的业务代码,最后再由socket发送响应,这就是Tomcat大致的流程</p>
 <h2 id="生命周期"><a href="#生命周期" class="headerlink" title="生命周期"></a>生命周期</h2><p>Tomcat的各个组件也是有生命周期的,这个生命周期由一种设计模式(状态机)来控制,下面让我们了解一下</p>
-<p>首先要介绍的是LifecycleMBeanBase类,下面是这个类的类图<br><img src="//ryanstian.github.io/2019/08/14/Tomcat源码笔记/LifecycleMBeanBase%E7%BB%A7%E6%89%BF%E5%9B%BE.png" alt="如果图片失效,请邮件联系作者补图"></p>
+<p>首先要介绍的是LifecycleMBeanBase类,下面是这个类的类图<br><img src="//ryanstian.github.io/blog/2019/08/14/Tomcat源码笔记/LifecycleMBeanBase%E7%BB%A7%E6%89%BF%E5%9B%BE.png" alt="如果图片失效,请邮件联系作者补图"></p>
 <p>我们从Lifecycle接口开始了解,Lifecycle定义了一个状态机,下面是Lifecycle的原注释</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">*            start()</span><br><span class="line">*  -----------------------------</span><br><span class="line">*  |                           |</span><br><span class="line">*  | init()                    |</span><br><span class="line">* NEW -»-- INITIALIZING        |</span><br><span class="line">* | |           |              |     ------------------«-----------------------</span><br><span class="line">* | |           |auto          |     |                                        |</span><br><span class="line">* | |          \|/    start() \|/   \|/     auto          auto         stop() |</span><br><span class="line">* | |      INITIALIZED --»-- STARTING_PREP --»- STARTING --»- STARTED --»---  |</span><br><span class="line">* | |         |                                                            |  |</span><br><span class="line">* | |destroy()|                                                            |  |</span><br><span class="line">* | --»-----«--    ------------------------«--------------------------------  ^</span><br><span class="line">* |     |          |                                                          |</span><br><span class="line">* |     |         \|/          auto                 auto              start() |</span><br><span class="line">* |     |     STOPPING_PREP ----»---- STOPPING ------»----- STOPPED -----»-----</span><br><span class="line">* |    \|/                               ^                     |  ^</span><br><span class="line">* |     |               stop()           |                     |  |</span><br><span class="line">* |     |       --------------------------                     |  |</span><br><span class="line">* |     |       |                                              |  |</span><br><span class="line">* |     |       |    destroy()                       destroy() |  |</span><br><span class="line">* |     |    FAILED ----»------ DESTROYING ---«-----------------  |</span><br><span class="line">* |     |                        ^     |                          |</span><br><span class="line">* |     |     destroy()          |     |auto                      |</span><br><span class="line">* |     --------»-----------------    \|/                         |</span><br><span class="line">* |                                 DESTROYED                     |</span><br><span class="line">* |                                                               |</span><br><span class="line">* |                            stop()                             |</span><br><span class="line">* ----»-----------------------------»------------------------------</span><br></pre></td></tr></table></figure>
 
 <p>我们可以看到,这是一种状态机设计模式。规定了组件生命周期的状态转换,可以方便的进行组件生命周期的管理。  </p>
-<p>从下图我们可以看到,从Server开始几乎每一个组件间接继承/实现了该状态机<br><img src="//ryanstian.github.io/2019/08/14/Tomcat源码笔记/Lifecycle%E6%8E%A5%E5%8F%A3%E5%AE%9E%E7%8E%B0%E5%88%97%E8%A1%A8.png" alt="如果图片失效,请邮件联系作者补图"></p>
+<p>从下图我们可以看到,从Server开始几乎每一个组件间接继承/实现了该状态机<br><img src="//ryanstian.github.io/blog/2019/08/14/Tomcat源码笔记/Lifecycle%E6%8E%A5%E5%8F%A3%E5%AE%9E%E7%8E%B0%E5%88%97%E8%A1%A8.png" alt="如果图片失效,请邮件联系作者补图"></p>
 <p>接下来让我们看LifecycleBase,这是一个抽象类,实现了fireLifecycleEvent,init,start…等方法</p>
 <p>fireLifecycleEvent的设计其实是根据观察者模式</p>
 <p>init,start等方法仅仅是用来控制其生命周期的,每个方法例如init,在内部还会调用initInternal(),Tomcat的很多组件的业务代码全部都在xxxInternal()中,由子类负责实现</p>
-<p>LifecycleMBeanBase则对LifecycleBase进行了进一步的实现,我们从它的图中可以看到<br><img src="//ryanstian.github.io/2019/08/14/Tomcat源码笔记/LifecycleMBeanBase%E7%B1%BB%E5%9B%BE.png" alt="如果图片失效,请邮件联系作者补图"></p>
+<p>LifecycleMBeanBase则对LifecycleBase进行了进一步的实现,我们从它的图中可以看到<br><img src="//ryanstian.github.io/blog/2019/08/14/Tomcat源码笔记/LifecycleMBeanBase%E7%B1%BB%E5%9B%BE.png" alt="如果图片失效,请邮件联系作者补图"></p>
 <p>其中最关键的是initInternal()和destroyInternal()。<br>主要实现了委托Register类来将子类(类如StandardServer等)注册到bean容器中。</p>
 <p>如果在看源码过程中大家对ManagedBean或者MBeanServer抱有疑惑,可以先去学习一下JMX规范再回来看容器部分代码,不过即使跳过容器部分,也不影响接下来的部分</p>
 <h2 id="Tomcat初始化流程-仅需有个印象即可"><a href="#Tomcat初始化流程-仅需有个印象即可" class="headerlink" title="Tomcat初始化流程(仅需有个印象即可)"></a>Tomcat初始化流程(仅需有个印象即可)</h2><p>Tomcat工作主要有几个流程:</p>
@@ -98,7 +98,7 @@
 <li>处理消息</li>
 <li>结束</li>
 </ul>
-<p>首先放一张tomcat init的流程图(简化版)<br><img src="//ryanstian.github.io/2019/08/14/Tomcat源码笔记/tomcat%E6%97%B6%E5%BA%8F%E5%9B%BEinit.png" alt="如果图片失效,请邮件联系作者补图"></p>
+<p>首先放一张tomcat init的流程图(简化版)<br><img src="//ryanstian.github.io/blog/2019/08/14/Tomcat源码笔记/tomcat%E6%97%B6%E5%BA%8F%E5%9B%BEinit.png" alt="如果图片失效,请邮件联系作者补图"></p>
 <ul>
 <li>Bootstrap:是入口,例如命令行输入service tomcat start等操作时,便是由这个类来解析,这个类均通过反射操作来调用Catalina</li>
 <li>Catalina:提供了操控Tomcat启停等行为的方法</li>
@@ -119,7 +119,7 @@
 <li><p>Tomcat的start流程其实跟init流程类似,在宏观上几乎没有改动,因此省略</p>
 </li>
 </ul>
-<h2 id="Tomcat接收消息流程"><a href="#Tomcat接收消息流程" class="headerlink" title="Tomcat接收消息流程"></a>Tomcat接收消息流程</h2><p>这里我认为一张图足以<br><img src="//ryanstian.github.io/2019/08/14/Tomcat源码笔记/tomcatNIO%E6%8E%A5%E6%94%B6%E8%AF%B7%E6%B1%82%E9%80%BB%E8%BE%91%E5%9B%BE.png" alt="如果图片失效,请邮件联系作者补图"></p>
+<h2 id="Tomcat接收消息流程"><a href="#Tomcat接收消息流程" class="headerlink" title="Tomcat接收消息流程"></a>Tomcat接收消息流程</h2><p>这里我认为一张图足以<br><img src="//ryanstian.github.io/blog/2019/08/14/Tomcat源码笔记/tomcatNIO%E6%8E%A5%E6%94%B6%E8%AF%B7%E6%B1%82%E9%80%BB%E8%BE%91%E5%9B%BE.png" alt="如果图片失效,请邮件联系作者补图"></p>
 <h2 id="一些关键的节点"><a href="#一些关键的节点" class="headerlink" title="一些关键的节点"></a>一些关键的节点</h2><p>这里将提供一些消息在Tomcat中传递的关键节点,可以帮助大家通过全局搜索快速定位到源码</p>
 <ul>
 <li>init时:<br>这里有人会疑惑类的初始化和注入依赖在哪里,答案是digester.parse<br>这种感觉就像是我们写springMVC时配置的xml一样,在这里xml就是server.xml。digester会根据这个xml来解析并注入依赖</li>
@@ -130,7 +130,7 @@
 <li>具体从socket读取消息的地方:<br>Http11InputBuffer类的socketWrapper.read。<br>NioSocketWrapper类的nRead = fillReadBuffer(block, to)</li>
 <li>关键类Http11Processor：<br>inputBuffer.parseHeaders将读取出的消息解析为消息头</li>
 </ul>
-<h2 id="这里我们讲Tomcat线程模型"><a href="#这里我们讲Tomcat线程模型" class="headerlink" title="这里我们讲Tomcat线程模型"></a>这里我们讲Tomcat线程模型</h2><p>TomcatNIO的线程模型其实非常简单,简单到什么程度?让我们看图<br><img src="//ryanstian.github.io/2019/08/14/Tomcat源码笔记/TomcatNIO%E7%BA%BF%E7%A8%8B%E6%A8%A1%E5%9E%8B.png" alt="如果图片失效,请邮件联系作者补图"></p>
+<h2 id="这里我们讲Tomcat线程模型"><a href="#这里我们讲Tomcat线程模型" class="headerlink" title="这里我们讲Tomcat线程模型"></a>这里我们讲Tomcat线程模型</h2><p>TomcatNIO的线程模型其实非常简单,简单到什么程度?让我们看图<br><img src="//ryanstian.github.io/blog/2019/08/14/Tomcat源码笔记/TomcatNIO%E7%BA%BF%E7%A8%8B%E6%A8%A1%E5%9E%8B.png" alt="如果图片失效,请邮件联系作者补图"></p>
 <p>甚至于io操作和业务操作在同一根线程上进行,没有经过分离,poller的职责仅仅是检测事件,并不负责io操作,<br><font color="red">注意这仅仅是NIO模式,不包括另外两种NIO2和APR模式</font></p>
 <p>我们看server.xml配置文档的时候可以看到允许我们设置一些参数,这里之前tomcatNIO接收请求逻辑图已经描述过,不再赘述。</p>
 <p>至于Poller,你在看旧文章时有人会说允许最大值不超过2个。没错,在之前的版本是这样,但是在9.0,我们看到注释文档中有句话,在NIO下Poller被改为仅有一个</p>
@@ -143,59 +143,16 @@
       </categories>
   </entry>
   <entry>
-    <title>简记20210818234900</title>
-    <url>/2021/08/18/%E7%AE%80%E8%AE%B020210818234900/</url>
-    <content><![CDATA[<a id="more"></a>
-<h1 id="一、看清屎山"><a href="#一、看清屎山" class="headerlink" title="一、看清屎山"></a>一、看清屎山</h1><p>校招生踏入公司，普遍第一项工作是熟悉业务，熟悉架构，熟悉代码。</p>
-<p>这个流程本没有错，那么坑在哪？在于习惯。新人就像海绵，看到什么，便会学什么</p>
-<p>而大家都知道。业务代码，由于历史包袱，或是人力紧张，又或者是种种不可抗力因素，本身就是屎山中混杂金子。</p>
-<p>有的新人懂得多，或者习惯求索原因，可以从中看出设计中不合理的地方  </p>
-<p>而有些更为初学者的新人，则会在学习过程中全都当知识学进去，导致后续到自己设计时把代码补丁当成设计原则。不得不说，这简直是灾难</p>
-<p>在这里，我不得不提醒大家们两点</p>
-<ul>
-<li>相信推理胜过相信别人。</li>
-<li>防火防盗，防同事吹逼</li>
-</ul>
-<p>这两句话具体怎么理解，我给大家举个例子就懂了</p>
-<ul>
-<li>曾经有个team轰轰烈烈推广他们的工具，看完他们功能介绍PPT和文档，内部讨论一波，感觉这工具很可以。<br>后来找他们team开始深入沟通。然而这一沟通，就发现了大坑，大致过程如下：<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">一顿背景介绍过后。。。</span><br><span class="line"></span><br><span class="line">我方team：能给我们详细讲下你们这个架构是咋玩的吗？</span><br><span class="line">对方team：巴拉巴拉。。。</span><br><span class="line"></span><br><span class="line">我方team：诶，那这个xxx问题你们是怎么解决的？</span><br><span class="line">对方team：噢，我们是这个场景，巴拉巴拉。</span><br><span class="line"></span><br><span class="line">我方team：有点问题，那如果这个地方xxx你们怎么解决？</span><br><span class="line">对方team：额，这个问题我们不会遇到</span><br><span class="line"></span><br><span class="line">沉默ing。。。</span><br><span class="line"></span><br><span class="line">我方team：感谢感谢，了解了</span><br></pre></td></tr></table></figure>
-
-</li>
-</ul>
-<p>仔细品，我相信可以品出来很多东西。  </p>
-<p>很多情况下，我们的项目只适合于某些特定的场景，又或是迫于KPI，将半成品伪装成精品。</p>
-<p>不是所有人都会承认自己项目存在缺陷，若是隐藏起缺陷，而你又被精美PPT忽悠了。那么恭喜，你又会隐藏起自己项目缺陷再次背刺下一位幸运儿。  </p>
-<p>在工作中，最重要的，是相信自己的思考。伪装再好的缺陷，也能被找到蛛丝马迹。隐藏再深的金子，当思绪扫过，也能透出点点微光</p>
-<p>总之一句话：屎山中淘金，莫把屎当宝</p>
-]]></content>
-      <categories>
-        <category>简记</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>简记20210818234800</title>
-    <url>/2021/08/18/%E7%AE%80%E8%AE%B020210818234800/</url>
-    <content><![CDATA[<a id="more"></a>
-<p>时光荏苒,不知不觉已然进入社会一个春秋  </p>
-<p>博客的事情停滞许久。究其因，怠惰自然居首位，然还有一点便是提笔难下</p>
-<p>一年前的自己，觉得自己懂得很多。一年后的自己，知道<br>自己才不过是刚刚入门。不得不说，学到的越多，越会发现自己的无知。</p>
-<p>这一年里，求知，热情，激动，无奈，彷徨，最终归于平静。接下来我将逐渐记录这些岁月，记录这有趣的生活，以及一路上所学所看所感。</p>
-]]></content>
-      <categories>
-        <category>简记</category>
-      </categories>
-  </entry>
-  <entry>
     <title>几种线程模型</title>
     <url>/2019/08/17/%E5%87%A0%E7%A7%8D%E7%BA%BF%E7%A8%8B%E6%A8%A1%E5%9E%8B/</url>
     <content><![CDATA[<p>我们来谈一谈java中常见的几种IO线程模型</p>
 <a id="more"></a>
 
-<h2 id="同步阻塞-bio"><a href="#同步阻塞-bio" class="headerlink" title="同步阻塞(bio)"></a>同步阻塞(bio)</h2><p>在read时需要无限等待直到消息到达,就是阻塞,同步则指的是每一步都需要等待上一步完成然后被调用<br><img src="//ryanstian.github.io/2019/08/17/几种线程模型/%E5%90%8C%E6%AD%A5%E9%98%BB%E5%A1%9Eio.png" alt="如果图片失效,请邮件联系作者补图"></p>
+<h2 id="同步阻塞-bio"><a href="#同步阻塞-bio" class="headerlink" title="同步阻塞(bio)"></a>同步阻塞(bio)</h2><p>在read时需要无限等待直到消息到达,就是阻塞,同步则指的是每一步都需要等待上一步完成然后被调用<br><img src="//ryanstian.github.io/blog/2019/08/17/几种线程模型/%E5%90%8C%E6%AD%A5%E9%98%BB%E5%A1%9Eio.png" alt="如果图片失效,请邮件联系作者补图"></p>
 <h2 id="同步非阻塞"><a href="#同步非阻塞" class="headerlink" title="同步非阻塞()"></a>同步非阻塞()</h2><p>同步阻塞和同步非阻塞的区别就在于,在read时无论是否有数据,立刻返回。</p>
 <p>那么或许有人会问了,这样有什么意义,还不是需要自己写while循环包裹来促使其不断访问直到数据到达？</p>
 <p>其实针对这一点,如果一个线程进入了阻塞状态,也就意味着这个线程无法用来做其他事情。</p>
-<p>如果我们是非阻塞的情况下,我们发现read数据未到达,可以先允许该线程去做其他工作,过一会再来read一次检测下消息是否到达,同时我们也可以通过标记位来控制其后续行为<br><img src="//ryanstian.github.io/2019/08/17/几种线程模型/%E5%90%8C%E6%AD%A5%E9%9D%9E%E9%98%BB%E5%A1%9Eio.png" alt="如果图片失效,请邮件联系作者补图"></p>
+<p>如果我们是非阻塞的情况下,我们发现read数据未到达,可以先允许该线程去做其他工作,过一会再来read一次检测下消息是否到达,同时我们也可以通过标记位来控制其后续行为<br><img src="//ryanstian.github.io/blog/2019/08/17/几种线程模型/%E5%90%8C%E6%AD%A5%E9%9D%9E%E9%98%BB%E5%A1%9Eio.png" alt="如果图片失效,请邮件联系作者补图"></p>
 <h2 id="io多路复用-nio"><a href="#io多路复用-nio" class="headerlink" title="io多路复用(nio)"></a>io多路复用(nio)</h2><p>其实nio也被算作同步非阻塞,不过我们不必拘泥于这些分类,在发展中,是先有的模型,后来才被分类,所以很多情况下分类是模棱两可的。</p>
 <p>io多路复用跟之前说的同步非阻塞有点关系,io多路复用的read也是非阻塞的,跟之前的最大区别在于,他采用了Selector选择器负责监听每一个socket的各种行为,当该行为被激活的时候,通知后续线程去处理。</p>
 <p>我们可以想象,此时有巨量的socket链接进来,我们需要为每一个socket创建一个线程来read</p>
@@ -204,7 +161,7 @@
 
 <p>上浪费掉,此时我们就需要一个方案来解放这些线程无意义的循环read</p>
 <p>一个管理者,来管理所有的Socket,这也就诞生了Selector选择器,由Selector负责检测是否有accept,read,write行为,并且通知其他线程来处理,这样我们可以节约大量线程,配合线程池我们就可以用有限的资源处理大量的连接</p>
-<p><font color="red">假设我们将流程分类为,io监听和io接收,业务处理三部分,那么nio的核心就是在于将io监听给提取出来单独管理</font><br><img src="//ryanstian.github.io/2019/08/17/几种线程模型/io%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8.png" alt="如果图片失效,请邮件联系作者补图"></p>
+<p><font color="red">假设我们将流程分类为,io监听和io接收,业务处理三部分,那么nio的核心就是在于将io监听给提取出来单独管理</font><br><img src="//ryanstian.github.io/blog/2019/08/17/几种线程模型/io%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8.png" alt="如果图片失效,请邮件联系作者补图"></p>
 <h2 id="异步"><a href="#异步" class="headerlink" title="异步"></a>异步</h2><p>说到异步,阻塞与非阻塞的界限更为模糊。</p>
 <p>下面让我们来看一段代码,这段代码并不是异步,他只是一个回调雏形,后面我会谈到</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">CallBack</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">callback</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Main</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">work</span><span class="params">(CallBack callBack)</span></span>&#123;</span><br><span class="line">        <span class="comment">//业务代码省略...</span></span><br><span class="line">        callBack.callback();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Main main = <span class="keyword">new</span> Main();</span><br><span class="line">        System.out.println(<span class="number">1</span>);</span><br><span class="line">        main.work(<span class="keyword">new</span> CallBack() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">callback</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                System.out.println(<span class="number">2</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">        System.out.println(<span class="number">3</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -244,46 +201,43 @@
       </categories>
   </entry>
   <entry>
-    <title>简记20210829224600</title>
-    <url>/2021/08/29/%E7%AE%80%E8%AE%B020210829224600/</url>
+    <title>简记20210818234800</title>
+    <url>/2021/08/18/%E7%AE%80%E8%AE%B020210818234800/</url>
     <content><![CDATA[<a id="more"></a>
-<h1 id="四、语言真的那么重要吗？-C-java-go-py"><a href="#四、语言真的那么重要吗？-C-java-go-py" class="headerlink" title="四、语言真的那么重要吗？(C+,java,go,py)"></a>四、语言真的那么重要吗？(C+,java,go,py)</h1><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">一位小伙在论坛大喊：Java天下第一!</span><br><span class="line">随后，一场键盘战争开始了</span><br></pre></td></tr></table></figure>
-
-<p>我曾看到过数不清的段子，大致含义相同，都是争论自己使用的语言是最好的语言。  </p>
-<p>起初我认为语言非常重要，把他当作未来深入前进的方向，由此会将语言特性示若圣经，潜意识里排斥其他语言的工作。<br>最有代表性的事件，就是在投递工作简历时，会特地寻找Java工程师的JD。遇到其他语言，则会犹豫再三</p>
-<p>后来一次偶然的机会，接触到golang相关的工作。golang对我来说是一种全新的语言，我对它的特性毫不了解。<br>这得我在工作时无暇顾及其特性把问题解决方案，用我手中的工具去落地实践。  </p>
-<p>在一阵忙碌后，轻松下来的自己复盘之前的工作。偶然间发现，即时不用语言特性，我也依旧能做到任何事情？？？<br>//TODO 没灵感，搁置</p>
+<p>时光荏苒,不知不觉已然进入社会一个春秋  </p>
+<p>博客的事情停滞许久。究其因，怠惰自然居首位，然还有一点便是提笔难下</p>
+<p>一年前的自己，觉得自己懂得很多。一年后的自己，知道<br>自己才不过是刚刚入门。不得不说，学到的越多，越会发现自己的无知。</p>
+<p>这一年里，求知，热情，激动，无奈，彷徨，最终归于平静。接下来我将逐渐记录这些岁月，记录这有趣的生活，以及一路上所学所看所感。</p>
 ]]></content>
       <categories>
         <category>简记</category>
       </categories>
   </entry>
   <entry>
-    <title>简记20210822191000</title>
-    <url>/2021/08/22/%E7%AE%80%E8%AE%B020210822191000/</url>
+    <title>简记20210818234900</title>
+    <url>/2021/08/18/%E7%AE%80%E8%AE%B020210818234900/</url>
     <content><![CDATA[<a id="more"></a>
-<h1 id="三、能RUN就行"><a href="#三、能RUN就行" class="headerlink" title="三、能RUN就行"></a>三、能RUN就行</h1><p>这是一则真实的段子</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">有人在网上发帖提问</span><br><span class="line">提问者：自己写的代码太难看了怎么办？</span><br><span class="line">路人A：能run吗？</span><br><span class="line">提问者：我run还是代码run？</span><br><span class="line">路人B：有一个能run就行</span><br></pre></td></tr></table></figure>
-
-<p>不得不说，真的是人间真实。接下来我们聊一聊，该如何做到“能RUN就行”。</p>
-<p>记得在我刚刚实习的时候，一段简单的代码写了改，改了写，最后推到重构。写完了，自己看着代码非常愉悦，但却又因几天后的一个紧急需求，不得不改成他最初的样子。</p>
-<p>经过了一年的修修补补，我理解了什么叫“能RUN就行”。当然，这仅针对业务代码而言，因为业务需要紧跟市场脚步，需要的是最短时间代码能RUN，不宕机，而且后面还改的动，能坚持到下次被重构，这就是一份代码的使命。</p>
-<p>之前我曾看到有人这么评价业务架构师（注意是业务）</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">程序员的作用是堆粪。架构师的作用是搭架子。</span><br><span class="line">屎山堆高，自己就塌了。有架子在，尽管臭，却能用</span><br></pre></td></tr></table></figure>
-
-<p>实在是很形象了。</p>
-<p>平时我们设计方案也是如此，方案不是越复杂越好，难的不是把方案完成，而是把复杂方案简单化。</p>
-<p>比如说才几万条数据，没啥热点，未来2年也不会增长到接近几百万，这时候来个分库分表，实属闲的。等到后面做编码的时候，这分库分表的编码复杂度反而得不偿失。</p>
-<p>又比如各个表都是按相同维度进行分表，你经过一系列的分析，算出来这个表该分表10张，另一个15张，再来一个50张。<br>当你接到个批量跨表数据分析工作，麻烦就来了。</p>
+<h1 id="一、看清屎山"><a href="#一、看清屎山" class="headerlink" title="一、看清屎山"></a>一、看清屎山</h1><p>校招生踏入公司，普遍第一项工作是熟悉业务，熟悉架构，熟悉代码。</p>
+<p>这个流程本没有错，那么坑在哪？在于习惯。新人就像海绵，看到什么，便会学什么</p>
+<p>而大家都知道。业务代码，由于历史包袱，或是人力紧张，又或者是种种不可抗力因素，本身就是屎山中混杂金子。</p>
+<p>有的新人懂得多，或者习惯求索原因，可以从中看出设计中不合理的地方  </p>
+<p>而有些更为初学者的新人，则会在学习过程中全都当知识学进去，导致后续到自己设计时把代码补丁当成设计原则。不得不说，这简直是灾难</p>
+<p>在这里，我不得不提醒大家们两点</p>
 <ul>
-<li>扫全表，压力大。</li>
-<li>扫单表，你就只能根据分表id计算最大公倍数，再来hash到对应分表  </li>
+<li>相信推理胜过相信别人。</li>
+<li>防火防盗，防同事吹逼</li>
 </ul>
-<p>或许这里有人会反驳，数据分析这种东西，不都是用数仓么？<br>但是这仅是个例子，不是所有的公司都支撑的起数仓，也不是所有的数据分析业务都需要放到数仓去跑</p>
-<p>我曾经也是追逐“完美”的人，但在追逐过程中我学到：<br>世上并没有真正的完美，但从一种角度，它是完美的。但换一种角度，丑陋不堪。最终美好的仅是综合情况下的取舍。</p>
-<p>话说回来，一切都要讲究变通。  </p>
-<p>曾经我见过有人为了尽量少的采用中间件，用mysql来控制并发场景下的库存，还设计预分配库存量等机制。<br>显然，运行了一段时间后QPS上来，程序RUN实在不动，人RUN了。<br>我们只能含泪接手代码，花费大力气把他的设计废掉改用redis</p>
-<p>总之，不要为了复杂而复杂，也不要为了简化而简化，凡事讲究有度。</p>
+<p>这两句话具体怎么理解，我给大家举个例子就懂了</p>
+<ul>
+<li>曾经有个team轰轰烈烈推广他们的工具，看完他们功能介绍PPT和文档，内部讨论一波，感觉这工具很可以。<br>后来找他们team开始深入沟通。然而这一沟通，就发现了大坑，大致过程如下：<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">一顿背景介绍过后。。。</span><br><span class="line"></span><br><span class="line">我方team：能给我们详细讲下你们这个架构是咋玩的吗？</span><br><span class="line">对方team：巴拉巴拉。。。</span><br><span class="line"></span><br><span class="line">我方team：诶，那这个xxx问题你们是怎么解决的？</span><br><span class="line">对方team：噢，我们是这个场景，巴拉巴拉。</span><br><span class="line"></span><br><span class="line">我方team：有点问题，那如果这个地方xxx你们怎么解决？</span><br><span class="line">对方team：额，这个问题我们不会遇到</span><br><span class="line"></span><br><span class="line">沉默ing。。。</span><br><span class="line"></span><br><span class="line">我方team：感谢感谢，了解了</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<p>仔细品，我相信可以品出来很多东西。  </p>
+<p>很多情况下，我们的项目只适合于某些特定的场景，又或是迫于KPI，将半成品伪装成精品。</p>
+<p>不是所有人都会承认自己项目存在缺陷，若是隐藏起缺陷，而你又被精美PPT忽悠了。那么恭喜，你又会隐藏起自己项目缺陷再次背刺下一位幸运儿。  </p>
+<p>在工作中，最重要的，是相信自己的思考。伪装再好的缺陷，也能被找到蛛丝马迹。隐藏再深的金子，当思绪扫过，也能透出点点微光</p>
+<p>总之一句话：屎山中淘金，莫把屎当宝</p>
 ]]></content>
       <categories>
         <category>简记</category>
@@ -337,6 +291,52 @@
 <p>这时候你或许会问，大数据平台难道不需要消耗资源处理数据吗？</p>
 <p>当然时需要的，只不过你是跟其他团队在共享资源。你的任务空闲时，这些资源会被其他团队使用。</p>
 <p>当然类似的，你也可以做到与k8s团队合作，做到动态删减容器节点，在满足你使用的情况下节约资源</p>
+]]></content>
+      <categories>
+        <category>简记</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>简记20210829224600</title>
+    <url>/2021/08/29/%E7%AE%80%E8%AE%B020210829224600/</url>
+    <content><![CDATA[<a id="more"></a>
+<h1 id="四、语言真的那么重要吗？-C-java-go-py"><a href="#四、语言真的那么重要吗？-C-java-go-py" class="headerlink" title="四、语言真的那么重要吗？(C+,java,go,py)"></a>四、语言真的那么重要吗？(C+,java,go,py)</h1><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">一位小伙在论坛大喊：Java天下第一!</span><br><span class="line">随后，一场键盘战争开始了</span><br></pre></td></tr></table></figure>
+
+<p>我曾看到过数不清的段子，大致含义相同，都是争论自己使用的语言是最好的语言。  </p>
+<p>起初我认为语言非常重要，把他当作未来深入前进的方向，由此会将语言特性示若圣经，潜意识里排斥其他语言的工作。<br>最有代表性的事件，就是在投递工作简历时，会特地寻找Java工程师的JD。遇到其他语言，则会犹豫再三</p>
+<p>后来一次偶然的机会，接触到golang相关的工作。golang对我来说是一种全新的语言，我对它的特性毫不了解。<br>这得我在工作时无暇顾及其特性把问题解决方案，用我手中的工具去落地实践。  </p>
+<p>在一阵忙碌后，轻松下来的自己复盘之前的工作。偶然间发现，即时不用语言特性，我也依旧能做到任何事情？？？<br>//TODO 没灵感，搁置</p>
+]]></content>
+      <categories>
+        <category>简记</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>简记20210822191000</title>
+    <url>/2021/08/22/%E7%AE%80%E8%AE%B020210822191000/</url>
+    <content><![CDATA[<a id="more"></a>
+<h1 id="三、能RUN就行"><a href="#三、能RUN就行" class="headerlink" title="三、能RUN就行"></a>三、能RUN就行</h1><p>这是一则真实的段子</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">有人在网上发帖提问</span><br><span class="line">提问者：自己写的代码太难看了怎么办？</span><br><span class="line">路人A：能run吗？</span><br><span class="line">提问者：我run还是代码run？</span><br><span class="line">路人B：有一个能run就行</span><br></pre></td></tr></table></figure>
+
+<p>不得不说，真的是人间真实。接下来我们聊一聊，该如何做到“能RUN就行”。</p>
+<p>记得在我刚刚实习的时候，一段简单的代码写了改，改了写，最后推到重构。写完了，自己看着代码非常愉悦，但却又因几天后的一个紧急需求，不得不改成他最初的样子。</p>
+<p>经过了一年的修修补补，我理解了什么叫“能RUN就行”。当然，这仅针对业务代码而言，因为业务需要紧跟市场脚步，需要的是最短时间代码能RUN，不宕机，而且后面还改的动，能坚持到下次被重构，这就是一份代码的使命。</p>
+<p>之前我曾看到有人这么评价业务架构师（注意是业务）</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">程序员的作用是堆粪。架构师的作用是搭架子。</span><br><span class="line">屎山堆高，自己就塌了。有架子在，尽管臭，却能用</span><br></pre></td></tr></table></figure>
+
+<p>实在是很形象了。</p>
+<p>平时我们设计方案也是如此，方案不是越复杂越好，难的不是把方案完成，而是把复杂方案简单化。</p>
+<p>比如说才几万条数据，没啥热点，未来2年也不会增长到接近几百万，这时候来个分库分表，实属闲的。等到后面做编码的时候，这分库分表的编码复杂度反而得不偿失。</p>
+<p>又比如各个表都是按相同维度进行分表，你经过一系列的分析，算出来这个表该分表10张，另一个15张，再来一个50张。<br>当你接到个批量跨表数据分析工作，麻烦就来了。</p>
+<ul>
+<li>扫全表，压力大。</li>
+<li>扫单表，你就只能根据分表id计算最大公倍数，再来hash到对应分表  </li>
+</ul>
+<p>或许这里有人会反驳，数据分析这种东西，不都是用数仓么？<br>但是这仅是个例子，不是所有的公司都支撑的起数仓，也不是所有的数据分析业务都需要放到数仓去跑</p>
+<p>我曾经也是追逐“完美”的人，但在追逐过程中我学到：<br>世上并没有真正的完美，但从一种角度，它是完美的。但换一种角度，丑陋不堪。最终美好的仅是综合情况下的取舍。</p>
+<p>话说回来，一切都要讲究变通。  </p>
+<p>曾经我见过有人为了尽量少的采用中间件，用mysql来控制并发场景下的库存，还设计预分配库存量等机制。<br>显然，运行了一段时间后QPS上来，程序RUN实在不动，人RUN了。<br>我们只能含泪接手代码，花费大力气把他的设计废掉改用redis</p>
+<p>总之，不要为了复杂而复杂，也不要为了简化而简化，凡事讲究有度。</p>
 ]]></content>
       <categories>
         <category>简记</category>
