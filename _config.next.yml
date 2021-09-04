@@ -41,7 +41,8 @@ creative_commons:
 
 menu:
   home: / || fa fa-bell
-
+  categories: /categories/
+  tags: /tags/
   # Docs:
   #   default: /docs/ || fa fa-book
 
