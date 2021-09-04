@@ -95,7 +95,7 @@
 
       
         <li class="menu-item menu-item-plugins"><a href="/blog/plugins/" rel="section"><i class="fa fa-flask fa-fw"></i>Plugins</a></li>
-        <li class="menu-item menu-item-archives"><a href="/blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">53</span></a></li>
+        <li class="menu-item menu-item-archives"><a href="/blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">5</span></a></li>
       <li class="menu-item menu-item-search">
         <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
         </a>
@@ -167,9 +167,13 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/blog/archives/">
-          <span class="site-state-item-count">53</span>
+          <span class="site-state-item-count">5</span>
           <span class="site-state-item-name">posts</span>
         </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">categories</span>
       </div>
   </nav>
 </div>
@@ -223,7 +227,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://ryanstian.github.io/blog/next-8-6-0-released/">
+    <link itemprop="mainEntityOfPage" href="https://ryanstian.github.io/blog/%E7%AE%80%E8%AE%B020210818234800/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/blog/images/logo.svg">
@@ -236,7 +240,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/blog/next-8-6-0-released/" class="post-title-link" itemprop="url">NexT 8.6.0 Released</a>
+          <a href="/blog/%E7%AE%80%E8%AE%B020210818234800/" class="post-title-link" itemprop="url">简记20210818234800</a>
         </h2>
 
         <div class="post-meta-container">
@@ -247,7 +251,16 @@
       </span>
       <span class="post-meta-item-text">Posted on</span>
 
-      <time title="Created: 2021-07-01 04:17:08" itemprop="dateCreated datePublished" datetime="2021-07-01T04:17:08+08:00">2021-07-01</time>
+      <time title="Created: 2021-08-18 23:48:00" itemprop="dateCreated datePublished" datetime="2021-08-18T23:48:00+08:00">2021-08-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/blog/categories/%E7%AE%80%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">简记</span></a>
+        </span>
     </span>
 
   
@@ -259,8 +272,8 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/blog/next-8-6-0-released/#disqus_thread" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="next-8-6-0-released/" itemprop="commentCount"></span>
+    <a title="disqus" href="/blog/%E7%AE%80%E8%AE%B020210818234800/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="简记20210818234800/" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -274,326 +287,11 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h2 id="⭐-Features"><a href="#⭐-Features" class="headerlink" title="⭐ Features"></a>⭐ Features</h2><ul>
-<li>Support Gitter Sidecar (<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL25leHQtdGhlbWUvaGV4by10aGVtZS1uZXh0L3B1bGwvMjg5">#289<i class="fa fa-external-link-alt"></i></span>)<figure class="highlight diff"><table><tr><td class="code"><pre><span class="line"><span class="addition">+# Gitter Support</span></span><br><span class="line"><span class="addition">+# For more information: https://gitter.im</span></span><br><span class="line"><span class="addition">+gitter:</span></span><br><span class="line"><span class="addition">+  enable: false</span></span><br><span class="line"><span class="addition">+  room:</span></span><br></pre></td></tr></table></figure></li>
-</ul>
-<h2 id="🐞-Bug-Fixes"><a href="#🐞-Bug-Fixes" class="headerlink" title="🐞 Bug Fixes"></a>🐞 Bug Fixes</h2><ul>
-<li>Fix scrolling for site overview (<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL25leHQtdGhlbWUvaGV4by10aGVtZS1uZXh0L3B1bGwvMjQz">#243<i class="fa fa-external-link-alt"></i></span>)</li>
-</ul>
-<h2 id="🛠-Improvements"><a href="#🛠-Improvements" class="headerlink" title="🛠 Improvements"></a>🛠 Improvements</h2><ul>
-<li>Separate inline listeners (<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL25leHQtdGhlbWUvaGV4by10aGVtZS1uZXh0L3B1bGwvMzAz">#303<i class="fa fa-external-link-alt"></i></span>)</li>
-<li>Correct meta viewport (<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL25leHQtdGhlbWUvaGV4by10aGVtZS1uZXh0L3B1bGwvMzAy">#302<i class="fa fa-external-link-alt"></i></span>)</li>
-<li>Escape only <code>&lt;</code> in front-end json (<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL25leHQtdGhlbWUvaGV4by10aGVtZS1uZXh0L3B1bGwvMjk0">#294<i class="fa fa-external-link-alt"></i></span>)</li>
-<li>Add gitter integration in <code>minify.js</code> (<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL25leHQtdGhlbWUvaGV4by10aGVtZS1uZXh0L3B1bGwvMzAw">#300<i class="fa fa-external-link-alt"></i></span>)</li>
-<li>Add missing alt attribute to img elements (<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL25leHQtdGhlbWUvaGV4by10aGVtZS1uZXh0L3B1bGwvMjg1">#285<i class="fa fa-external-link-alt"></i></span>)</li>
-</ul>
-<h2 id="🌀-External-Changes"><a href="#🌀-External-Changes" class="headerlink" title="🌀 External Changes"></a>🌀 External Changes</h2><ul>
-<li>Update dependency @next-theme/eslint-config to v0.0.3 (<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL25leHQtdGhlbWUvaGV4by10aGVtZS1uZXh0L3B1bGwvMzAx">#301<i class="fa fa-external-link-alt"></i></span>)</li>
-<li>Update dependency mocha to v9 (<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL25leHQtdGhlbWUvaGV4by10aGVtZS1uZXh0L3B1bGwvMjkw">#290<i class="fa fa-external-link-alt"></i></span>)</li>
-<li>Update dependency eslint to v7.29.0 (<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL25leHQtdGhlbWUvaGV4by10aGVtZS1uZXh0L3B1bGwvMjg4">#288<i class="fa fa-external-link-alt"></i></span>)</li>
-</ul>
-<hr>
-<p>For full changes, see the <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL25leHQtdGhlbWUvaGV4by10aGVtZS1uZXh0L2NvbXBhcmUvdjguNS4wLi4udjguNi4w">comparison between v8.5.0 and v8.6.0<i class="fa fa-external-link-alt"></i></span></p>
-<p><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL25leHQtdGhlbWUvaGV4by10aGVtZS1uZXh0L3JlbGVhc2VzL3RhZy92OC42LjA=">Detailed changes for NexT v8.6.0<i class="fa fa-external-link-alt"></i></span></p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://ryanstian.github.io/blog/next-8-5-0-released/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/blog/images/logo.svg">
-      <meta itemprop="name" content="Theme NexT">
-      <meta itemprop="description" content="Stay Simple. Stay NexT.">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Ryanstian的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/blog/next-8-5-0-released/" class="post-title-link" itemprop="url">NexT 8.5.0 Released</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2021-05-31 18:15:05" itemprop="dateCreated datePublished" datetime="2021-05-31T18:15:05+08:00">2021-05-31</time>
-    </span>
-
-  
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus: </span>
-    
-    <a title="disqus" href="/blog/next-8-5-0-released/#disqus_thread" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="next-8-5-0-released/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h2 id="🌟-New-Features"><a href="#🌟-New-Features" class="headerlink" title="🌟 New Features"></a>🌟 New Features</h2><ul>
-<li>Subresource Integrity (<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL25leHQtdGhlbWUvaGV4by10aGVtZS1uZXh0L3B1bGwvMjQ3">#247<i class="fa fa-external-link-alt"></i></span>)</li>
-</ul>
-<h2 id="⭐-Features"><a href="#⭐-Features" class="headerlink" title="⭐ Features"></a>⭐ Features</h2><ul>
-<li>Load Creative Commons badge via CDN (<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL25leHQtdGhlbWUvaGV4by10aGVtZS1uZXh0L3B1bGwvMjY3">#267<i class="fa fa-external-link-alt"></i></span>)<figure class="highlight diff"><table><tr><td class="code"><pre><span class="line">creative_commons:</span><br><span class="line"><span class="addition">+  # Available values: big | small</span></span><br><span class="line"><span class="addition">+  size: small</span></span><br></pre></td></tr></table></figure></li>
-</ul>
-<h2 id="🐞-Bug-Fixes"><a href="#🐞-Bug-Fixes" class="headerlink" title="🐞 Bug Fixes"></a>🐞 Bug Fixes</h2><ul>
-<li>Fix overwritten of non-object in CONFIG (<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL25leHQtdGhlbWUvaGV4by10aGVtZS1uZXh0L3B1bGwvMjc5">#279<i class="fa fa-external-link-alt"></i></span>)</li>
-</ul>
-<h2 id="🛠-Improvements"><a href="#🛠-Improvements" class="headerlink" title="🛠 Improvements"></a>🛠 Improvements</h2><ul>
-<li>Use passive scroll listeners (<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL25leHQtdGhlbWUvaGV4by10aGVtZS1uZXh0L3B1bGwvMjgy">#282<i class="fa fa-external-link-alt"></i></span>)</li>
-<li>Change gitalk default offical proxy (<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL25leHQtdGhlbWUvaGV4by10aGVtZS1uZXh0L3B1bGwvMjU3">#257<i class="fa fa-external-link-alt"></i></span>)</li>
-<li>Move <code>comments.js</code> and <code>config.js</code> inject point (<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL25leHQtdGhlbWUvaGV4by10aGVtZS1uZXh0L3B1bGwvMjc3">#277<i class="fa fa-external-link-alt"></i></span>)</li>
-</ul>
-<h2 id="🌀-External-Changes"><a href="#🌀-External-Changes" class="headerlink" title="🌀 External Changes"></a>🌀 External Changes</h2><ul>
-<li>Update dependency eslint to v7.27.0 (<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL25leHQtdGhlbWUvaGV4by10aGVtZS1uZXh0L3B1bGwvMjY5">#269<i class="fa fa-external-link-alt"></i></span>)</li>
-<li>Update dependency mocha to v8.4.0 (<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL25leHQtdGhlbWUvaGV4by10aGVtZS1uZXh0L3B1bGwvMjY4">#268<i class="fa fa-external-link-alt"></i></span>)</li>
-</ul>
-<hr>
-<p>For full changes, see the <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL25leHQtdGhlbWUvaGV4by10aGVtZS1uZXh0L2NvbXBhcmUvdjguNC4wLi4udjguNS4w">comparison between v8.4.0 and v8.5.0<i class="fa fa-external-link-alt"></i></span></p>
-<p><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL25leHQtdGhlbWUvaGV4by10aGVtZS1uZXh0L3JlbGVhc2VzL3RhZy92OC41LjA=">Detailed changes for NexT v8.5.0<i class="fa fa-external-link-alt"></i></span></p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://ryanstian.github.io/blog/next-8-4-0-released/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/blog/images/logo.svg">
-      <meta itemprop="name" content="Theme NexT">
-      <meta itemprop="description" content="Stay Simple. Stay NexT.">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Ryanstian的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/blog/next-8-4-0-released/" class="post-title-link" itemprop="url">NexT 8.4.0 Released</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2021-05-01 03:27:19" itemprop="dateCreated datePublished" datetime="2021-05-01T03:27:19+08:00">2021-05-01</time>
-    </span>
-
-  
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus: </span>
-    
-    <a title="disqus" href="/blog/next-8-4-0-released/#disqus_thread" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="next-8-4-0-released/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h2 id="💥-Breaking-Changes"><a href="#💥-Breaking-Changes" class="headerlink" title="💥 Breaking Changes"></a>💥 Breaking Changes</h2><ul>
-<li>Separate third party inline scripts (<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL25leHQtdGhlbWUvaGV4by10aGVtZS1uZXh0L3B1bGwvMjQx">#241<i class="fa fa-external-link-alt"></i></span>)</li>
-</ul>
-<h2 id="⭐-Features"><a href="#⭐-Features" class="headerlink" title="⭐ Features"></a>⭐ Features</h2><ul>
-<li>New body scrollbar style option (<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL25leHQtdGhlbWUvaGV4by10aGVtZS1uZXh0L3B1bGwvMjQ4">#248<i class="fa fa-external-link-alt"></i></span>)<figure class="highlight diff"><table><tr><td class="code"><pre><span class="line"><span class="addition">+# Override browsers&#x27; default behavior.</span></span><br><span class="line"><span class="addition">+body_scrollbar:</span></span><br><span class="line"><span class="addition">+  # Place the scrollbar over the content.</span></span><br><span class="line"><span class="addition">+  overlay: false</span></span><br><span class="line"><span class="addition">+  # Present the scrollbar even if the content is not overflowing.</span></span><br><span class="line"><span class="addition">+  stable: false</span></span><br></pre></td></tr></table></figure></li>
-</ul>
-<h2 id="🐞-Bug-Fixes"><a href="#🐞-Bug-Fixes" class="headerlink" title="🐞 Bug Fixes"></a>🐞 Bug Fixes</h2><ul>
-<li>Fix scroll restoration (<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL25leHQtdGhlbWUvaGV4by10aGVtZS1uZXh0L3B1bGwvMjU2">#256<i class="fa fa-external-link-alt"></i></span>)</li>
-<li>Fix changyan on Pjax sites (<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL25leHQtdGhlbWUvaGV4by10aGVtZS1uZXh0L3B1bGwvMjUy">#252<i class="fa fa-external-link-alt"></i></span>)</li>
-<li>Disable <code>margin</code> animation of <code>&lt;body&gt;</code> (<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL25leHQtdGhlbWUvaGV4by10aGVtZS1uZXh0L3B1bGwvMjM2">#236<i class="fa fa-external-link-alt"></i></span>)</li>
-</ul>
-<h2 id="🛠-Improvements"><a href="#🛠-Improvements" class="headerlink" title="🛠 Improvements"></a>🛠 Improvements</h2><ul>
-<li>Remove internal scripts if <code>minify</code> is true and the CDN provider is not <code>local</code> (<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL25leHQtdGhlbWUvaGV4by10aGVtZS1uZXh0L3B1bGwvMjUx">#251<i class="fa fa-external-link-alt"></i></span>)</li>
-<li>Use ImgBot to optimize images (<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL25leHQtdGhlbWUvaGV4by10aGVtZS1uZXh0L3B1bGwvMjQy">#242<i class="fa fa-external-link-alt"></i></span>)</li>
-<li>Separate NexT inline scripts and styles (<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL25leHQtdGhlbWUvaGV4by10aGVtZS1uZXh0L3B1bGwvMjI2">#226<i class="fa fa-external-link-alt"></i></span>)</li>
-</ul>
-<h2 id="🌀-External-Changes"><a href="#🌀-External-Changes" class="headerlink" title="🌀 External Changes"></a>🌀 External Changes</h2><ul>
-<li>Update dependency js-yaml to v4.1.0 (<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL25leHQtdGhlbWUvaGV4by10aGVtZS1uZXh0L3B1bGwvMjQ5">#249<i class="fa fa-external-link-alt"></i></span>)</li>
-<li>Update dependency eslint to v7.25.0 (<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL25leHQtdGhlbWUvaGV4by10aGVtZS1uZXh0L3B1bGwvMjQ0">#244<i class="fa fa-external-link-alt"></i></span>)</li>
-</ul>
-<h2 id="🌍-Localization"><a href="#🌍-Localization" class="headerlink" title="🌍 Localization"></a>🌍 Localization</h2><ul>
-<li>New Crowdin updates (<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL25leHQtdGhlbWUvaGV4by10aGVtZS1uZXh0L3B1bGwvMjQ1">#245<i class="fa fa-external-link-alt"></i></span>)</li>
-</ul>
-<hr>
-<p>For full changes, see the <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL25leHQtdGhlbWUvaGV4by10aGVtZS1uZXh0L2NvbXBhcmUvdjguMy4wLi4udjguNC4w">comparison between v8.3.0 and v8.4.0<i class="fa fa-external-link-alt"></i></span></p>
-<p><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL25leHQtdGhlbWUvaGV4by10aGVtZS1uZXh0L3JlbGVhc2VzL3RhZy92OC40LjA=">Detailed changes for NexT v8.4.0<i class="fa fa-external-link-alt"></i></span></p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://ryanstian.github.io/blog/next-8-3-0-released/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/blog/images/logo.svg">
-      <meta itemprop="name" content="Theme NexT">
-      <meta itemprop="description" content="Stay Simple. Stay NexT.">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Ryanstian的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/blog/next-8-3-0-released/" class="post-title-link" itemprop="url">NexT 8.3.0 Released</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2021-04-01 07:36:21" itemprop="dateCreated datePublished" datetime="2021-04-01T07:36:21+08:00">2021-04-01</time>
-    </span>
-
-  
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus: </span>
-    
-    <a title="disqus" href="/blog/next-8-3-0-released/#disqus_thread" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="next-8-3-0-released/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h2 id="⭐-Features"><a href="#⭐-Features" class="headerlink" title="⭐ Features"></a>⭐ Features</h2><ul>
-<li>New reversed reading progress bar option (<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL25leHQtdGhlbWUvaGV4by10aGVtZS1uZXh0L3B1bGwvMjIx">#221<i class="fa fa-external-link-alt"></i></span>)<figure class="highlight diff"><table><tr><td class="code"><pre><span class="line"># Reading progress bar</span><br><span class="line">reading_progress:</span><br><span class="line">  enable: false</span><br><span class="line"><span class="addition">+  # Available values: left | right</span></span><br><span class="line"><span class="addition">+  start_at: left</span></span><br><span class="line">  # Available values: top | bottom</span><br><span class="line">  position: top</span><br><span class="line"><span class="addition">+  reversed: false</span></span><br><span class="line">  color: &quot;[#37](https://github.com/next-theme/hexo-theme-next/pull/37)c6c0&quot;</span><br><span class="line">  height: 3px</span><br></pre></td></tr></table></figure></li>
-</ul>
-<h2 id="🐞-Bug-Fixes"><a href="#🐞-Bug-Fixes" class="headerlink" title="🐞 Bug Fixes"></a>🐞 Bug Fixes</h2><ul>
-<li>Fix mermaid preformatted issue (<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL25leHQtdGhlbWUvaGV4by10aGVtZS1uZXh0L2NvbW1pdC85ZWYzYTYzNTUyMmFhZDQyYjZlYWViMWRjNzVjNmIxZWQ5OTc1YTEx">9ef3a63<i class="fa fa-external-link-alt"></i></span>)</li>
-</ul>
-<h2 id="🛠-Improvements"><a href="#🛠-Improvements" class="headerlink" title="🛠 Improvements"></a>🛠 Improvements</h2><ul>
-<li>Use CSS transitions to animate <code>site-nav</code> (<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL25leHQtdGhlbWUvaGV4by10aGVtZS1uZXh0L3B1bGwvMjIz">#223<i class="fa fa-external-link-alt"></i></span>)</li>
-</ul>
-<h2 id="🌀-External-Changes"><a href="#🌀-External-Changes" class="headerlink" title="🌀 External Changes"></a>🌀 External Changes</h2><ul>
-<li>Update dependency eslint to v7.23.0 (<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL25leHQtdGhlbWUvaGV4by10aGVtZS1uZXh0L3B1bGwvMjMw">#230<i class="fa fa-external-link-alt"></i></span>)</li>
-<li>Update dependency mocha to v8.3.2 (<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL25leHQtdGhlbWUvaGV4by10aGVtZS1uZXh0L3B1bGwvMjE5">#219<i class="fa fa-external-link-alt"></i></span>)</li>
-<li>Update dependency chai to v4.3.4 (<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL25leHQtdGhlbWUvaGV4by10aGVtZS1uZXh0L3B1bGwvMjE2">#216<i class="fa fa-external-link-alt"></i></span>)</li>
-</ul>
-<h2 id="🌍-Localization"><a href="#🌍-Localization" class="headerlink" title="🌍 Localization"></a>🌍 Localization</h2><ul>
-<li>New Crowdin updates (<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL25leHQtdGhlbWUvaGV4by10aGVtZS1uZXh0L3B1bGwvMjM4">#238<i class="fa fa-external-link-alt"></i></span>)</li>
-<li>Add aria-label for buttons and selects (<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL25leHQtdGhlbWUvaGV4by10aGVtZS1uZXh0L3B1bGwvMjM0">#234<i class="fa fa-external-link-alt"></i></span>)</li>
-</ul>
-<hr>
-<p>For full changes, see the <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL25leHQtdGhlbWUvaGV4by10aGVtZS1uZXh0L2NvbXBhcmUvdjguMi4yLi4udjguMy4w">comparison between v8.2.2 and v8.3.0<i class="fa fa-external-link-alt"></i></span></p>
-<p><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL25leHQtdGhlbWUvaGV4by10aGVtZS1uZXh0L3JlbGVhc2VzL3RhZy92OC4zLjA=">Detailed changes for NexT v8.3.0<i class="fa fa-external-link-alt"></i></span></p>
+          <span id="more"></span>
+<p>时光荏苒,不知不觉已然进入社会一个春秋  </p>
+<p>博客的事情停滞许久。究其因，怠惰自然居首位，然还有一点便是提笔难下</p>
+<p>一年前的自己，觉得自己懂得很多。一年后的自己，知道<br>自己才不过是刚刚入门。不得不说，学到的越多，越会发现自己的无知。</p>
+<p>这一年里，求知，热情，激动，无奈，彷徨，最终归于平静。接下来我将逐渐记录这些岁月，记录这有趣的生活，以及一路上所学所看所感。</p>
 
       
     </div>
@@ -613,7 +311,7 @@
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/blog/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/blog/">1</a><span class="page-number current">2</span><a class="page-number" href="/blog/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/blog/page/14/">14</a><a class="extend next" rel="next" href="/blog/page/3/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <a class="extend prev" rel="prev" href="/blog/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/blog/">1</a><span class="page-number current">2</span>
   </nav>
 
 </div>
