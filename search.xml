@@ -1,6 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>mysql数据量大如何做DDL</title>
+    <url>/2021/08/27/mysql%E6%95%B0%E6%8D%AE%E9%87%8F%E5%A4%A7%E5%A6%82%E4%BD%95%E5%81%9ADDL/</url>
+    <content><![CDATA[<h1 id="一、背景"><a href="#一、背景" class="headerlink" title="一、背景"></a>一、背景</h1><p>mysql单表数据量小，并发压力小时，我们可以考虑直接在表上做alter操作。<br>一旦数据量达到百万千万级别，直接alter会导致长时间缩表，此时我们就无法无脑alter。<br>这章与大家聊一聊，mysql表中数据量大时，如何做DDL操作。</p>
+<a id="more"></a>
+
+<h1 id="二、正文"><a href="#二、正文" class="headerlink" title="二、正文"></a>二、正文</h1><p>目前常用的两种方式gh-ost, pt-osc。这两种方式的目的均是为了尽最大可能保证DDL时不影响整体业务正常进行，而并非全程不锁定数据</p>
+<h2 id="gh-ost"><a href="#gh-ost" class="headerlink" title="gh-ost"></a>gh-ost</h2><p>这里我们假设要对表a增加一列<br>操作步骤：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1、创建与表a结构当前结构一致的空表，叫做a.tmp</span><br><span class="line">2、对a.tmp执行alter语句，增加列</span><br><span class="line">3、增量同步：消费binlog，将a表binlog应用到a.tmp表（insert操作替换为replace覆盖）</span><br><span class="line">4、存量同步：//注意，步骤3与步骤4可并行执行</span><br><span class="line">- 查询现有表id</span><br><span class="line">- 将id分批，每n个一批，加写锁 //写锁为排他锁，可禁止select后，插入a.tmp前产生该行新binlog</span><br><span class="line">- 将该批数据select后应用到a.tmp表（操作为replace覆盖）</span><br><span class="line">- 应用后该批数据解锁</span><br><span class="line">- 下一批数据重复该操作</span><br><span class="line">5、当存量同步完成，锁表，等binlog追平</span><br><span class="line">6、将表a与a.tmp交换表名，</span><br><span class="line">7、流程结束</span><br></pre></td></tr></table></figure>
+
+<p>里面其实简化了很多东西，与gh-ost有些许出入，不过确可以帮助我们更快速理解gh-ost玩法</p>
+<p>这里解释几个原理：  </p>
+<p>1、步骤3与步骤4为何可以并行？</p>
+<ul>
+<li>首先我们所有的操作均为覆盖含义（insert已替换为覆盖，update实际上解析binlog得到的是数据更改后的绝对量，而非i=i+1这种相对量）</li>
+<li>我们select时对数据加了写锁（排他锁），在insert成功前数据不会被修改，不会产生binlog</li>
+<li>若select先执行，binlog后执行。由于数据覆盖，当binlog追平后数据必然最新</li>
+<li>若binlog先执行，select后执行。由于select加写锁，select后插入的必为最新数据</li>
+<li>总的来说，对于某行数据，两种操作无论中途并行穿插多少次，最后一次执行的操作总能保证该行数据最新</li>
+</ul>
+<p>2、这种方式如何保证业务正常进行？</p>
+<ul>
+<li>由于我们是分批加锁，仅涉及该批数据用户被阻塞，瞬时不可用。其他用户依然可正常读写</li>
+</ul>
+<p>3、该方式有什么限制？</p>
+<ul>
+<li>由于依赖主键进行select，必须要求具备主键</li>
+<li>建议mysql 5.7及以上</li>
+</ul>
+<p>4、第六步交换表名如何操作？</p>
+<ul>
+<li>交换表名时借助第三张表，过程如下<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1、A线程：创建_del表，对源表和_del表加写锁</span><br><span class="line">2、B线程：执行rename table `源表` to `del表`, `临时表` to `源表`。 此时由于A线程的锁，B线程操作被阻塞</span><br><span class="line">3、检查是否有待执行renmae请求</span><br><span class="line">4、A线程：先执行删除_del表命令，再释放锁 </span><br><span class="line"></span><br><span class="line">//原理</span><br><span class="line">//考虑到A线程可能由于断开会话，导致锁释放，新数据汇入源表。所以提前创建_del表占位，使得rename执行前感知到锁</span><br><span class="line">//由于在mysql中，多个语句被block时，rename优先级最高，故rename会先被执行</span><br><span class="line">//删除_del时，由于我们采用lock方式缩表，会直接释放_del的锁，而依旧源表的锁</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<p>缺点：<br>1、mysql5.6及以下，不支持并行复制，效率低<br>2、gh-ost高负载下由于顺序消费binlog，性能会低于pt-osc</p>
+<h2 id="pt-osc"><a href="#pt-osc" class="headerlink" title="pt-osc"></a>pt-osc</h2><p>基本原理与gh-ost一致</p>
+<p>不同之处在于，pt-osc不采用binlog，而是采用mysql触发器同步增量数据。具体消费方式与gh-ost基本一致。</p>
+<p>缺点：<br>1、触发器并行执行，对mysql压力大</p>
+<h2 id="mysql原生Online-DDL"><a href="#mysql原生Online-DDL" class="headerlink" title="mysql原生Online DDL"></a>mysql原生Online DDL</h2><p>未研究，据有限资料，各方面要好于gh-ost,pt-osc,但也有一定局限性</p>
+<h1 id="三、扩展"><a href="#三、扩展" class="headerlink" title="三、扩展"></a>三、扩展</h1><p>当下游数仓需要捞取binlog同步数据时，如何使下游对pt-osc,gh-ost无感知？<br>答：可借鉴DM工具的方式，将涉及pt-osc,gh-ost特有名称后缀的DML语句，缓存起来。后续数据继续解析，直到接收rename语句，再将缓存的DML语句改写后发送至下游。<br>具体需考虑有业务场景及上游操作方式，如上游保证全部分表rename后才会写入新数据，则我们便可在收到第一条DDL 语句后继续消费DML。<br>若上游保证全部分表格式相同，则我们可以接到第一条DDL即应用到下游</p>
+]]></content>
+      <categories>
+        <category>mysql</category>
+      </categories>
+  </entry>
+  <entry>
     <title>Tomcat源码笔记</title>
     <url>/2019/08/14/Tomcat%E6%BA%90%E7%A0%81%E7%AC%94%E8%AE%B0/</url>
     <content><![CDATA[<p>本章我们不会涉及代码,而是简要的介绍Tomcat的实现原理</p>
@@ -97,49 +143,33 @@
       </categories>
   </entry>
   <entry>
-    <title>mysql数据量大如何做DDL</title>
-    <url>/2021/08/27/mysql%E6%95%B0%E6%8D%AE%E9%87%8F%E5%A4%A7%E5%A6%82%E4%BD%95%E5%81%9ADDL/</url>
-    <content><![CDATA[<h1 id="一、背景"><a href="#一、背景" class="headerlink" title="一、背景"></a>一、背景</h1><p>mysql单表数据量小，并发压力小时，我们可以考虑直接在表上做alter操作。<br>一旦数据量达到百万千万级别，直接alter会导致长时间缩表，此时我们就无法无脑alter。<br>这章与大家聊一聊，mysql表中数据量大时，如何做DDL操作。</p>
-<a id="more"></a>
-
-<h1 id="二、正文"><a href="#二、正文" class="headerlink" title="二、正文"></a>二、正文</h1><p>目前常用的两种方式gh-ost, pt-osc。这两种方式的目的均是为了尽最大可能保证DDL时不影响整体业务正常进行，而并非全程不锁定数据</p>
-<h2 id="gh-ost"><a href="#gh-ost" class="headerlink" title="gh-ost"></a>gh-ost</h2><p>这里我们假设要对表a增加一列<br>操作步骤：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1、创建与表a结构当前结构一致的空表，叫做a.tmp</span><br><span class="line">2、对a.tmp执行alter语句，增加列</span><br><span class="line">3、增量同步：消费binlog，将a表binlog应用到a.tmp表（insert操作替换为replace覆盖）</span><br><span class="line">4、存量同步：//注意，步骤3与步骤4可并行执行</span><br><span class="line">- 查询现有表id</span><br><span class="line">- 将id分批，每n个一批，加写锁 //写锁为排他锁，可禁止select后，插入a.tmp前产生该行新binlog</span><br><span class="line">- 将该批数据select后应用到a.tmp表（操作为replace覆盖）</span><br><span class="line">- 应用后该批数据解锁</span><br><span class="line">- 下一批数据重复该操作</span><br><span class="line">5、当存量同步完成，锁表，等binlog追平</span><br><span class="line">6、将表a与a.tmp交换表名，</span><br><span class="line">7、流程结束</span><br></pre></td></tr></table></figure>
-
-<p>里面其实简化了很多东西，与gh-ost有些许出入，不过确可以帮助我们更快速理解gh-ost玩法</p>
-<p>这里解释几个原理：  </p>
-<p>1、步骤3与步骤4为何可以并行？</p>
+    <title>简记20210818234900</title>
+    <url>/2021/08/18/%E7%AE%80%E8%AE%B020210818234900/</url>
+    <content><![CDATA[<a id="more"></a>
+<h1 id="一、看清屎山"><a href="#一、看清屎山" class="headerlink" title="一、看清屎山"></a>一、看清屎山</h1><p>校招生踏入公司，普遍第一项工作是熟悉业务，熟悉架构，熟悉代码。</p>
+<p>这个流程本没有错，那么坑在哪？在于习惯。新人就像海绵，看到什么，便会学什么</p>
+<p>而大家都知道。业务代码，由于历史包袱，或是人力紧张，又或者是种种不可抗力因素，本身就是屎山中混杂金子。</p>
+<p>有的新人懂得多，或者习惯求索原因，可以从中看出设计中不合理的地方  </p>
+<p>而有些更为初学者的新人，则会在学习过程中全都当知识学进去，导致后续到自己设计时把代码补丁当成设计原则。不得不说，这简直是灾难</p>
+<p>在这里，我不得不提醒大家们两点</p>
 <ul>
-<li>首先我们所有的操作均为覆盖含义（insert已替换为覆盖，update实际上解析binlog得到的是数据更改后的绝对量，而非i=i+1这种相对量）</li>
-<li>我们select时对数据加了写锁（排他锁），在insert成功前数据不会被修改，不会产生binlog</li>
-<li>若select先执行，binlog后执行。由于数据覆盖，当binlog追平后数据必然最新</li>
-<li>若binlog先执行，select后执行。由于select加写锁，select后插入的必为最新数据</li>
-<li>总的来说，对于某行数据，两种操作无论中途并行穿插多少次，最后一次执行的操作总能保证该行数据最新</li>
+<li>相信推理胜过相信别人。</li>
+<li>防火防盗，防同事吹逼</li>
 </ul>
-<p>2、这种方式如何保证业务正常进行？</p>
+<p>这两句话具体怎么理解，我给大家举个例子就懂了</p>
 <ul>
-<li>由于我们是分批加锁，仅涉及该批数据用户被阻塞，瞬时不可用。其他用户依然可正常读写</li>
-</ul>
-<p>3、该方式有什么限制？</p>
-<ul>
-<li>由于依赖主键进行select，必须要求具备主键</li>
-<li>建议mysql 5.7及以上</li>
-</ul>
-<p>4、第六步交换表名如何操作？</p>
-<ul>
-<li>交换表名时借助第三张表，过程如下<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1、A线程：创建_del表，对源表和_del表加写锁</span><br><span class="line">2、B线程：执行rename table `源表` to `del表`, `临时表` to `源表`。 此时由于A线程的锁，B线程操作被阻塞</span><br><span class="line">3、检查是否有待执行renmae请求</span><br><span class="line">4、A线程：先执行删除_del表命令，再释放锁 </span><br><span class="line"></span><br><span class="line">//原理</span><br><span class="line">//考虑到A线程可能由于断开会话，导致锁释放，新数据汇入源表。所以提前创建_del表占位，使得rename执行前感知到锁</span><br><span class="line">//由于在mysql中，多个语句被block时，rename优先级最高，故rename会先被执行</span><br><span class="line">//删除_del时，由于我们采用lock方式缩表，会直接释放_del的锁，而依旧源表的锁</span><br></pre></td></tr></table></figure>
+<li>曾经有个team轰轰烈烈推广他们的工具，看完他们功能介绍PPT和文档，内部讨论一波，感觉这工具很可以。<br>后来找他们team开始深入沟通。然而这一沟通，就发现了大坑，大致过程如下：<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">一顿背景介绍过后。。。</span><br><span class="line"></span><br><span class="line">我方team：能给我们详细讲下你们这个架构是咋玩的吗？</span><br><span class="line">对方team：巴拉巴拉。。。</span><br><span class="line"></span><br><span class="line">我方team：诶，那这个xxx问题你们是怎么解决的？</span><br><span class="line">对方team：噢，我们是这个场景，巴拉巴拉。</span><br><span class="line"></span><br><span class="line">我方team：有点问题，那如果这个地方xxx你们怎么解决？</span><br><span class="line">对方team：额，这个问题我们不会遇到</span><br><span class="line"></span><br><span class="line">沉默ing。。。</span><br><span class="line"></span><br><span class="line">我方team：感谢感谢，了解了</span><br></pre></td></tr></table></figure>
 
 </li>
 </ul>
-<p>缺点：<br>1、mysql5.6及以下，不支持并行复制，效率低<br>2、gh-ost高负载下由于顺序消费binlog，性能会低于pt-osc</p>
-<h2 id="pt-osc"><a href="#pt-osc" class="headerlink" title="pt-osc"></a>pt-osc</h2><p>基本原理与gh-ost一致</p>
-<p>不同之处在于，pt-osc不采用binlog，而是采用mysql触发器同步增量数据。具体消费方式与gh-ost基本一致。</p>
-<p>缺点：<br>1、触发器并行执行，对mysql压力大</p>
-<h2 id="mysql原生Online-DDL"><a href="#mysql原生Online-DDL" class="headerlink" title="mysql原生Online DDL"></a>mysql原生Online DDL</h2><p>未研究，据有限资料，各方面要好于gh-ost,pt-osc,但也有一定局限性</p>
-<h1 id="三、扩展"><a href="#三、扩展" class="headerlink" title="三、扩展"></a>三、扩展</h1><p>当下游数仓需要捞取binlog同步数据时，如何使下游对pt-osc,gh-ost无感知？<br>答：可借鉴DM工具的方式，将涉及pt-osc,gh-ost特有名称后缀的DML语句，缓存起来。后续数据继续解析，直到接收rename语句，再将缓存的DML语句改写后发送至下游。<br>具体需考虑有业务场景及上游操作方式，如上游保证全部分表rename后才会写入新数据，则我们便可在收到第一条DDL 语句后继续消费DML。<br>若上游保证全部分表格式相同，则我们可以接到第一条DDL即应用到下游</p>
+<p>仔细品，我相信可以品出来很多东西。  </p>
+<p>很多情况下，我们的项目只适合于某些特定的场景，又或是迫于KPI，将半成品伪装成精品。</p>
+<p>不是所有人都会承认自己项目存在缺陷，若是隐藏起缺陷，而你又被精美PPT忽悠了。那么恭喜，你又会隐藏起自己项目缺陷再次背刺下一位幸运儿。  </p>
+<p>在工作中，最重要的，是相信自己的思考。伪装再好的缺陷，也能被找到蛛丝马迹。隐藏再深的金子，当思绪扫过，也能透出点点微光</p>
+<p>总之一句话：屎山中淘金，莫把屎当宝</p>
 ]]></content>
       <categories>
-        <category>mysql</category>
+        <category>简记</category>
       </categories>
   </entry>
   <entry>
@@ -214,6 +244,52 @@
       </categories>
   </entry>
   <entry>
+    <title>简记20210829224600</title>
+    <url>/2021/08/29/%E7%AE%80%E8%AE%B020210829224600/</url>
+    <content><![CDATA[<a id="more"></a>
+<h1 id="四、语言真的那么重要吗？-C-java-go-py"><a href="#四、语言真的那么重要吗？-C-java-go-py" class="headerlink" title="四、语言真的那么重要吗？(C+,java,go,py)"></a>四、语言真的那么重要吗？(C+,java,go,py)</h1><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">一位小伙在论坛大喊：Java天下第一!</span><br><span class="line">随后，一场键盘战争开始了</span><br></pre></td></tr></table></figure>
+
+<p>我曾看到过数不清的段子，大致含义相同，都是争论自己使用的语言是最好的语言。  </p>
+<p>起初我认为语言非常重要，把他当作未来深入前进的方向，由此会将语言特性示若圣经，潜意识里排斥其他语言的工作。<br>最有代表性的事件，就是在投递工作简历时，会特地寻找Java工程师的JD。遇到其他语言，则会犹豫再三</p>
+<p>后来一次偶然的机会，接触到golang相关的工作。golang对我来说是一种全新的语言，我对它的特性毫不了解。<br>这得我在工作时无暇顾及其特性把问题解决方案，用我手中的工具去落地实践。  </p>
+<p>在一阵忙碌后，轻松下来的自己复盘之前的工作。偶然间发现，即时不用语言特性，我也依旧能做到任何事情？？？<br>//TODO 没灵感，搁置</p>
+]]></content>
+      <categories>
+        <category>简记</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>简记20210822191000</title>
+    <url>/2021/08/22/%E7%AE%80%E8%AE%B020210822191000/</url>
+    <content><![CDATA[<a id="more"></a>
+<h1 id="三、能RUN就行"><a href="#三、能RUN就行" class="headerlink" title="三、能RUN就行"></a>三、能RUN就行</h1><p>这是一则真实的段子</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">有人在网上发帖提问</span><br><span class="line">提问者：自己写的代码太难看了怎么办？</span><br><span class="line">路人A：能run吗？</span><br><span class="line">提问者：我run还是代码run？</span><br><span class="line">路人B：有一个能run就行</span><br></pre></td></tr></table></figure>
+
+<p>不得不说，真的是人间真实。接下来我们聊一聊，该如何做到“能RUN就行”。</p>
+<p>记得在我刚刚实习的时候，一段简单的代码写了改，改了写，最后推到重构。写完了，自己看着代码非常愉悦，但却又因几天后的一个紧急需求，不得不改成他最初的样子。</p>
+<p>经过了一年的修修补补，我理解了什么叫“能RUN就行”。当然，这仅针对业务代码而言，因为业务需要紧跟市场脚步，需要的是最短时间代码能RUN，不宕机，而且后面还改的动，能坚持到下次被重构，这就是一份代码的使命。</p>
+<p>之前我曾看到有人这么评价业务架构师（注意是业务）</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">程序员的作用是堆粪。架构师的作用是搭架子。</span><br><span class="line">屎山堆高，自己就塌了。有架子在，尽管臭，却能用</span><br></pre></td></tr></table></figure>
+
+<p>实在是很形象了。</p>
+<p>平时我们设计方案也是如此，方案不是越复杂越好，难的不是把方案完成，而是把复杂方案简单化。</p>
+<p>比如说才几万条数据，没啥热点，未来2年也不会增长到接近几百万，这时候来个分库分表，实属闲的。等到后面做编码的时候，这分库分表的编码复杂度反而得不偿失。</p>
+<p>又比如各个表都是按相同维度进行分表，你经过一系列的分析，算出来这个表该分表10张，另一个15张，再来一个50张。<br>当你接到个批量跨表数据分析工作，麻烦就来了。</p>
+<ul>
+<li>扫全表，压力大。</li>
+<li>扫单表，你就只能根据分表id计算最大公倍数，再来hash到对应分表  </li>
+</ul>
+<p>或许这里有人会反驳，数据分析这种东西，不都是用数仓么？<br>但是这仅是个例子，不是所有的公司都支撑的起数仓，也不是所有的数据分析业务都需要放到数仓去跑</p>
+<p>我曾经也是追逐“完美”的人，但在追逐过程中我学到：<br>世上并没有真正的完美，但从一种角度，它是完美的。但换一种角度，丑陋不堪。最终美好的仅是综合情况下的取舍。</p>
+<p>话说回来，一切都要讲究变通。  </p>
+<p>曾经我见过有人为了尽量少的采用中间件，用mysql来控制并发场景下的库存，还设计预分配库存量等机制。<br>显然，运行了一段时间后QPS上来，程序RUN实在不动，人RUN了。<br>我们只能含泪接手代码，花费大力气把他的设计废掉改用redis</p>
+<p>总之，不要为了复杂而复杂，也不要为了简化而简化，凡事讲究有度。</p>
+]]></content>
+      <categories>
+        <category>简记</category>
+      </categories>
+  </entry>
+  <entry>
     <title>简记20210822174300</title>
     <url>/2021/08/22/%E7%AE%80%E8%AE%B020210822174300/</url>
     <content><![CDATA[<a id="more"></a>
@@ -261,82 +337,6 @@
 <p>这时候你或许会问，大数据平台难道不需要消耗资源处理数据吗？</p>
 <p>当然时需要的，只不过你是跟其他团队在共享资源。你的任务空闲时，这些资源会被其他团队使用。</p>
 <p>当然类似的，你也可以做到与k8s团队合作，做到动态删减容器节点，在满足你使用的情况下节约资源</p>
-]]></content>
-      <categories>
-        <category>简记</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>简记20210822191000</title>
-    <url>/2021/08/22/%E7%AE%80%E8%AE%B020210822191000/</url>
-    <content><![CDATA[<a id="more"></a>
-<h1 id="三、能RUN就行"><a href="#三、能RUN就行" class="headerlink" title="三、能RUN就行"></a>三、能RUN就行</h1><p>这是一则真实的段子</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">有人在网上发帖提问</span><br><span class="line">提问者：自己写的代码太难看了怎么办？</span><br><span class="line">路人A：能run吗？</span><br><span class="line">提问者：我run还是代码run？</span><br><span class="line">路人B：有一个能run就行</span><br></pre></td></tr></table></figure>
-
-<p>不得不说，真的是人间真实。接下来我们聊一聊，该如何做到“能RUN就行”。</p>
-<p>记得在我刚刚实习的时候，一段简单的代码写了改，改了写，最后推到重构。写完了，自己看着代码非常愉悦，但却又因几天后的一个紧急需求，不得不改成他最初的样子。</p>
-<p>经过了一年的修修补补，我理解了什么叫“能RUN就行”。当然，这仅针对业务代码而言，因为业务需要紧跟市场脚步，需要的是最短时间代码能RUN，不宕机，而且后面还改的动，能坚持到下次被重构，这就是一份代码的使命。</p>
-<p>之前我曾看到有人这么评价业务架构师（注意是业务）</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">程序员的作用是堆粪。架构师的作用是搭架子。</span><br><span class="line">屎山堆高，自己就塌了。有架子在，尽管臭，却能用</span><br></pre></td></tr></table></figure>
-
-<p>实在是很形象了。</p>
-<p>平时我们设计方案也是如此，方案不是越复杂越好，难的不是把方案完成，而是把复杂方案简单化。</p>
-<p>比如说才几万条数据，没啥热点，未来2年也不会增长到接近几百万，这时候来个分库分表，实属闲的。等到后面做编码的时候，这分库分表的编码复杂度反而得不偿失。</p>
-<p>又比如各个表都是按相同维度进行分表，你经过一系列的分析，算出来这个表该分表10张，另一个15张，再来一个50张。<br>当你接到个批量跨表数据分析工作，麻烦就来了。</p>
-<ul>
-<li>扫全表，压力大。</li>
-<li>扫单表，你就只能根据分表id计算最大公倍数，再来hash到对应分表  </li>
-</ul>
-<p>或许这里有人会反驳，数据分析这种东西，不都是用数仓么？<br>但是这仅是个例子，不是所有的公司都支撑的起数仓，也不是所有的数据分析业务都需要放到数仓去跑</p>
-<p>我曾经也是追逐“完美”的人，但在追逐过程中我学到：<br>世上并没有真正的完美，但从一种角度，它是完美的。但换一种角度，丑陋不堪。最终美好的仅是综合情况下的取舍。</p>
-<p>话说回来，一切都要讲究变通。  </p>
-<p>曾经我见过有人为了尽量少的采用中间件，用mysql来控制并发场景下的库存，还设计预分配库存量等机制。<br>显然，运行了一段时间后QPS上来，程序RUN实在不动，人RUN了。<br>我们只能含泪接手代码，花费大力气把他的设计废掉改用redis</p>
-<p>总之，不要为了复杂而复杂，也不要为了简化而简化，凡事讲究有度。</p>
-]]></content>
-      <categories>
-        <category>简记</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>简记20210818234900</title>
-    <url>/2021/08/18/%E7%AE%80%E8%AE%B020210818234900/</url>
-    <content><![CDATA[<a id="more"></a>
-<h1 id="一、看清屎山"><a href="#一、看清屎山" class="headerlink" title="一、看清屎山"></a>一、看清屎山</h1><p>校招生踏入公司，普遍第一项工作是熟悉业务，熟悉架构，熟悉代码。</p>
-<p>这个流程本没有错，那么坑在哪？在于习惯。新人就像海绵，看到什么，便会学什么</p>
-<p>而大家都知道。业务代码，由于历史包袱，或是人力紧张，又或者是种种不可抗力因素，本身就是屎山中混杂金子。</p>
-<p>有的新人懂得多，或者习惯求索原因，可以从中看出设计中不合理的地方  </p>
-<p>而有些更为初学者的新人，则会在学习过程中全都当知识学进去，导致后续到自己设计时把代码补丁当成设计原则。不得不说，这简直是灾难</p>
-<p>在这里，我不得不提醒大家们两点</p>
-<ul>
-<li>相信推理胜过相信别人。</li>
-<li>防火防盗，防同事吹逼</li>
-</ul>
-<p>这两句话具体怎么理解，我给大家举个例子就懂了</p>
-<ul>
-<li>曾经有个team轰轰烈烈推广他们的工具，看完他们功能介绍PPT和文档，内部讨论一波，感觉这工具很可以。<br>后来找他们team开始深入沟通。然而这一沟通，就发现了大坑，大致过程如下：<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">一顿背景介绍过后。。。</span><br><span class="line"></span><br><span class="line">我方team：能给我们详细讲下你们这个架构是咋玩的吗？</span><br><span class="line">对方team：巴拉巴拉。。。</span><br><span class="line"></span><br><span class="line">我方team：诶，那这个xxx问题你们是怎么解决的？</span><br><span class="line">对方team：噢，我们是这个场景，巴拉巴拉。</span><br><span class="line"></span><br><span class="line">我方team：有点问题，那如果这个地方xxx你们怎么解决？</span><br><span class="line">对方team：额，这个问题我们不会遇到</span><br><span class="line"></span><br><span class="line">沉默ing。。。</span><br><span class="line"></span><br><span class="line">我方team：感谢感谢，了解了</span><br></pre></td></tr></table></figure>
-
-</li>
-</ul>
-<p>仔细品，我相信可以品出来很多东西。  </p>
-<p>很多情况下，我们的项目只适合于某些特定的场景，又或是迫于KPI，将半成品伪装成精品。</p>
-<p>不是所有人都会承认自己项目存在缺陷，若是隐藏起缺陷，而你又被精美PPT忽悠了。那么恭喜，你又会隐藏起自己项目缺陷再次背刺下一位幸运儿。  </p>
-<p>在工作中，最重要的，是相信自己的思考。伪装再好的缺陷，也能被找到蛛丝马迹。隐藏再深的金子，当思绪扫过，也能透出点点微光</p>
-<p>总之一句话：屎山中淘金，莫把屎当宝</p>
-]]></content>
-      <categories>
-        <category>简记</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>简记20210829224600</title>
-    <url>/2021/08/29/%E7%AE%80%E8%AE%B020210829224600/</url>
-    <content><![CDATA[<a id="more"></a>
-<h1 id="四、语言真的那么重要吗？-C-java-go-py"><a href="#四、语言真的那么重要吗？-C-java-go-py" class="headerlink" title="四、语言真的那么重要吗？(C+,java,go,py)"></a>四、语言真的那么重要吗？(C+,java,go,py)</h1><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">一位小伙在论坛大喊：Java天下第一!</span><br><span class="line">随后，一场键盘战争开始了</span><br></pre></td></tr></table></figure>
-
-<p>我曾看到过数不清的段子，大致含义相同，都是争论自己使用的语言是最好的语言。  </p>
-<p>起初我认为语言非常重要，把他当作未来深入前进的方向，由此会将语言特性示若圣经，潜意识里排斥其他语言的工作。<br>最有代表性的事件，就是在投递工作简历时，会特地寻找Java工程师的JD。遇到其他语言，则会犹豫再三</p>
-<p>后来一次偶然的机会，接触到golang相关的工作。golang对我来说是一种全新的语言，我对它的特性毫不了解。<br>这得我在工作时无暇顾及其特性把问题解决方案，用我手中的工具去落地实践。  </p>
-<p>在一阵忙碌后，轻松下来的自己复盘之前的工作。偶然间发现，即时不用语言特性，我也依旧能做到任何事情？？？<br>//TODO 没灵感，搁置</p>
 ]]></content>
       <categories>
         <category>简记</category>
