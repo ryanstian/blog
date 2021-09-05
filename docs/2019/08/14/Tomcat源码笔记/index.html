@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/blog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/blog/css/main.css">
+
+
+<link rel="stylesheet" href="/blog/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"ryanstian.github.io","root":"/blog/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="本章我们不会涉及代码,而是简要的介绍Tomcat的实现原理">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Tomcat源码笔记">
+<meta property="og:url" content="https://ryanstian.github.io/blog/2019/08/14/Tomcat%E6%BA%90%E7%A0%81%E7%AC%94%E8%AE%B0/index.html">
+<meta property="og:site_name" content="Ryanstian的博客">
+<meta property="og:description" content="本章我们不会涉及代码,而是简要的介绍Tomcat的实现原理">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://ryanstian.github.io/blog/2019/08/14/Tomcat%E6%BA%90%E7%A0%81%E7%AC%94%E8%AE%B0/LifecycleMBeanBase%E7%BB%A7%E6%89%BF%E5%9B%BE.png">
+<meta property="og:image" content="https://ryanstian.github.io/blog/2019/08/14/Tomcat%E6%BA%90%E7%A0%81%E7%AC%94%E8%AE%B0/Lifecycle%E6%8E%A5%E5%8F%A3%E5%AE%9E%E7%8E%B0%E5%88%97%E8%A1%A8.png">
+<meta property="og:image" content="https://ryanstian.github.io/blog/2019/08/14/Tomcat%E6%BA%90%E7%A0%81%E7%AC%94%E8%AE%B0/LifecycleMBeanBase%E7%B1%BB%E5%9B%BE.png">
+<meta property="og:image" content="https://ryanstian.github.io/blog/2019/08/14/Tomcat%E6%BA%90%E7%A0%81%E7%AC%94%E8%AE%B0/tomcat%E6%97%B6%E5%BA%8F%E5%9B%BEinit.png">
+<meta property="og:image" content="https://ryanstian.github.io/blog/2019/08/14/Tomcat%E6%BA%90%E7%A0%81%E7%AC%94%E8%AE%B0/tomcatNIO%E6%8E%A5%E6%94%B6%E8%AF%B7%E6%B1%82%E9%80%BB%E8%BE%91%E5%9B%BE.png">
+<meta property="og:image" content="https://ryanstian.github.io/blog/2019/08/14/Tomcat%E6%BA%90%E7%A0%81%E7%AC%94%E8%AE%B0/TomcatNIO%E7%BA%BF%E7%A8%8B%E6%A8%A1%E5%9E%8B.png">
+<meta property="article:published_time" content="2019-08-14T15:24:00.000Z">
+<meta property="article:modified_time" content="2021-09-05T01:51:08.285Z">
+<meta property="article:author" content="Ryanstian">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://ryanstian.github.io/blog/2019/08/14/Tomcat%E6%BA%90%E7%A0%81%E7%AC%94%E8%AE%B0/LifecycleMBeanBase%E7%BB%A7%E6%89%BF%E5%9B%BE.png">
+
+<link rel="canonical" href="https://ryanstian.github.io/blog/2019/08/14/Tomcat%E6%BA%90%E7%A0%81%E7%AC%94%E8%AE%B0/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Tomcat源码笔记 | Ryanstian的博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/blog/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Ryanstian的博客</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/blog/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/blog/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://ryanstian.github.io/blog/2019/08/14/Tomcat%E6%BA%90%E7%A0%81%E7%AC%94%E8%AE%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/blog/images/avatar.gif">
+      <meta itemprop="name" content="Ryanstian">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Ryanstian的博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Tomcat源码笔记
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-08-14 23:24:00" itemprop="dateCreated datePublished" datetime="2019-08-14T23:24:00+08:00">2019-08-14</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-09-05 09:51:08" itemprop="dateModified" datetime="2021-09-05T09:51:08+08:00">2021-09-05</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/blog/categories/Tomcat/" itemprop="url" rel="index"><span itemprop="name">Tomcat</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>本章我们不会涉及代码,而是简要的介绍Tomcat的实现原理</p>
+<span id="more"></span>
+<p><strong>Tomcat版本9.0.21</strong></p>
+<h2 id="Tomcat是什么"><a href="#Tomcat是什么" class="headerlink" title="Tomcat是什么?"></a>Tomcat是什么?</h2><p>在我看来,Tomcat是利用各种模型和设计方式对socket的深度封装,做到适配各种协议同时达到一定性能的代码组<br>同时给我们写的各种业务代码(Servlet)提供了容器(也可以理解为tomcat可以将以对象的形式使用我们写的Servlet业务),这是Tomcat的核心。<br>当然,Tomcat还实现了一些其他的比如生命周期管理,但是这些都是为了核心而服务的</p>
+<p>我们第一次接触Tomcat,相信大多数人都是Hello World。<br>想想当时我们是怎么做的:</p>
+<ul>
+<li>我们建立了个项目</li>
+<li>按照网上的教程建好了项目里面的文件夹</li>
+<li>导入servlet包</li>
+<li>开始编写xml配置文件</li>
+<li>继承Servlet编写Get,Post代码</li>
+<li>导出war包放到tomcat下的webapps文件夹</li>
+<li>启动tomcat</li>
+</ul>
+<p>so easy,然后我们就可以通过浏览器访问我们之前写好的接口了。</p>
+<p>但是,我们有没有想过是为什么,为什么我们GET中的代码会被调用,为什么我们访问一个网址会执行我们的代码,他又是怎么执行的？</p>
+<p>这一切,我们将从Tomcat中找到答案</p>
+<h2 id="消息接收"><a href="#消息接收" class="headerlink" title="消息接收"></a>消息接收</h2><p>首先,消息是如何接收的？</p>
+<p>这里,我要阐述下自己的理解：  </p>
+<ul>
+<li>在网络传输的世界里面,一切都是消息。<br>消息是指什么?<br>消息可以理解为一串二进制,一串byte或者字符串（当然,在网络模型的最底层,这些都会被转换为二进制来传输）</li>
+<li>协议又是什么?<br>协议是一种事先约定的规范。规定了消息格式,消息处理方式等等各种机制<br>例如，我们编写servlet最常用到的http协议,他的可视化表示就如同下面这些内容。<br>其实,每一行后面都跟着\r\n,不过这是换行符,所以在屏幕上展现出来就是一行一行的数据<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">GET / HTTP/1.1</span><br><span class="line">Host: localhost:8080</span><br><span class="line">User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101 Firefox/68.0</span><br><span class="line">Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8</span><br><span class="line">Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Connection: keep-alive</span><br><span class="line">Upgrade-Insecure-Requests: 1</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p>了解了这些以后,我们就可以继续进行了  </p>
+<p>既然一切都是消息,那么当我们发送一个http请求的时候,Tomcat最开始接收到的也是一串像是上面这种的字符串,java中接收消息用的就是socket,Tomcat也不例外。  </p>
+<p>所以我在文章最开始的时候说到：“Tomcat实质就是对socket的深度封装”</p>
+<p>在获取到socket套接字以后，Tomcat开始解析<br>根据传入内容标明协议的不同,按照在代码中定义好的各种协议模板来解析这个字符串。<br>解析完成后封装到Request和Response中交给Servlet执行用户自定义的业务代码,最后再由socket发送响应,这就是Tomcat大致的流程</p>
+<h2 id="生命周期"><a href="#生命周期" class="headerlink" title="生命周期"></a>生命周期</h2><p>Tomcat的各个组件也是有生命周期的,这个生命周期由一种设计模式(状态机)来控制,下面让我们了解一下</p>
+<p>首先要介绍的是LifecycleMBeanBase类,下面是这个类的类图<br><img src="LifecycleMBeanBase%E7%BB%A7%E6%89%BF%E5%9B%BE.png" alt="如果图片失效,请邮件联系作者补图"></p>
+<p>我们从Lifecycle接口开始了解,Lifecycle定义了一个状态机,下面是Lifecycle的原注释</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">*            start()</span><br><span class="line">*  -----------------------------</span><br><span class="line">*  |                           |</span><br><span class="line">*  | init()                    |</span><br><span class="line">* NEW -»-- INITIALIZING        |</span><br><span class="line">* | |           |              |     ------------------«-----------------------</span><br><span class="line">* | |           |auto          |     |                                        |</span><br><span class="line">* | |          \|/    start() \|/   \|/     auto          auto         stop() |</span><br><span class="line">* | |      INITIALIZED --»-- STARTING_PREP --»- STARTING --»- STARTED --»---  |</span><br><span class="line">* | |         |                                                            |  |</span><br><span class="line">* | |destroy()|                                                            |  |</span><br><span class="line">* | --»-----«--    ------------------------«--------------------------------  ^</span><br><span class="line">* |     |          |                                                          |</span><br><span class="line">* |     |         \|/          auto                 auto              start() |</span><br><span class="line">* |     |     STOPPING_PREP ----»---- STOPPING ------»----- STOPPED -----»-----</span><br><span class="line">* |    \|/                               ^                     |  ^</span><br><span class="line">* |     |               stop()           |                     |  |</span><br><span class="line">* |     |       --------------------------                     |  |</span><br><span class="line">* |     |       |                                              |  |</span><br><span class="line">* |     |       |    destroy()                       destroy() |  |</span><br><span class="line">* |     |    FAILED ----»------ DESTROYING ---«-----------------  |</span><br><span class="line">* |     |                        ^     |                          |</span><br><span class="line">* |     |     destroy()          |     |auto                      |</span><br><span class="line">* |     --------»-----------------    \|/                         |</span><br><span class="line">* |                                 DESTROYED                     |</span><br><span class="line">* |                                                               |</span><br><span class="line">* |                            stop()                             |</span><br><span class="line">* ----»-----------------------------»------------------------------</span><br></pre></td></tr></table></figure>
+<p>我们可以看到,这是一种状态机设计模式。规定了组件生命周期的状态转换,可以方便的进行组件生命周期的管理。  </p>
+<p>从下图我们可以看到,从Server开始几乎每一个组件间接继承/实现了该状态机<br><img src="Lifecycle%E6%8E%A5%E5%8F%A3%E5%AE%9E%E7%8E%B0%E5%88%97%E8%A1%A8.png" alt="如果图片失效,请邮件联系作者补图"></p>
+<p>接下来让我们看LifecycleBase,这是一个抽象类,实现了fireLifecycleEvent,init,start…等方法</p>
+<p>fireLifecycleEvent的设计其实是根据观察者模式</p>
+<p>init,start等方法仅仅是用来控制其生命周期的,每个方法例如init,在内部还会调用initInternal(),Tomcat的很多组件的业务代码全部都在xxxInternal()中,由子类负责实现</p>
+<p>LifecycleMBeanBase则对LifecycleBase进行了进一步的实现,我们从它的图中可以看到<br><img src="LifecycleMBeanBase%E7%B1%BB%E5%9B%BE.png" alt="如果图片失效,请邮件联系作者补图"></p>
+<p>其中最关键的是initInternal()和destroyInternal()。<br>主要实现了委托Register类来将子类(类如StandardServer等)注册到bean容器中。</p>
+<p>如果在看源码过程中大家对ManagedBean或者MBeanServer抱有疑惑,可以先去学习一下JMX规范再回来看容器部分代码,不过即使跳过容器部分,也不影响接下来的部分</p>
+<h2 id="Tomcat初始化流程-仅需有个印象即可"><a href="#Tomcat初始化流程-仅需有个印象即可" class="headerlink" title="Tomcat初始化流程(仅需有个印象即可)"></a>Tomcat初始化流程(仅需有个印象即可)</h2><p>Tomcat工作主要有几个流程:</p>
+<ul>
+<li>init(负责new各级对象,组件依赖关系,加载配置文件)</li>
+<li>start(这一步完成时可以正常接收请求开始处理)</li>
+<li>处理消息</li>
+<li>结束</li>
+</ul>
+<p>首先放一张tomcat init的流程图(简化版)<br><img src="tomcat%E6%97%B6%E5%BA%8F%E5%9B%BEinit.png" alt="如果图片失效,请邮件联系作者补图"></p>
+<ul>
+<li>Bootstrap:是入口,例如命令行输入service tomcat start等操作时,便是由这个类来解析,这个类均通过反射操作来调用Catalina</li>
+<li>Catalina:提供了操控Tomcat启停等行为的方法</li>
+<li>LifecycleBase:状态机设计模式,我们后文会提及,StandardServer等大部分组件都会实现该状态机</li>
+<li>StandardServer:顶级容器,一个Tomcat对应唯一一个Server,负责管理多个service的启停等行为</li>
+<li>StandardService:可以完整执行功能的最小单元容器(如果不明白可以先继续看)<br>下面是一个server.xml文件去掉注释后的内容。根据xml我们可以清楚的看到其构建逻辑<br>Server包含Service,Service包含Connector和Engine,Engine包含host<br>假如我们现在面临一个问题,有两个同名的项目需要发布或者希望不同项目部署在不同的端口,那么我们就可以在后面新增一个service</li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">Server</span> <span class="attr">port</span>=<span class="string">&quot;8005&quot;</span> <span class="attr">shutdown</span>=<span class="string">&quot;SHUTDOWN&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">Listener</span> <span class="attr">className</span>=<span class="string">&quot;org.apache.catalina.startup.VersionLoggerListener&quot;</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">Listener</span> <span class="attr">className</span>=<span class="string">&quot;org.apache.catalina.core.AprLifecycleListener&quot;</span> <span class="attr">SSLEngine</span>=<span class="string">&quot;on&quot;</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">Listener</span> <span class="attr">className</span>=<span class="string">&quot;org.apache.catalina.core.JreMemoryLeakPreventionListener&quot;</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">Listener</span> <span class="attr">className</span>=<span class="string">&quot;org.apache.catalina.mbeans.GlobalResourcesLifecycleListener&quot;</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">Listener</span> <span class="attr">className</span>=<span class="string">&quot;org.apache.catalina.core.ThreadLocalLeakPreventionListener&quot;</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">GlobalNamingResources</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">Resource</span> <span class="attr">name</span>=<span class="string">&quot;UserDatabase&quot;</span> <span class="attr">auth</span>=<span class="string">&quot;Container&quot;</span></span></span><br><span class="line"><span class="tag">              <span class="attr">type</span>=<span class="string">&quot;org.apache.catalina.UserDatabase&quot;</span></span></span><br><span class="line"><span class="tag">              <span class="attr">description</span>=<span class="string">&quot;User database that can be updated and saved&quot;</span></span></span><br><span class="line"><span class="tag">              <span class="attr">factory</span>=<span class="string">&quot;org.apache.catalina.users.MemoryUserDatabaseFactory&quot;</span></span></span><br><span class="line"><span class="tag">              <span class="attr">pathname</span>=<span class="string">&quot;conf/tomcat-users.xml&quot;</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">GlobalNamingResources</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">Service</span> <span class="attr">name</span>=<span class="string">&quot;Catalina&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">Connector</span> <span class="attr">port</span>=<span class="string">&quot;8080&quot;</span> <span class="attr">protocol</span>=<span class="string">&quot;HTTP/1.1&quot;</span></span></span><br><span class="line"><span class="tag">               <span class="attr">connectionTimeout</span>=<span class="string">&quot;20000&quot;</span></span></span><br><span class="line"><span class="tag">               <span class="attr">redirectPort</span>=<span class="string">&quot;8443&quot;</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">Connector</span> <span class="attr">port</span>=<span class="string">&quot;8009&quot;</span> <span class="attr">protocol</span>=<span class="string">&quot;AJP/1.3&quot;</span> <span class="attr">redirectPort</span>=<span class="string">&quot;8443&quot;</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">Engine</span> <span class="attr">name</span>=<span class="string">&quot;Catalina&quot;</span> <span class="attr">defaultHost</span>=<span class="string">&quot;localhost&quot;</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">Realm</span> <span class="attr">className</span>=<span class="string">&quot;org.apache.catalina.realm.LockOutRealm&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">Realm</span> <span class="attr">className</span>=<span class="string">&quot;org.apache.catalina.realm.UserDatabaseRealm&quot;</span></span></span><br><span class="line"><span class="tag">               <span class="attr">resourceName</span>=<span class="string">&quot;UserDatabase&quot;</span>/&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">Realm</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">Host</span> <span class="attr">name</span>=<span class="string">&quot;localhost&quot;</span>  <span class="attr">appBase</span>=<span class="string">&quot;webapps&quot;</span></span></span><br><span class="line"><span class="tag">            <span class="attr">unpackWARs</span>=<span class="string">&quot;true&quot;</span> <span class="attr">autoDeploy</span>=<span class="string">&quot;true&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">Valve</span> <span class="attr">className</span>=<span class="string">&quot;org.apache.catalina.valves.AccessLogValve&quot;</span> <span class="attr">directory</span>=<span class="string">&quot;logs&quot;</span></span></span><br><span class="line"><span class="tag">               <span class="attr">prefix</span>=<span class="string">&quot;localhost_access_log&quot;</span> <span class="attr">suffix</span>=<span class="string">&quot;.txt&quot;</span></span></span><br><span class="line"><span class="tag">               <span class="attr">pattern</span>=<span class="string">&quot;%h %l %u %t <span class="symbol">&amp;quot;</span>%r<span class="symbol">&amp;quot;</span> %s %b&quot;</span> /&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">Host</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">Engine</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">Service</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">Server</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>ScheduledThreadPoolExecutor:线程池,后面我在讲述线程模型的时候会讲到</li>
+<li>Container容器模块,呈现包含关系,之间以责任链形式调用,这里注意一点,虽然方法名是invoke,但实际上并不是通过反射来调用,类似的在tomcat中也有很多继承了Runnable但是有些模块用不到start而是使用run的情况<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  Engine&#123;</span><br><span class="line">    Host&#123;</span><br><span class="line">      Context&#123;</span><br><span class="line">        Wrapper</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li>Endpoint:核心部分,后面讲线程模型我会提到</li>
+<li>Tomcat的start流程其实跟init流程类似,在宏观上几乎没有改动,因此省略</li>
+</ul>
+<h2 id="Tomcat接收消息流程"><a href="#Tomcat接收消息流程" class="headerlink" title="Tomcat接收消息流程"></a>Tomcat接收消息流程</h2><p>这里我认为一张图足以<br><img src="tomcatNIO%E6%8E%A5%E6%94%B6%E8%AF%B7%E6%B1%82%E9%80%BB%E8%BE%91%E5%9B%BE.png" alt="如果图片失效,请邮件联系作者补图"></p>
+<h2 id="一些关键的节点"><a href="#一些关键的节点" class="headerlink" title="一些关键的节点"></a>一些关键的节点</h2><p>这里将提供一些消息在Tomcat中传递的关键节点,可以帮助大家通过全局搜索快速定位到源码</p>
+<ul>
+<li>init时:<br>这里有人会疑惑类的初始化和注入依赖在哪里,答案是digester.parse<br>这种感觉就像是我们写springMVC时配置的xml一样,在这里xml就是server.xml。digester会根据这个xml来解析并注入依赖</li>
+<li>NIO接收消息时:<br>关键类Acceptor。其run方法是核心,endpoint.setSocketOptions是转折点。随后一系列操作将accept到的封装为PollerEvent加入队列</li>
+<li>关键类Poller：<br>从队列取处PollerEvent注册到socketChannel的Selector选择器中,并且负责轮询读写事件,将其封装后扔到线程池中</li>
+<li>关键类SocketProcessor：<br>被上文封装的Runnable,负责接下来的读取解析处理返回操作</li>
+<li>关键类Http11Processor：<br>inputBuffer.parseRequestLine获取并解析请求,如果是文件传输类型,那么不会解析消息体,如果是表格那种文本的,就会一起读取出来</li>
+<li>具体从socket读取消息的地方:<br>Http11InputBuffer类的socketWrapper.read。<br>NioSocketWrapper类的nRead = fillReadBuffer(block, to)</li>
+<li>关键类Http11Processor：<br>inputBuffer.parseHeaders将读取出的消息解析为消息头</li>
+</ul>
+<h2 id="这里我们讲Tomcat线程模型"><a href="#这里我们讲Tomcat线程模型" class="headerlink" title="这里我们讲Tomcat线程模型"></a>这里我们讲Tomcat线程模型</h2><p>TomcatNIO的线程模型其实非常简单,简单到什么程度?让我们看图<br><img src="TomcatNIO%E7%BA%BF%E7%A8%8B%E6%A8%A1%E5%9E%8B.png" alt="如果图片失效,请邮件联系作者补图"></p>
+<p>甚至于io操作和业务操作在同一根线程上进行,没有经过分离,poller的职责仅仅是检测事件,并不负责io操作,<br><font color=red>注意这仅仅是NIO模式,不包括另外两种NIO2和APR模式</font></p>
+<p>我们看server.xml配置文档的时候可以看到允许我们设置一些参数,这里之前tomcatNIO接收请求逻辑图已经描述过,不再赘述。</p>
+<p>至于Poller,你在看旧文章时有人会说允许最大值不超过2个。没错,在之前的版本是这样,但是在9.0,我们看到注释文档中有句话,在NIO下Poller被改为仅有一个</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;update&gt;</span><br><span class="line">    Remove &lt;code&gt;pollerThreadCount&lt;/code&gt; Connector attribute for NIO,</span><br><span class="line">    one poller thread is sufficient. (remm)</span><br><span class="line">&lt;/update&gt;</span><br></pre></td></tr></table></figure>
+
+<p>通过这些,我们可以分析到<br>Tomcat NIO模式下,是通过粗暴的增加线程来处理请求。<br>如果同时请求数过多,会被ServerSocketChannel阻拦掉<br>如果交给线程池的read达到线程池上限,那么就会加入队列中进行排队</p>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Ryanstian
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://ryanstian.github.io/blog/2019/08/14/Tomcat%E6%BA%90%E7%A0%81%E7%AC%94%E8%AE%B0/" title="Tomcat源码笔记">https://ryanstian.github.io/blog/2019/08/14/Tomcat源码笔记/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/blog/2019/07/02/mysql%E5%A4%A7%E5%B0%8F%E5%86%99%E9%97%AE%E9%A2%98/" rel="prev" title="mysql大小写问题">
+      <i class="fa fa-chevron-left"></i> mysql大小写问题
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/blog/2019/08/17/%E5%87%A0%E7%A7%8D%E7%BA%BF%E7%A8%8B%E6%A8%A1%E5%9E%8B/" rel="next" title="几种线程模型">
+      几种线程模型 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Tomcat%E6%98%AF%E4%BB%80%E4%B9%88"><span class="nav-number">1.</span> <span class="nav-text">Tomcat是什么?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B6%88%E6%81%AF%E6%8E%A5%E6%94%B6"><span class="nav-number">2.</span> <span class="nav-text">消息接收</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F"><span class="nav-number">3.</span> <span class="nav-text">生命周期</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Tomcat%E5%88%9D%E5%A7%8B%E5%8C%96%E6%B5%81%E7%A8%8B-%E4%BB%85%E9%9C%80%E6%9C%89%E4%B8%AA%E5%8D%B0%E8%B1%A1%E5%8D%B3%E5%8F%AF"><span class="nav-number">4.</span> <span class="nav-text">Tomcat初始化流程(仅需有个印象即可)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Tomcat%E6%8E%A5%E6%94%B6%E6%B6%88%E6%81%AF%E6%B5%81%E7%A8%8B"><span class="nav-number">5.</span> <span class="nav-text">Tomcat接收消息流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E4%BA%9B%E5%85%B3%E9%94%AE%E7%9A%84%E8%8A%82%E7%82%B9"><span class="nav-number">6.</span> <span class="nav-text">一些关键的节点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%99%E9%87%8C%E6%88%91%E4%BB%AC%E8%AE%B2Tomcat%E7%BA%BF%E7%A8%8B%E6%A8%A1%E5%9E%8B"><span class="nav-number">7.</span> <span class="nav-text">这里我们讲Tomcat线程模型</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Ryanstian</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/blog/archives/">
+        
+          <span class="site-state-item-count">38</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/blog/categories/">
+          
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/blog/tags/">
+          
+        <span class="site-state-item-count">17</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" class="cc-opacity" rel="noopener" target="_blank"><img src="/blog/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Ryanstian</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/blog/lib/anime.min.js"></script>
+  <script src="/blog/lib/velocity/velocity.min.js"></script>
+  <script src="/blog/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/blog/js/utils.js"></script>
+
+<script src="/blog/js/motion.js"></script>
+
+
+<script src="/blog/js/schemes/muse.js"></script>
+
+
+<script src="/blog/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

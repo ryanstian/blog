@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/blog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/blog/css/main.css">
+
+
+<link rel="stylesheet" href="/blog/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"ryanstian.github.io","root":"/blog/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="二、跳出固化思维经过第一阶段在摸爬滚打，相信已经有了些许积累，学到了很多。   这时，我相信你至少已经知道了。什么时候该用分库分表，什么时候该用redis，什么时候该用kafka等等一系列的简单应用。 大致了解原理以及会用是一方面，精通又是另一方面。大部分工作的人，也仅仅是了解原理及停留在会用的阶段。当然这并不会妨碍我们用它们来设计我们的程序。 好了，让我们回归正题。 当你进行一项程序，我希望你">
+<meta property="og:type" content="article">
+<meta property="og:title" content="简记20210822174300">
+<meta property="og:url" content="https://ryanstian.github.io/blog/2021/08/22/%E7%AE%80%E8%AE%B020210822174300/index.html">
+<meta property="og:site_name" content="Ryanstian的博客">
+<meta property="og:description" content="二、跳出固化思维经过第一阶段在摸爬滚打，相信已经有了些许积累，学到了很多。   这时，我相信你至少已经知道了。什么时候该用分库分表，什么时候该用redis，什么时候该用kafka等等一系列的简单应用。 大致了解原理以及会用是一方面，精通又是另一方面。大部分工作的人，也仅仅是了解原理及停留在会用的阶段。当然这并不会妨碍我们用它们来设计我们的程序。 好了，让我们回归正题。 当你进行一项程序，我希望你">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-08-22T09:43:00.000Z">
+<meta property="article:modified_time" content="2021-08-26T15:56:18.584Z">
+<meta property="article:author" content="Ryanstian">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://ryanstian.github.io/blog/2021/08/22/%E7%AE%80%E8%AE%B020210822174300/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>简记20210822174300 | Ryanstian的博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/blog/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Ryanstian的博客</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/blog/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/blog/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://ryanstian.github.io/blog/2021/08/22/%E7%AE%80%E8%AE%B020210822174300/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/blog/images/avatar.gif">
+      <meta itemprop="name" content="Ryanstian">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Ryanstian的博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          简记20210822174300
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-08-22 17:43:00" itemprop="dateCreated datePublished" datetime="2021-08-22T17:43:00+08:00">2021-08-22</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-08-26 23:56:18" itemprop="dateModified" datetime="2021-08-26T23:56:18+08:00">2021-08-26</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/blog/categories/%E7%AE%80%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">简记</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <span id="more"></span>
+<h1 id="二、跳出固化思维"><a href="#二、跳出固化思维" class="headerlink" title="二、跳出固化思维"></a>二、跳出固化思维</h1><p>经过第一阶段在摸爬滚打，相信已经有了些许积累，学到了很多。  </p>
+<p>这时，我相信你至少已经知道了。什么时候该用分库分表，什么时候该用redis，什么时候该用kafka等等一系列的简单应用。</p>
+<p>大致了解原理以及会用是一方面，精通又是另一方面。大部分工作的人，也仅仅是了解原理及停留在会用的阶段。当然这并不会妨碍我们用它们来设计我们的程序。</p>
+<p>好了，让我们回归正题。</p>
+<p>当你进行一项程序，我希望你忘记自己学过的各种中间件，学过的各种语言等等。</p>
+<p>此时便可以从程序本质出发，从需求开始，一点点分析你需要哪些特性来组装出你的程序，然后去寻找适合的技能，而非从自己所有的技能中做排除法。</p>
+<p>等我们把所需的特性一一列出以后。才是需要结合团队掌握的技能，以及底层支持等各种情况，来进行综合考虑的情况。</p>
+<p>这里我会举几个例子，当然受限于保密等原因，无法说的太过详细。但已经足以辅助理解。</p>
+<p>examle1：<br>刚入职场时曾经遇到了这样一个问题：  </p>
+<p>我需要定时对一系列的信息进行处理，根据来源方不通进行不同的处理规则，处理规则依托于各渠道方强相关。  </p>
+<p>并且在我程序运行过程中，还会源源不断的增加新来源方，以及改变旧有渠道处理方式。  </p>
+<p>在我处理完数据后，会对几方数据进行比对，然后根据渠道组合不同，定制不同的清理流程  </p>
+<p>solution1-1：<br>此时，其实总的来说就两个问题。</p>
+<ul>
+<li>1.通用性 VS 定制化</li>
+<li>2.流程复杂性</li>
+</ul>
+<p>这一阶段，我所掌握的知识相当有限。在我的认知范围内，我是这样思考的：</p>
+<ul>
+<li>1.由于各个业务流程过于复杂，如果单独为每个业务定制，那么后期维护复杂度会把我拖垮。于是我需要在所有业务中抽象出一个共性模型。在通用的基础上，用不同的策略（策略模式）去处理定制化问题</li>
+<li>2.因为流程复杂多变，我对需求进行了分析，去google上参考业界通用流程，在复杂流程中关键步骤抽离出来，考虑各自成为服务，各服务无状态且可横向扩展。<br>让数据通过中间件为中转，流转于各个服务中，通过控制不同数据在服务中的流转顺序，以此来解决流程复杂性问题（后来考虑到维护成本，被要求压缩在一个服务里，通过方法调用来分割了）</li>
+<li>3.但还有一个问题没有解决，各业务的定制化逻辑。这里比较困难的一点为，逻辑与渠道方高度耦合，即我们需要完全掌握业务方逻辑才可以定制出处理规则，这是相当困难的。<br>我曾考虑过采用动态加载插件的形式，让业务将他们的规则封装在一个插件中，交由我们在程序中热拔插。后来考虑到这其中的不可控性便被放弃了（例如业务方写的规则需要在我们服务上跑，很容易失控）。<br>最终，基于各种压力，我们选择将一小部分及其特殊的逻辑让各渠道方预处理（或是我们替其进行预处理），然后走入通用逻辑。</li>
+</ul>
+<p>在这一阶段，我的知识储备中并没有dag调度，大数据处理等概念。但是通过对业务的分析，已经衍生出雏形。</p>
+<p>这也是我为什么强调，忘记自己的知识储备，从需求来分析需要什么，而不是你会什么。</p>
+<p>———–扩展———–  </p>
+<p>solution1-2：<br>后来接触了DAG调度平台，可以发现。其中的流程复杂性，便是dag中的流程控制。  </p>
+<p>本质上与我们先前拆分为多个微服务进行处理并没有区别，只不过dag平台提供了更为巧妙的调度方式，以及更为简洁的编码。</p>
+<p>让我们在思考一下，我们拥有了流程调度能力，并且我们的业务已经发展的比较复杂，各种渠道的定制化流程复杂交错。  </p>
+<p>先前我们制定的通用化模型，应付现在的场景非常吃力。任何一个渠道的改动，均需们发版来更新，会影响到所有渠道的处理。而且每次改动均需考虑兼容性问题</p>
+<p>此时，我们该如何协调定制化与通用化的矛盾呢？（该答案并未亲自实践）</p>
+<p>答案是，反过来，在定制化的基础上做通用。  </p>
+<p>先前我已经提到，我们是定时任务，也就意味着，当我们有能力通过调度平台将各渠道拆分后，我们并不需要程序一直在run。可以在需要被调度时，通过调度平台启动对应渠道的处理程序。</p>
+<p>此时我们的编程思想要转换一下，我们的代码并不需要控制整个流程，而是像一个个插件一样被使用，我们仅需维护一个插件库。  </p>
+<p>当某个渠道紧急需求过来时，我们可以在插件库中找到该渠道对应的通用模型，复制出来一份，对其进行紧急定制化。在后期维护时，我们尝试将定制化功能抽离成通用功能，再添加回插件库。</p>
+<p>调度平台通过在我们插件库中选择合适的插件，编排出各个渠道的任务</p>
+<p>solution1-3：<br>随着后来的学习，我们接触了大数据。了解到对于数据的处理，原来是已经有现成的轮子，不需要我们自己去费尽心思，进行横向扩展来增加吞吐。</p>
+<p>那么回过头来，我们再思考一下。随着时间的增长，我们的程序资源占用逐渐出现了问题。</p>
+<p>在高峰期，我们的任务全堆在一起，CPU内存带宽磁盘IO等非常吃紧，并且有宕机趋势。然而在非任务期间，所有资源全部闲置。那么我们该如何解决这个问题？</p>
+<p>这里就不得不提到大数据平台了。之前提到，我们的数据流其实是在各个服务中流转的，这无疑增大了我们的负担。但如果，我们的程序仅仅负责命令流呢？</p>
+<p>通过将数据加载到大数据平台，我们的插件被调度平台控制，向大数据平台提交命令，处理任务。整个流程中，我们的流程控制的机器几乎不会接触到任何数据流，命令的发出几乎不会消耗资源。</p>
+<p>这时候你或许会问，大数据平台难道不需要消耗资源处理数据吗？</p>
+<p>当然时需要的，只不过你是跟其他团队在共享资源。你的任务空闲时，这些资源会被其他团队使用。</p>
+<p>当然类似的，你也可以做到与k8s团队合作，做到动态删减容器节点，在满足你使用的情况下节约资源</p>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Ryanstian
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://ryanstian.github.io/blog/2021/08/22/%E7%AE%80%E8%AE%B020210822174300/" title="简记20210822174300">https://ryanstian.github.io/blog/2021/08/22/简记20210822174300/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/blog/2021/08/22/%E7%AE%80%E8%AE%B020210822191000/" rel="prev" title="简记20210822191000">
+      <i class="fa fa-chevron-left"></i> 简记20210822191000
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/blog/2021/08/27/mysql%E6%95%B0%E6%8D%AE%E9%87%8F%E5%A4%A7%E5%A6%82%E4%BD%95%E5%81%9ADDL/" rel="next" title="mysql数据量大如何做DDL">
+      mysql数据量大如何做DDL <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E8%B7%B3%E5%87%BA%E5%9B%BA%E5%8C%96%E6%80%9D%E7%BB%B4"><span class="nav-number">1.</span> <span class="nav-text">二、跳出固化思维</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Ryanstian</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/blog/archives/">
+        
+          <span class="site-state-item-count">38</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/blog/categories/">
+          
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/blog/tags/">
+          
+        <span class="site-state-item-count">17</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" class="cc-opacity" rel="noopener" target="_blank"><img src="/blog/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Ryanstian</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/blog/lib/anime.min.js"></script>
+  <script src="/blog/lib/velocity/velocity.min.js"></script>
+  <script src="/blog/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/blog/js/utils.js"></script>
+
+<script src="/blog/js/motion.js"></script>
+
+
+<script src="/blog/js/schemes/muse.js"></script>
+
+
+<script src="/blog/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

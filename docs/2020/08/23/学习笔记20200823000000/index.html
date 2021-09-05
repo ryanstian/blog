@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/blog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/blog/css/main.css">
+
+
+<link rel="stylesheet" href="/blog/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"ryanstian.github.io","root":"/blog/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="关于分库分表的一些学习之前有说到过分库分表这个问题,但是分库分表以后会面临几个问题  分表一般是按某个字段当关键词进行分表,但这也就造成了,如果where的一个目标是非关键词,我们就无法知道他属于哪张表 limit,order by,group by无法做到全局视角  那么接下来说一下我学到的一些方法  对于where这种情况,可以选择 建立映射表,将id和要where的字段单独拿张表映射,并且做">
+<meta property="og:type" content="article">
+<meta property="og:title" content="学习笔记20200823000000">
+<meta property="og:url" content="https://ryanstian.github.io/blog/2020/08/23/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B020200823000000/index.html">
+<meta property="og:site_name" content="Ryanstian的博客">
+<meta property="og:description" content="关于分库分表的一些学习之前有说到过分库分表这个问题,但是分库分表以后会面临几个问题  分表一般是按某个字段当关键词进行分表,但这也就造成了,如果where的一个目标是非关键词,我们就无法知道他属于哪张表 limit,order by,group by无法做到全局视角  那么接下来说一下我学到的一些方法  对于where这种情况,可以选择 建立映射表,将id和要where的字段单独拿张表映射,并且做">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-08-23T15:27:00.000Z">
+<meta property="article:modified_time" content="2021-09-05T02:39:39.159Z">
+<meta property="article:author" content="Ryanstian">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://ryanstian.github.io/blog/2020/08/23/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B020200823000000/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>学习笔记20200823000000 | Ryanstian的博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/blog/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Ryanstian的博客</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/blog/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/blog/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://ryanstian.github.io/blog/2020/08/23/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B020200823000000/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/blog/images/avatar.gif">
+      <meta itemprop="name" content="Ryanstian">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Ryanstian的博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          学习笔记20200823000000
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-08-23 23:27:00" itemprop="dateCreated datePublished" datetime="2020-08-23T23:27:00+08:00">2020-08-23</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-09-05 10:39:39" itemprop="dateModified" datetime="2021-09-05T10:39:39+08:00">2021-09-05</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/blog/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h4 id="关于分库分表的一些学习"><a href="#关于分库分表的一些学习" class="headerlink" title="关于分库分表的一些学习"></a>关于分库分表的一些学习</h4><p>之前有说到过分库分表这个问题,但是分库分表以后会面临几个问题</p>
+<ul>
+<li>分表一般是按某个字段当关键词进行分表,但这也就造成了,如果where的一个目标是非关键词,我们就无法知道他属于哪张表</li>
+<li>limit,order by,group by无法做到全局视角</li>
+</ul>
+<p>那么接下来说一下我学到的一些方法</p>
+<ul>
+<li>对于where这种情况,可以选择<ul>
+<li>建立映射表,将id和要where的字段单独拿张表映射,并且做到缓存里面(当然,无法避免有些情况下缓存来不及同步,这种我只能想到去所有库查询)</li>
+<li>做冗余字段,所有表都围绕关键词做冗余,一律拿关键词去查询</li>
+</ul>
+</li>
+<li>limit和order by目前只知道在偏移量小的情况下,可以取各库偏移量之前的全部数据,内存中比较,其他方法目前未知,待补充</li>
+</ul>
+<p>还有一点,对于分库分表的情况来说,应当尽量在需求阶段进行回绝,或者说严格限制搜索条件,例如我where一个关键字段和两个字段,在业务层聚合排序时操作的数据量必定不是一个量级,这时候就可以用取各表前n个字段再聚合的方式进行分页查询。我们也可以限制查询时间,只查询最近几个月。还有种方式可能就是跳出关系型数据库,利用大数据平台来进行查询,这个的具体操作目前还没想明白</p>
+<h4 id="关于秒杀的一些学习"><a href="#关于秒杀的一些学习" class="headerlink" title="关于秒杀的一些学习"></a>关于秒杀的一些学习</h4><p>秒杀系统主要是面对的短时间(秒/分钟级别)的瞬间流量激增,如果说堆机器的话,过于浪费(因为只用那几分钟)。</p>
+<p>对于这种情况,可以从以下几点来思考</p>
+<ul>
+<li>缓存:包括前端缓存,cdn分流静态资源,后端热点数据缓存,需要秒杀的商品及数量做缓存</li>
+<li>限流:对于秒杀场景,其实真正能抢到货的人较少,所以对于进入慢的请求是没有意义的(这里要注意用户体验,不能以错误的形式呈现,而是货物已被锁定或其他话语)。对于没有被拦截下来的请求,可以直接走缓存(这里缓存要做持久化)判断是否还有库存(锁单),对于没有库存的情况下,可以允许用户等待(因为前面有可能有人放弃订单,这时候库存就放出来了,此时给用户呈现的可以是库存已无,正在尝试等待其他用户取消订单)</li>
+<li>队列:如果被迫接受命令进行处理,容易压爆服务器,可以选择解耦,用户请求扔到队列,服务器主动去请求(可以为秒杀进行单独设计),这里需要做好前端交互和呈现,避免用户以为网络卡住</li>
+<li>降级:暂时关闭/延迟/异步执行非核心部分,将资源挪给核心</li>
+<li>主备:秒杀场景对于时效性有很高要求,要预防宕机</li>
+<li>持久化:如果宕机,这里要考虑时间(如果出现意外,应该放弃过旧的数据),例如用户秒杀了,但是宕机卡住了,并且他以为自己没买上又抢了其他商品,这时候突然系统恢复数据,买上了,对于用户来说是重复购买(或者跟前端做好交互,防止用户误会)</li>
+<li>独立部署:秒杀独立出来成为一个单独的系统</li>
+</ul>
+<p>这里对于一些常规的分布式手段例如,堆机器,分库分表就没有提及,主要是思想。其实个人感觉目前看过的这几个架构,变来变去基本内容也无非是缓存,限流,队列,降级这一套。关键是与业务结合起来灵活变通和组合,并且配合一些补偿/预防机制(压测,监控,开关,第二套备用方案)</p>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Ryanstian
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://ryanstian.github.io/blog/2020/08/23/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B020200823000000/" title="学习笔记20200823000000">https://ryanstian.github.io/blog/2020/08/23/学习笔记20200823000000/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/blog/2020/08/17/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B020200817000000/" rel="prev" title="学习笔记20200817000000">
+      <i class="fa fa-chevron-left"></i> 学习笔记20200817000000
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/blog/2021/08/18/%E7%AE%80%E8%AE%B020210818234800/" rel="next" title="简记20210818234800">
+      简记20210818234800 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%85%B3%E4%BA%8E%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8%E7%9A%84%E4%B8%80%E4%BA%9B%E5%AD%A6%E4%B9%A0"><span class="nav-number">1.</span> <span class="nav-text">关于分库分表的一些学习</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%85%B3%E4%BA%8E%E7%A7%92%E6%9D%80%E7%9A%84%E4%B8%80%E4%BA%9B%E5%AD%A6%E4%B9%A0"><span class="nav-number">2.</span> <span class="nav-text">关于秒杀的一些学习</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Ryanstian</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/blog/archives/">
+        
+          <span class="site-state-item-count">38</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/blog/categories/">
+          
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/blog/tags/">
+          
+        <span class="site-state-item-count">17</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" class="cc-opacity" rel="noopener" target="_blank"><img src="/blog/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Ryanstian</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/blog/lib/anime.min.js"></script>
+  <script src="/blog/lib/velocity/velocity.min.js"></script>
+  <script src="/blog/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/blog/js/utils.js"></script>
+
+<script src="/blog/js/motion.js"></script>
+
+
+<script src="/blog/js/schemes/muse.js"></script>
+
+
+<script src="/blog/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
