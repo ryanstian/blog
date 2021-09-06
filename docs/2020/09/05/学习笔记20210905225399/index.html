@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/blog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/blog/css/main.css">
+
+
+<link rel="stylesheet" href="/blog/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"ryanstian.github.io","root":"/blog/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="Hadoop生态圈基础三件套HDFSHDFS是分布式文件系统。hadoop生态圈组件大部分依赖HDFS中存储的数据。由于底层存储一样，往往各个开源组件都是可以数据互通  MapReduce分布式计算框架&#x2F;模型。（我们自己写代码的话，通常会分片，并行计算，再合并等，该框架方便我们处理这些非业务问题）  Yarn资源统一管理与调度平台  通常的用法为：我们利用MapReduce框架写的程序，读取HD">
+<meta property="og:type" content="article">
+<meta property="og:title" content="学习笔记20210905225399">
+<meta property="og:url" content="https://ryanstian.github.io/blog/2020/09/05/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B020210905225399/index.html">
+<meta property="og:site_name" content="Ryanstian的博客">
+<meta property="og:description" content="Hadoop生态圈基础三件套HDFSHDFS是分布式文件系统。hadoop生态圈组件大部分依赖HDFS中存储的数据。由于底层存储一样，往往各个开源组件都是可以数据互通  MapReduce分布式计算框架&#x2F;模型。（我们自己写代码的话，通常会分片，并行计算，再合并等，该框架方便我们处理这些非业务问题）  Yarn资源统一管理与调度平台  通常的用法为：我们利用MapReduce框架写的程序，读取HD">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-09-05T14:53:00.000Z">
+<meta property="article:modified_time" content="2021-09-05T15:52:53.044Z">
+<meta property="article:author" content="Ryanstian">
+<meta property="article:tag" content="大数据">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://ryanstian.github.io/blog/2020/09/05/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B020210905225399/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>学习笔记20210905225399 | Ryanstian的博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/blog/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Ryanstian的博客</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/blog/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/blog/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://ryanstian.github.io/blog/2020/09/05/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B020210905225399/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/blog/images/avatar.gif">
+      <meta itemprop="name" content="Ryanstian">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Ryanstian的博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          学习笔记20210905225399
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-09-05 22:53:00" itemprop="dateCreated datePublished" datetime="2020-09-05T22:53:00+08:00">2020-09-05</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-09-05 23:52:53" itemprop="dateModified" datetime="2021-09-05T23:52:53+08:00">2021-09-05</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/blog/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <span id="more"></span>
+<h2 id="Hadoop生态圈基础三件套"><a href="#Hadoop生态圈基础三件套" class="headerlink" title="Hadoop生态圈基础三件套"></a>Hadoop生态圈基础三件套</h2><h4 id="HDFS"><a href="#HDFS" class="headerlink" title="HDFS"></a>HDFS</h4><pre><code>HDFS是分布式文件系统。hadoop生态圈组件大部分依赖HDFS中存储的数据。由于底层存储一样，往往各个开源组件都是可以数据互通
+</code></pre>
+<h4 id="MapReduce"><a href="#MapReduce" class="headerlink" title="MapReduce"></a>MapReduce</h4><pre><code>分布式计算框架/模型。（我们自己写代码的话，通常会分片，并行计算，再合并等，该框架方便我们处理这些非业务问题）
+</code></pre>
+<h4 id="Yarn"><a href="#Yarn" class="headerlink" title="Yarn"></a>Yarn</h4><pre><code>资源统一管理与调度平台
+</code></pre>
+<p>通常的用法为：我们利用MapReduce框架写的程序，读取HDFS上文件，当作数据输入进行处理。众多MapReduce程序跑在众多机器上，由yarn进行资源调度</p>
+<h2 id="DAG"><a href="#DAG" class="headerlink" title="DAG"></a>DAG</h2><p>通常我们对数据的处理，例如分片，过滤，聚合等操作。都采用类似DAG模型（有向无环图），每个操作相当于有向无环图中的每个节点。</p>
+<p>我们可以用流程编排的方式，将每个操作编排起来，也可以借助DAG调度平台实现</p>
+<h2 id="平台概念"><a href="#平台概念" class="headerlink" title="平台概念"></a>平台概念</h2><p>大数据与我们平时的程序驱动方式不太相同。大数据中，处理流程往往是由平台来驱动我们代码；而平时，整个程序是由我们代码自己写控制流程进行驱动</p>
+<h2 id="离线OLAP框架"><a href="#离线OLAP框架" class="headerlink" title="离线OLAP框架"></a>离线OLAP框架</h2><p>离线OLAP通常应用场景是，不要求延迟时间的场景。<br>通常有：日志分析，报表生成，其他离线分析型场景</p>
+<h4 id="TiSpark"><a href="#TiSpark" class="headerlink" title="TiSpark"></a>TiSpark</h4><pre><code>TiSpark既可以批处理，也可流处理
+</code></pre>
+<h4 id="Hive"><a href="#Hive" class="headerlink" title="Hive"></a>Hive</h4><pre><code>基于Hadoop的数据仓库，解决海量结构化数据统计问题。支持类似sql的语法（但不支持事务），原理是将sql转化为mapreduce去执行  
+- 倾向于处理结构化数据，要求先声明数据结构，再载入数据
+- 数据仓库，允许增删改查。但是修改和删除，本质是先将文件数据块读出，修改后再存入，代价极大
+</code></pre>
+<h4 id="Pig"><a href="#Pig" class="headerlink" title="Pig"></a>Pig</h4><pre><code>与Hive基本一致。  
+- 倾向于处理非结构化数据，允许先载入数据，再声明数据结构
+- 纯粹文件处理，不允许增加修改删除
+- 数据分析语法比Hive略全
+</code></pre>
+<p>有时会Pig，Hive结合使用。利用Pig非结构化数据处理特性清晰数据，Hive在后方做数据分析</p>
+<h2 id="数据存储-搜索框架"><a href="#数据存储-搜索框架" class="headerlink" title="数据存储/搜索框架"></a>数据存储/搜索框架</h2><h4 id="Hbase"><a href="#Hbase" class="headerlink" title="Hbase"></a>Hbase</h4><ul>
+<li>分布式KV存储，方便随机读写访问</li>
+<li>更新支持能力极好（底层不是直接删除，而是记录数据及时间戳，读取最新数据。）</li>
+<li>查询性能极好。由于其kv存储，无法做到复杂分析</li>
+</ul>
+<h4 id="ES"><a href="#ES" class="headerlink" title="ES"></a>ES</h4><ul>
+<li>更新能力差，由于底层HDFS存储，只能整块修改</li>
+<li>查询能力强。自身会建立反向索引（索引可常驻内存），且具备复杂分析能力</li>
+</ul>
+<h2 id="流处理框架"><a href="#流处理框架" class="headerlink" title="流处理框架"></a>流处理框架</h2><p>流处理通常运用在，欺诈识别，基于规则的异常告警，业务监控，广告推荐系统，实时分析等场景</p>
+<h4 id="流批概念"><a href="#流批概念" class="headerlink" title="流批概念"></a>流批概念</h4><p>流处理通常为事件驱动，即收到消息会触发计算。<br>批处理会当数据积累到一定数量时再计算。<br>两者在延迟和吞吐量有所差别</p>
+<h4 id="storm"><a href="#storm" class="headerlink" title="storm"></a>storm</h4><p>流处理框架，延迟在几毫米-&gt;几十毫秒，可保证消息最少被处理一次</p>
+<h4 id="spark"><a href="#spark" class="headerlink" title="spark"></a>spark</h4><p>支持选择流处理或批处理，延迟在秒级，有spark生态支撑。<br>流处理的原理是，通过极小的批处理伪装流处理<br>spark某种程度上弱于flink，其优点在于建立在spark生态上，需要离线&amp;实时处理结合的场景尤为适合</p>
+<h4 id="flink"><a href="#flink" class="headerlink" title="flink"></a>flink</h4><p>流批一体，延迟几十毫秒-&gt;几百毫秒。<br>批处理原理是，流处理伪装成批处理</p>
+<h4 id="samza"><a href="#samza" class="headerlink" title="samza"></a>samza</h4><p>强依赖kafka，优点是可以将中间计算结果存储至kafka供下游消费</p>
+<p>流处理</p>
+<h2 id="一些其他工具"><a href="#一些其他工具" class="headerlink" title="一些其他工具"></a>一些其他工具</h2><h4 id="mahout"><a href="#mahout" class="headerlink" title="mahout"></a>mahout</h4><p>是个机器学习库</p>
+<h4 id="flume"><a href="#flume" class="headerlink" title="flume"></a>flume</h4><p>跟logstash功能类似，但侧重点有所差别</p>
+<h4 id="scoop"><a href="#scoop" class="headerlink" title="scoop"></a>scoop</h4><p>在mysql等关系型数据库，与HDFS存储的各种大数据工具中，复制数据</p>
+<h4 id="zookeeper"><a href="#zookeeper" class="headerlink" title="zookeeper"></a>zookeeper</h4><h4 id="kafka"><a href="#kafka" class="headerlink" title="kafka"></a>kafka</h4><h2 id="学习顺序"><a href="#学习顺序" class="headerlink" title="学习顺序"></a>学习顺序</h2><p>HDFS-&gt;离线-&gt;批处理-&gt;流处理</p>
+<h2 id="究竟谁优谁劣"><a href="#究竟谁优谁劣" class="headerlink" title="究竟谁优谁劣"></a>究竟谁优谁劣</h2><p>没有绝对上的优劣，各个框架都在飞速发展中，经常会出现互相借鉴的情况。<br>有可能过上一段时间，支持特性便有所进步</p>
+<h2 id="如何看待大数据"><a href="#如何看待大数据" class="headerlink" title="如何看待大数据"></a>如何看待大数据</h2><p>大数据仅仅是帮助我们简化代码编写的工具。即使不用大数据，我们也依旧需要按照大数据的方式去处理数据。不必排斥，也不必过度推崇</p>
+<h2 id="什么时候会需要使用大数据框架"><a href="#什么时候会需要使用大数据框架" class="headerlink" title="什么时候会需要使用大数据框架"></a>什么时候会需要使用大数据框架</h2><ul>
+<li>由于大数据通常是由平台驱动代码，团队需具备运维能力</li>
+<li>代码处理时，数据量已经多到需要提前按哈希分批来处理的底部</li>
+</ul>
+<h2 id="目前自己的疑问"><a href="#目前自己的疑问" class="headerlink" title="目前自己的疑问"></a>目前自己的疑问</h2><p>如何基于全部历史数据，来进行实时持续聚合</p>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Ryanstian
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://ryanstian.github.io/blog/2020/09/05/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B020210905225399/" title="学习笔记20210905225399">https://ryanstian.github.io/blog/2020/09/05/学习笔记20210905225399/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/blog/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/" rel="tag"># 大数据</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/blog/2020/08/23/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B020200823000000/" rel="prev" title="学习笔记20200823000000">
+      <i class="fa fa-chevron-left"></i> 学习笔记20200823000000
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/blog/2021/05/05/%E5%9B%9B%E5%B1%82%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E4%B8%8E%E4%B8%83%E5%B1%82%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/" rel="next" title="四层负载均衡与七层负载均衡">
+      四层负载均衡与七层负载均衡 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Hadoop%E7%94%9F%E6%80%81%E5%9C%88%E5%9F%BA%E7%A1%80%E4%B8%89%E4%BB%B6%E5%A5%97"><span class="nav-number">1.</span> <span class="nav-text">Hadoop生态圈基础三件套</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#HDFS"><span class="nav-number">1.0.1.</span> <span class="nav-text">HDFS</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#MapReduce"><span class="nav-number">1.0.2.</span> <span class="nav-text">MapReduce</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Yarn"><span class="nav-number">1.0.3.</span> <span class="nav-text">Yarn</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DAG"><span class="nav-number">2.</span> <span class="nav-text">DAG</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B9%B3%E5%8F%B0%E6%A6%82%E5%BF%B5"><span class="nav-number">3.</span> <span class="nav-text">平台概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A6%BB%E7%BA%BFOLAP%E6%A1%86%E6%9E%B6"><span class="nav-number">4.</span> <span class="nav-text">离线OLAP框架</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#TiSpark"><span class="nav-number">4.0.1.</span> <span class="nav-text">TiSpark</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Hive"><span class="nav-number">4.0.2.</span> <span class="nav-text">Hive</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Pig"><span class="nav-number">4.0.3.</span> <span class="nav-text">Pig</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8-%E6%90%9C%E7%B4%A2%E6%A1%86%E6%9E%B6"><span class="nav-number">5.</span> <span class="nav-text">数据存储&#x2F;搜索框架</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Hbase"><span class="nav-number">5.0.1.</span> <span class="nav-text">Hbase</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ES"><span class="nav-number">5.0.2.</span> <span class="nav-text">ES</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%81%E5%A4%84%E7%90%86%E6%A1%86%E6%9E%B6"><span class="nav-number">6.</span> <span class="nav-text">流处理框架</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B5%81%E6%89%B9%E6%A6%82%E5%BF%B5"><span class="nav-number">6.0.1.</span> <span class="nav-text">流批概念</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#storm"><span class="nav-number">6.0.2.</span> <span class="nav-text">storm</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#spark"><span class="nav-number">6.0.3.</span> <span class="nav-text">spark</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#flink"><span class="nav-number">6.0.4.</span> <span class="nav-text">flink</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#samza"><span class="nav-number">6.0.5.</span> <span class="nav-text">samza</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E4%BA%9B%E5%85%B6%E4%BB%96%E5%B7%A5%E5%85%B7"><span class="nav-number">7.</span> <span class="nav-text">一些其他工具</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#mahout"><span class="nav-number">7.0.1.</span> <span class="nav-text">mahout</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#flume"><span class="nav-number">7.0.2.</span> <span class="nav-text">flume</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#scoop"><span class="nav-number">7.0.3.</span> <span class="nav-text">scoop</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#zookeeper"><span class="nav-number">7.0.4.</span> <span class="nav-text">zookeeper</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#kafka"><span class="nav-number">7.0.5.</span> <span class="nav-text">kafka</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%A6%E4%B9%A0%E9%A1%BA%E5%BA%8F"><span class="nav-number">8.</span> <span class="nav-text">学习顺序</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A9%B6%E7%AB%9F%E8%B0%81%E4%BC%98%E8%B0%81%E5%8A%A3"><span class="nav-number">9.</span> <span class="nav-text">究竟谁优谁劣</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E7%9C%8B%E5%BE%85%E5%A4%A7%E6%95%B0%E6%8D%AE"><span class="nav-number">10.</span> <span class="nav-text">如何看待大数据</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%97%B6%E5%80%99%E4%BC%9A%E9%9C%80%E8%A6%81%E4%BD%BF%E7%94%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%A1%86%E6%9E%B6"><span class="nav-number">11.</span> <span class="nav-text">什么时候会需要使用大数据框架</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%AE%E5%89%8D%E8%87%AA%E5%B7%B1%E7%9A%84%E7%96%91%E9%97%AE"><span class="nav-number">12.</span> <span class="nav-text">目前自己的疑问</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Ryanstian</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/blog/archives/">
+        
+          <span class="site-state-item-count">42</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/blog/categories/">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/blog/tags/">
+          
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" class="cc-opacity" rel="noopener" target="_blank"><img src="/blog/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Ryanstian</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/blog/lib/anime.min.js"></script>
+  <script src="/blog/lib/velocity/velocity.min.js"></script>
+  <script src="/blog/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/blog/js/utils.js"></script>
+
+<script src="/blog/js/motion.js"></script>
+
+
+<script src="/blog/js/schemes/muse.js"></script>
+
+
+<script src="/blog/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

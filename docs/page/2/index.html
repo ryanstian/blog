@@ -155,6 +155,394 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://ryanstian.github.io/blog/2020/08/23/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B020200823000000/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/blog/images/avatar.gif">
+      <meta itemprop="name" content="Ryanstian">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Ryanstian的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/blog/2020/08/23/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B020200823000000/" class="post-title-link" itemprop="url">学习笔记20200823000000</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-08-23 23:27:00" itemprop="dateCreated datePublished" datetime="2020-08-23T23:27:00+08:00">2020-08-23</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-09-05 10:39:39" itemprop="dateModified" datetime="2021-09-05T10:39:39+08:00">2021-09-05</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/blog/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h4 id="关于分库分表的一些学习"><a href="#关于分库分表的一些学习" class="headerlink" title="关于分库分表的一些学习"></a>关于分库分表的一些学习</h4><p>之前有说到过分库分表这个问题,但是分库分表以后会面临几个问题</p>
+<ul>
+<li>分表一般是按某个字段当关键词进行分表,但这也就造成了,如果where的一个目标是非关键词,我们就无法知道他属于哪张表</li>
+<li>limit,order by,group by无法做到全局视角</li>
+</ul>
+<p>那么接下来说一下我学到的一些方法</p>
+<ul>
+<li>对于where这种情况,可以选择<ul>
+<li>建立映射表,将id和要where的字段单独拿张表映射,并且做到缓存里面(当然,无法避免有些情况下缓存来不及同步,这种我只能想到去所有库查询)</li>
+<li>做冗余字段,所有表都围绕关键词做冗余,一律拿关键词去查询</li>
+</ul>
+</li>
+<li>limit和order by目前只知道在偏移量小的情况下,可以取各库偏移量之前的全部数据,内存中比较,其他方法目前未知,待补充</li>
+</ul>
+<p>还有一点,对于分库分表的情况来说,应当尽量在需求阶段进行回绝,或者说严格限制搜索条件,例如我where一个关键字段和两个字段,在业务层聚合排序时操作的数据量必定不是一个量级,这时候就可以用取各表前n个字段再聚合的方式进行分页查询。我们也可以限制查询时间,只查询最近几个月。还有种方式可能就是跳出关系型数据库,利用大数据平台来进行查询,这个的具体操作目前还没想明白</p>
+<h4 id="关于秒杀的一些学习"><a href="#关于秒杀的一些学习" class="headerlink" title="关于秒杀的一些学习"></a>关于秒杀的一些学习</h4><p>秒杀系统主要是面对的短时间(秒/分钟级别)的瞬间流量激增,如果说堆机器的话,过于浪费(因为只用那几分钟)。</p>
+<p>对于这种情况,可以从以下几点来思考</p>
+<ul>
+<li>缓存:包括前端缓存,cdn分流静态资源,后端热点数据缓存,需要秒杀的商品及数量做缓存</li>
+<li>限流:对于秒杀场景,其实真正能抢到货的人较少,所以对于进入慢的请求是没有意义的(这里要注意用户体验,不能以错误的形式呈现,而是货物已被锁定或其他话语)。对于没有被拦截下来的请求,可以直接走缓存(这里缓存要做持久化)判断是否还有库存(锁单),对于没有库存的情况下,可以允许用户等待(因为前面有可能有人放弃订单,这时候库存就放出来了,此时给用户呈现的可以是库存已无,正在尝试等待其他用户取消订单)</li>
+<li>队列:如果被迫接受命令进行处理,容易压爆服务器,可以选择解耦,用户请求扔到队列,服务器主动去请求(可以为秒杀进行单独设计),这里需要做好前端交互和呈现,避免用户以为网络卡住</li>
+<li>降级:暂时关闭/延迟/异步执行非核心部分,将资源挪给核心</li>
+<li>主备:秒杀场景对于时效性有很高要求,要预防宕机</li>
+<li>持久化:如果宕机,这里要考虑时间(如果出现意外,应该放弃过旧的数据),例如用户秒杀了,但是宕机卡住了,并且他以为自己没买上又抢了其他商品,这时候突然系统恢复数据,买上了,对于用户来说是重复购买(或者跟前端做好交互,防止用户误会)</li>
+<li>独立部署:秒杀独立出来成为一个单独的系统</li>
+</ul>
+<p>这里对于一些常规的分布式手段例如,堆机器,分库分表就没有提及,主要是思想。其实个人感觉目前看过的这几个架构,变来变去基本内容也无非是缓存,限流,队列,降级这一套。关键是与业务结合起来灵活变通和组合,并且配合一些补偿/预防机制(压测,监控,开关,第二套备用方案)</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://ryanstian.github.io/blog/2020/08/17/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B020200817000000/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/blog/images/avatar.gif">
+      <meta itemprop="name" content="Ryanstian">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Ryanstian的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/blog/2020/08/17/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B020200817000000/" class="post-title-link" itemprop="url">学习笔记20200817000000</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-08-17 23:27:00" itemprop="dateCreated datePublished" datetime="2020-08-17T23:27:00+08:00">2020-08-17</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-09-05 10:43:01" itemprop="dateModified" datetime="2021-09-05T10:43:01+08:00">2021-09-05</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/blog/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>关于微服务方面的笔记,这仅以我的视角来看,而非行业发展的顺序</p>
+<p>最初接触到服务端,还是这种的单机架构,这事也很多初学者第一次写代码接触的</p>
+<p><img src="%E5%8D%95%E6%9C%BA.png" alt="如果图片失效,请邮件联系作者补图"></p>
+<center>单机架构</center>
+
+<p>后来,接触到了分布式架构。当然,仅仅是半分布式。</p>
+<p><img src="%E5%88%86%E5%B8%83%E5%BC%8F%E4%B8%9A%E5%8A%A1_%E5%8D%95%E6%9C%BA%E6%95%B0%E6%8D%AE%E5%BA%93.png" alt="如果图片失效,请邮件联系作者补图"></p>
+<center>分布式业务_单机数据库</center>
+
+<p>当时面对这个架构,我有想过一些问题,例如:这样的话,仅仅是降低了业务服务器压力,但是并不能降低数据库压力,反而数据库压力更大,那么当时的想法便是,将数据库拆散到每一个服务中去,各服务通过远程调用交互。</p>
+<p>变成了这张图所示,从中可以看到,要说他是分布式吧,他确实是分布式,毕竟数据库可以做分库分表,服务也可以水平扩展。</p>
+<p>但是这种架构存在着一个致命的问题,那便是服务依赖。在以前,我们写sql时往往会夹杂很多join语句做联表查询,我们往往还以写出优秀的复杂查询语句为荣。</p>
+<p>但现在,这成为了巨大的包袱。由于表被拆分到各个服务了,那么以前的join语句也被拆分成了一条条的语句到不同服务,那么服务间会频繁进行远程调用来交互数据,当业务逐渐复杂,几个服务就会互相形成环状甚至网状</p>
+<p>即使在设计初期就划分好了职责范围,那么随着业务复杂度的上升,无法避免某两个微服务的职责范围会产生重叠,乃至融合在一起,连带效应几个微服务也融合在一起,最终虽然是分布式部署,但是从业务上,他们已经成为了单机系统</p>
+<p><img src="%E5%8D%95%E7%BA%AF%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E5%BE%AE%E6%9C%8D%E5%8A%A1.png" alt="如果图片失效,请邮件联系作者补图"></p>
+<center>单纯的分布式微服务</center>
+
+<p>当时我也曾遭遇了这种问题,直到我听到了两句话</p>
+<ul>
+<li>sql中不允许出现join语句或者其他联表语句,不允许出现外键</li>
+<li>垂直分层</li>
+</ul>
+<p>是的,想想为什么我们明明是分布式,却最终像个单机一样。一个原因是我们的sql导致了表于表之间产生强依赖关系,无法独立。另一个原因是,我们将微服务聚合的责任扔给了微服务自己,而不是第三方。</p>
+<p>那么基于以上,我们就可以将业务进行分层,库表自治,基于以下几个原则</p>
+<ul>
+<li>数据库仅充当存储功能,而不应该融合业务逻辑(联表也算作业务逻辑)。数据库仅当作存储功能后,表于表,库与库之间的强依赖被解除,可以随意拆分,由于不与业务逻辑融合,我们完全可以将分库分表做在框架层,使得业务无感知</li>
+<li>微服务垂直分层,平时我们谈的高内聚低耦合,在模块设计上便体现出来,如果需要因为业务原因产生微服务交互,应该判断交互程度,如果多个微服务需要两两调用,那么应该将其分割,基础微服务沉降到底层,由上级微服务聚合多个下级微服务,以此类推,逐级沉降</li>
+<li>不应过分设计,应依托于具体需要以及开发难度,展望未来发展速度。例如某个大学图书馆的图书管理系统搞个垂直分层,搞十几个微服务,那么完全就是牛刀杀鸡,毫无意义(当然学习之用除外)</li>
+</ul>
+<p><img src="%E5%9E%82%E7%9B%B4%E5%88%86%E5%B1%82.png" alt="如果图片失效,请邮件联系作者补图"></p>
+<center>垂直分层</center>
+
+<p>那么如何改进,或者说何时改进?</p>
+<ul>
+<li>监控系统,监控方法,sql,业务线频率以及时间,抽离出高频,核心的模块来做沉降和重构</li>
+<li>当开发难度过大,优化所耗费时间&lt;开发所需付出额外精力</li>
+<li>业务空闲时</li>
+</ul>
+<p>还需了解的地方:容灾,微服务多层的雪崩</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://ryanstian.github.io/blog/2020/08/11/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B020200811000000/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/blog/images/avatar.gif">
+      <meta itemprop="name" content="Ryanstian">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Ryanstian的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/blog/2020/08/11/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B020200811000000/" class="post-title-link" itemprop="url">学习笔记20200811000000</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-08-11 00:14:00" itemprop="dateCreated datePublished" datetime="2020-08-11T00:14:00+08:00">2020-08-11</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-09-05 10:39:53" itemprop="dateModified" datetime="2021-09-05T10:39:53+08:00">2021-09-05</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/blog/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <span id="more"></span>
+
+<h4 id="tar与gzip的区别"><a href="#tar与gzip的区别" class="headerlink" title="tar与gzip的区别"></a>tar与gzip的区别</h4><p>gzip是压缩</p>
+<p>而tar是归档</p>
+<p>例如我们如果只有一个txt,那么可以用gzip压缩</p>
+<p>而如果两个txt想在一个压缩包,那么就需要用tar来归档,然后再用gzip压缩。例如tar.gz文件就是这么来的</p>
+<p>gzip单独是无法压缩多个文件的(当然是特指格式上,并非指的某个命令)</p>
+<h4 id="为何mysql列注释不建议写comment在数据库"><a href="#为何mysql列注释不建议写comment在数据库" class="headerlink" title="为何mysql列注释不建议写comment在数据库"></a>为何mysql列注释不建议写comment在数据库</h4><ul>
+<li>数据库被盗后容易被轻松理解业务</li>
+<li>分布式数据库每个表都修改comment维护困难,即使跑脚本也容易出错</li>
+</ul>
+<h4 id="为何不建议写子查询"><a href="#为何不建议写子查询" class="headerlink" title="为何不建议写子查询"></a>为何不建议写子查询</h4><ul>
+<li>子查询的业务逻辑在sql中而非业务代码</li>
+<li>如果是小项目无所谓</li>
+<li>如果是大项目,特别是分布式数据库的情况下,子查询无法跨数据库查询</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://ryanstian.github.io/blog/2020/08/10/%E5%85%B3%E4%BA%8E%E6%B5%81%E5%BC%8F%E4%B8%8B%E8%BD%BD%E7%9A%84%E6%80%9D%E8%80%83/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/blog/images/avatar.gif">
+      <meta itemprop="name" content="Ryanstian">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Ryanstian的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/blog/2020/08/10/%E5%85%B3%E4%BA%8E%E6%B5%81%E5%BC%8F%E4%B8%8B%E8%BD%BD%E7%9A%84%E6%80%9D%E8%80%83/" class="post-title-link" itemprop="url">关于流式下载的思考</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-08-10 23:56:00" itemprop="dateCreated datePublished" datetime="2020-08-10T23:56:00+08:00">2020-08-10</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-09-05 10:37:16" itemprop="dateModified" datetime="2021-09-05T10:37:16+08:00">2021-09-05</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <span id="more"></span>
+<h4 id="为什么需要流式下载"><a href="#为什么需要流式下载" class="headerlink" title="为什么需要流式下载?"></a>为什么需要流式下载?</h4><ul>
+<li>情况1:前端点击下载后,后端生成数据过慢,导致超时<ul>
+<li>解决1:当然这可以通过调整前后端超时时间</li>
+<li>解决2:给用户loading或其他方法展现</li>
+<li>解决3:异步,后端接到请求后返回并异步生成,前端轮询状态(这种方式注意控制导出频率和重复利用导出文件,避免用户疯狂点击爆掉服务端)</li>
+</ul>
+</li>
+<li>情况2:数据量过大,服务器内存扛不住数据且导出数据不会出现重复,无保存价值<ul>
+<li>解决1:使用可暂存硬盘的文件生成工具</li>
+<li>其他方式:参考情况1</li>
+</ul>
+</li>
+</ul>
+<p>由于资源及时间问题,我们通常想用流式下载</p>
+<h4 id="什么情况下流式下载可行-此处指的文件需要时时生成-非已存在的文件"><a href="#什么情况下流式下载可行-此处指的文件需要时时生成-非已存在的文件" class="headerlink" title="什么情况下流式下载可行?(此处指的文件需要时时生成,非已存在的文件)"></a>什么情况下流式下载可行?(此处指的文件需要时时生成,非已存在的文件)</h4><p>目前根据了解,无需文件头的文件可行(例如txt以及任何可以通过更改txt后缀来变更为想要类型的文件)或者文件头数据固定不变的可行</p>
+<p>原因:</p>
+<ul>
+<li>如果无需文件头,那么仅需文件体数据,我们完全可以直接通过流式传输给浏览器(设置为流文件类型)让前端按序保存到文件中。</li>
+<li>而如果需要文件头的话,文件头中往往包含了文件长度,文件校验码等信息(例如压缩文件就包含了校验码,压缩后大小,压缩前大小,另外压缩文件还需通过文件头标识的文件长度来识别压缩包中有几个文件并解压)</li>
+<li>我们流式传输是顺序传输,我们在开始传输时并不知道文件长度,传输结束也无法回头修改文件头(如果前端有某些操作配合除外),所以流式传输在该种情况下不可行</li>
+</ul>
+<p>ps:提示下,excel有行数限制。而且10W行以上的excel就已经不适合查看了,打开速度已经影响用户体验。所以大量数据的话谨慎用excel</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://ryanstian.github.io/blog/2020/08/08/docker%20for%20mac%E7%BD%91%E7%BB%9C%E4%B8%8D%E9%80%9A/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -501,7 +889,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-09-05 10:36:59" itemprop="dateModified" datetime="2021-09-05T10:36:59+08:00">2021-09-05</time>
+                <time title="修改时间：2021-09-05 22:52:58" itemprop="dateModified" datetime="2021-09-05T22:52:58+08:00">2021-09-05</time>
               </span>
 
           
@@ -516,7 +904,7 @@
 
       
           <span id="more"></span>
-<p>ps:当时写的语序很乱，改不动了，后面重新整理一波</p>
+<p>ps:当时写的语序很乱，改不动了，后面重新整理一波 DOING</p>
 <p>下面我所提到的mysql事务,均是基于InnoDB引擎(平时我们常用的引擎),千万不要将对InnoDB的理解代入其他的引擎</p>
 <p>提到mysql,对于业务场景来说,肯定是需要懂一些mysql事务方面的内容,那么本篇就来谈一下关于mysql事务的问题</p>
 <p>说到事务,我们就会问了,何时要用到事务?又或者事务是用来做什么的?  </p>
@@ -660,316 +1048,10 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://ryanstian.github.io/blog/2019/10/05/java%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8Unsafe%E7%B1%BB%E6%96%B9%E6%B3%95/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/blog/images/avatar.gif">
-      <meta itemprop="name" content="Ryanstian">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Ryanstian的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/blog/2019/10/05/java%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8Unsafe%E7%B1%BB%E6%96%B9%E6%B3%95/" class="post-title-link" itemprop="url">如何使用Unsafe类方法</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2019-10-05 18:11:00" itemprop="dateCreated datePublished" datetime="2019-10-05T18:11:00+08:00">2019-10-05</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-09-05 10:16:05" itemprop="dateModified" datetime="2021-09-05T10:16:05+08:00">2021-09-05</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>版本：JDK8<br>首先Unsafe类是不建议被使用的,因为他面向底层,可能在每一代jdk版本中发生变化,除非你有把握在在每一次升级jdk时维护你的项目</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/blog/2019/10/05/java%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8Unsafe%E7%B1%BB%E6%96%B9%E6%B3%95/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://ryanstian.github.io/blog/2019/10/05/ThreadPoolExecutor%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/blog/images/avatar.gif">
-      <meta itemprop="name" content="Ryanstian">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Ryanstian的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/blog/2019/10/05/ThreadPoolExecutor%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/" class="post-title-link" itemprop="url">ThreadPoolExecutor源码分析</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2019-10-05 18:11:00" itemprop="dateCreated datePublished" datetime="2019-10-05T18:11:00+08:00">2019-10-05</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-09-05 09:54:24" itemprop="dateModified" datetime="2021-09-05T09:54:24+08:00">2021-09-05</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>看到网上讲线程池源码的文章一堆大坑,只能自己扒源码扒篇文章出来了,坐标jdk8</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/blog/2019/10/05/ThreadPoolExecutor%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://ryanstian.github.io/blog/2019/09/15/IDEA%E4%BF%AE%E6%94%B9java%E7%89%88%E6%9C%AC%E5%8F%B7/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/blog/images/avatar.gif">
-      <meta itemprop="name" content="Ryanstian">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Ryanstian的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/blog/2019/09/15/IDEA%E4%BF%AE%E6%94%B9java%E7%89%88%E6%9C%AC%E5%8F%B7/" class="post-title-link" itemprop="url">IDEA修改java版本号</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2019-09-15 18:56:00" itemprop="dateCreated datePublished" datetime="2019-09-15T18:56:00+08:00">2019-09-15</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-09-05 10:18:26" itemprop="dateModified" datetime="2021-09-05T10:18:26+08:00">2021-09-05</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/blog/categories/IDEA/" itemprop="url" rel="index"><span itemprop="name">IDEA</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>总共有4处需要修改,直接上图(在后面),如果懒得每次改版本号,也可以利用maven插件</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/blog/2019/09/15/IDEA%E4%BF%AE%E6%94%B9java%E7%89%88%E6%9C%AC%E5%8F%B7/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://ryanstian.github.io/blog/2019/09/15/%E9%9A%A7%E9%81%93%E8%BF%9E%E6%8E%A5redis%E9%9B%86%E7%BE%A4%E6%8A%A5%E9%94%99/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/blog/images/avatar.gif">
-      <meta itemprop="name" content="Ryanstian">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Ryanstian的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/blog/2019/09/15/%E9%9A%A7%E9%81%93%E8%BF%9E%E6%8E%A5redis%E9%9B%86%E7%BE%A4%E6%8A%A5%E9%94%99/" class="post-title-link" itemprop="url">隧道连接redis集群报错</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2019-09-15 14:56:00" itemprop="dateCreated datePublished" datetime="2019-09-15T14:56:00+08:00">2019-09-15</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-09-05 10:37:43" itemprop="dateModified" datetime="2021-09-05T10:37:43+08:00">2021-09-05</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/blog/categories/BUG/" itemprop="url" rel="index"><span itemprop="name">BUG</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h4 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h4><p>&emsp;java springboot程序访问redis,由于redis集群分布于多个目标服务器上,且均有防火墙阻拦,平时调试都是通过tunnel建立隧道来访问。单个redis通过隧道访问成功,但是redis集群通过隧道访问失败。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/blog/2019/09/15/%E9%9A%A7%E9%81%93%E8%BF%9E%E6%8E%A5redis%E9%9B%86%E7%BE%A4%E6%8A%A5%E9%94%99/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/blog/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/blog/">1</a><span class="page-number current">2</span><a class="page-number" href="/blog/page/3/">3</a><a class="page-number" href="/blog/page/4/">4</a><a class="extend next" rel="next" href="/blog/page/3/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/blog/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/blog/">1</a><span class="page-number current">2</span><a class="page-number" href="/blog/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/blog/page/5/">5</a><a class="extend next" rel="next" href="/blog/page/3/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -1035,20 +1117,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/blog/archives/">
         
-          <span class="site-state-item-count">38</span>
+          <span class="site-state-item-count">42</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/blog/categories/">
           
-        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-count">11</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/blog/tags/">
           
-        <span class="site-state-item-count">17</span>
+        <span class="site-state-item-count">18</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
