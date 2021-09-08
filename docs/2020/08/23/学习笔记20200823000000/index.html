@@ -20,15 +20,15 @@
     var CONFIG = {"hostname":"ryanstian.github.io","root":"/blog/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="关于分库分表的一些学习之前有说到过分库分表这个问题,但是分库分表以后会面临几个问题  分表一般是按某个字段当关键词进行分表,但这也就造成了,如果where的一个目标是非关键词,我们就无法知道他属于哪张表 limit,order by,group by无法做到全局视角  那么接下来说一下我学到的一些方法  对于where这种情况,可以选择 建立映射表,将id和要where的字段单独拿张表映射,并且做">
+  <meta name="description" content="关于分库分表的一些学习之前有说到过分库分表这个问题,但是分库分表以后会面临几个问题  分表一般是按某个字段当关键词进行分表,但这也就造成了,如果where的一个目标是非关键词,我们就无法知道他属于哪张表 limit,order by,group by无法做到全局视角  那么接下来说一下我学到的一些方法  对于where这种情况,可以选择 建立映射表,将id和要where的字段单独拿张表映射,并且">
 <meta property="og:type" content="article">
 <meta property="og:title" content="学习笔记20200823000000">
 <meta property="og:url" content="https://ryanstian.github.io/blog/2020/08/23/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B020200823000000/index.html">
 <meta property="og:site_name" content="Ryanstian的博客">
-<meta property="og:description" content="关于分库分表的一些学习之前有说到过分库分表这个问题,但是分库分表以后会面临几个问题  分表一般是按某个字段当关键词进行分表,但这也就造成了,如果where的一个目标是非关键词,我们就无法知道他属于哪张表 limit,order by,group by无法做到全局视角  那么接下来说一下我学到的一些方法  对于where这种情况,可以选择 建立映射表,将id和要where的字段单独拿张表映射,并且做">
+<meta property="og:description" content="关于分库分表的一些学习之前有说到过分库分表这个问题,但是分库分表以后会面临几个问题  分表一般是按某个字段当关键词进行分表,但这也就造成了,如果where的一个目标是非关键词,我们就无法知道他属于哪张表 limit,order by,group by无法做到全局视角  那么接下来说一下我学到的一些方法  对于where这种情况,可以选择 建立映射表,将id和要where的字段单独拿张表映射,并且">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2020-08-23T15:27:00.000Z">
-<meta property="article:modified_time" content="2021-09-05T02:39:39.159Z">
+<meta property="article:modified_time" content="2021-09-07T11:49:01.961Z">
 <meta property="article:author" content="Ryanstian">
 <meta name="twitter:card" content="summary">
 
@@ -190,7 +190,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-09-05 10:39:39" itemprop="dateModified" datetime="2021-09-05T10:39:39+08:00">2021-09-05</time>
+                <time title="修改时间：2021-09-07 19:49:01" itemprop="dateModified" datetime="2021-09-07T19:49:01+08:00">2021-09-07</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -213,7 +213,8 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h4 id="关于分库分表的一些学习"><a href="#关于分库分表的一些学习" class="headerlink" title="关于分库分表的一些学习"></a>关于分库分表的一些学习</h4><p>之前有说到过分库分表这个问题,但是分库分表以后会面临几个问题</p>
+        <span id="more"></span>
+<h4 id="关于分库分表的一些学习"><a href="#关于分库分表的一些学习" class="headerlink" title="关于分库分表的一些学习"></a>关于分库分表的一些学习</h4><p>之前有说到过分库分表这个问题,但是分库分表以后会面临几个问题</p>
 <ul>
 <li>分表一般是按某个字段当关键词进行分表,但这也就造成了,如果where的一个目标是非关键词,我们就无法知道他属于哪张表</li>
 <li>limit,order by,group by无法做到全局视角</li>
@@ -276,8 +277,8 @@
       <i class="fa fa-chevron-left"></i> 学习笔记20200817000000
     </a></div>
       <div class="post-nav-item">
-    <a href="/blog/2020/09/05/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B020210905225399/" rel="next" title="学习笔记20210905225399">
-      学习笔记20210905225399 <i class="fa fa-chevron-right"></i>
+    <a href="/blog/2020/09/05/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B020210905225399-%E5%A4%A7%E6%95%B0%E6%8D%AE/" rel="next" title="学习笔记20210905225399-大数据">
+      学习笔记20210905225399-大数据 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
