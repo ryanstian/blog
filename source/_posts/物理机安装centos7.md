@@ -79,11 +79,23 @@ UEFI为较新启动方式，如果有,建议使用。旧平台很多不支持UEF
 修改后service network restart重启网络。  
 这些操作弄完，插根网线就能上网了
 
-#### yum安装软件
+#### 时间问题
 新系统时钟一般是错误的，这时候yum install会告诉你协议过期。  
-用date命令把日期改成今天就好了。
+用date s "2021-09-11 00:00:00"命令把日期改成不太旧的时间就好了。
 
 如果连不上官方的yum源，就去找个国内的源设置上来用，源的链接可能会变，注意找时间新的多尝试下
+
+当yum可用以后，安装ntp  
+yum -y install ntp ntpdate
+
+让系统时间与网络时间同步：ntpdate cn.ntp.org.cn  
+cn.ntp.org.cn指的网络服务器，可去http://www.ntp.org.cn获取更多
+
+
+#### yum安装软件
+如果发现包不存在，可以换源   
+如果还原后已经找不到包，那可能你需要的包属于epel。需要执行`yum install epel-release`  
+centos官方为了稳定性，库版本会比较旧。`epel-release`属于第三方包，有很多新库。
 
 #### 如何知道散热器有没有安装好
 lm_sensors工具可以看cpu温度。  

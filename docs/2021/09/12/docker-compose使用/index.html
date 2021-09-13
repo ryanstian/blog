@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/blog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/blog/css/main.css">
+
+
+<link rel="stylesheet" href="/blog/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"ryanstian.github.io","root":"/blog/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="docker-compose其实可以理解为一个脚本，代替我们执行创建容器命令。如果需要创建多个容器，那么提前编写docker-compse会非常好用">
+<meta property="og:type" content="article">
+<meta property="og:title" content="docker-compose使用">
+<meta property="og:url" content="https://ryanstian.github.io/blog/2021/09/12/docker-compose%E4%BD%BF%E7%94%A8/index.html">
+<meta property="og:site_name" content="Ryanstian的博客">
+<meta property="og:description" content="docker-compose其实可以理解为一个脚本，代替我们执行创建容器命令。如果需要创建多个容器，那么提前编写docker-compse会非常好用">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-09-12T03:36:00.000Z">
+<meta property="article:modified_time" content="2021-09-12T05:27:44.772Z">
+<meta property="article:author" content="Ryanstian">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://ryanstian.github.io/blog/2021/09/12/docker-compose%E4%BD%BF%E7%94%A8/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>docker-compose使用 | Ryanstian的博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/blog/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Ryanstian的博客</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/blog/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/blog/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://ryanstian.github.io/blog/2021/09/12/docker-compose%E4%BD%BF%E7%94%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/blog/images/avatar.gif">
+      <meta itemprop="name" content="Ryanstian">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Ryanstian的博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          docker-compose使用
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-09-12 11:36:00 / 修改时间：13:27:44" itemprop="dateCreated datePublished" datetime="2021-09-12T11:36:00+08:00">2021-09-12</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/blog/categories/docker/" itemprop="url" rel="index"><span itemprop="name">docker</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>docker-compose其实可以理解为一个脚本，代替我们执行创建容器命令。<br>如果需要创建多个容器，那么提前编写docker-compse会非常好用</p>
+<span id="more"></span>
+<h2 id="安装docker-compose"><a href="#安装docker-compose" class="headerlink" title="安装docker-compose"></a>安装docker-compose</h2><p>直接<code>yum -y install docker-compose</code>即可<br>ps：后续版本太高可能需要去github下载特殊版本，并且下载后建立软连接，赋予可执行权限  </p>
+<p>安装完后检查安装情况<code>docker-compose --version</code></p>
+<h2 id="编写docker-compose"><a href="#编写docker-compose" class="headerlink" title="编写docker-compose"></a>编写docker-compose</h2><p>docker-compose，本质上就是用yml的形式，把我们平时<code>docker run xxx</code>的命令再写一遍。<br>基本<code>docker run xxx</code>能用的，docker-compose都能用。反之亦然</p>
+<p>示例：</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># version不是任意填，要填你docker版本对应的compose版本</span></span><br><span class="line"><span class="attr">version:</span> <span class="string">&#x27;3&#x27;</span></span><br><span class="line"><span class="comment"># service为容器的根目录，下面my1，my2，my3分别是三个容器，名字可以任意起</span></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">    <span class="comment"># 创建容器，my1可以任意叫，只是目录结构要求，后续没啥用</span></span><br><span class="line">    <span class="attr">my1:</span></span><br><span class="line">        <span class="comment"># 选用的镜像</span></span><br><span class="line">        <span class="attr">image:</span> <span class="string">mysql</span></span><br><span class="line">        <span class="comment"># 重启策略（可选），如果为no，则运行compose后不会自动启动</span></span><br><span class="line">        <span class="attr">restart:</span> <span class="string">&quot;no&quot;</span></span><br><span class="line">        <span class="comment"># 容器名，相当于docker run --name xxx</span></span><br><span class="line">        <span class="attr">container_name:</span> <span class="string">mysql1</span></span><br><span class="line">        <span class="comment"># 网桥配置（可选），配置好以后同一网桥下可以用别名互访，可配置多个网桥</span></span><br><span class="line">        <span class="attr">networks:</span></span><br><span class="line">            <span class="comment"># 其中一个网桥，名字需要与下方定义一致，具体见代码块最下方网桥定义</span></span><br><span class="line">            <span class="attr">docker-net:</span></span><br><span class="line">                <span class="comment"># 容器在网桥中的别名，用于容器互访</span></span><br><span class="line">                <span class="attr">aliases:</span></span><br><span class="line">                    <span class="comment"># 这里别名叫做mysql1</span></span><br><span class="line">                    <span class="bullet">-</span> <span class="string">mysql1</span></span><br><span class="line">        <span class="comment"># 容器相关参数</span></span><br><span class="line">        <span class="attr">deploy:</span></span><br><span class="line">            <span class="comment"># 资源限制</span></span><br><span class="line">            <span class="attr">resources:</span></span><br><span class="line">                <span class="comment"># 最大资源限制</span></span><br><span class="line">                <span class="attr">limits:</span></span><br><span class="line">                    <span class="comment"># 这里1是指的单核cpu限制，多核cpu可以超过1</span></span><br><span class="line">                    <span class="attr">cpus:</span> <span class="string">&quot;1&quot;</span></span><br><span class="line">                    <span class="comment"># 内存限制</span></span><br><span class="line">                    <span class="attr">memory:</span> <span class="string">4096M</span></span><br><span class="line">                <span class="comment"># 宿主机为容器预留资源</span></span><br><span class="line">                <span class="attr">reservations:</span></span><br><span class="line">                    <span class="attr">cpus:</span> <span class="string">&quot;0.25&quot;</span></span><br><span class="line">                    <span class="attr">memory:</span> <span class="string">1024M</span></span><br><span class="line">    <span class="comment"># 创建第二个容器</span></span><br><span class="line">    <span class="attr">my2:</span></span><br><span class="line">        <span class="attr">image:</span> <span class="string">mysql</span></span><br><span class="line">        <span class="attr">restart:</span> <span class="string">&quot;no&quot;</span></span><br><span class="line">        <span class="attr">container_name:</span> <span class="string">mysql2</span></span><br><span class="line">        <span class="attr">networks:</span></span><br><span class="line">            <span class="attr">docker-net:</span></span><br><span class="line">                <span class="attr">aliases:</span></span><br><span class="line">                    <span class="bullet">-</span> <span class="string">mysql2</span></span><br><span class="line">        <span class="attr">deploy:</span></span><br><span class="line">            <span class="attr">resources:</span></span><br><span class="line">                <span class="attr">limits:</span></span><br><span class="line">                    <span class="attr">cpus:</span> <span class="string">&quot;1&quot;</span></span><br><span class="line">                    <span class="attr">memory:</span> <span class="string">4096M</span></span><br><span class="line">                <span class="attr">reservations:</span></span><br><span class="line">                    <span class="attr">cpus:</span> <span class="string">&quot;0.25&quot;</span></span><br><span class="line">                    <span class="attr">memory:</span> <span class="string">1024M</span></span><br><span class="line">    <span class="attr">my3:</span></span><br><span class="line">        <span class="attr">image:</span> <span class="string">mysql</span></span><br><span class="line">        <span class="attr">restart:</span> <span class="string">&quot;no&quot;</span></span><br><span class="line">        <span class="attr">container_name:</span> <span class="string">mysql3</span></span><br><span class="line">        <span class="attr">networks:</span></span><br><span class="line">            <span class="attr">docker-net:</span></span><br><span class="line">                <span class="attr">aliases:</span></span><br><span class="line">                    <span class="bullet">-</span> <span class="string">mysql3</span></span><br><span class="line">        <span class="attr">deploy:</span></span><br><span class="line">            <span class="attr">resources:</span></span><br><span class="line">                <span class="attr">limits:</span></span><br><span class="line">                    <span class="attr">cpus:</span> <span class="string">&quot;1&quot;</span></span><br><span class="line">                    <span class="attr">memory:</span> <span class="string">4096M</span></span><br><span class="line">                <span class="attr">reservations:</span></span><br><span class="line">                    <span class="attr">cpus:</span> <span class="string">&quot;0.25&quot;</span></span><br><span class="line">                    <span class="attr">memory:</span> <span class="string">1024M</span></span><br><span class="line"><span class="comment"># 定义网桥</span></span><br><span class="line"><span class="attr">networks:</span></span><br><span class="line">    <span class="comment"># 要定义的网桥名，可以定义多个网桥</span></span><br><span class="line">    <span class="attr">docker-net:</span></span><br></pre></td></tr></table></figure>
+
+<p>其他命令还有在my1目录下，诸如environment设置容器环境等（需容器支持），具体可自行查阅</p>
+<h2 id="运行docker-compose"><a href="#运行docker-compose" class="headerlink" title="运行docker-compose"></a>运行docker-compose</h2><p>-f表示指定文件，-d表示后台运行(否则会直接在你当前窗口运行，一关窗口就关闭了)<br><code>docker-compose -f 自己编写的compose文件名 up -d</code></p>
+<h2 id="扩展-docker容器互访"><a href="#扩展-docker容器互访" class="headerlink" title="扩展 docker容器互访"></a>扩展 docker容器互访</h2><p>1、docker安装时会创建默认网桥，容器可通过内网ip互访<br>2、自己创建网桥<code>docker network create testnet</code>,容器创建时通过–network 网桥名 –network-alias 网络别名 连接到网桥<br>然后此网桥下容器间可通过网络别名互访</p>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Ryanstian
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://ryanstian.github.io/blog/2021/09/12/docker-compose%E4%BD%BF%E7%94%A8/" title="docker-compose使用">https://ryanstian.github.io/blog/2021/09/12/docker-compose使用/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/blog/2021/09/11/centos7%E5%86%85%E6%A0%B8%E5%8D%87%E7%BA%A7/" rel="prev" title="centos7内核升级">
+      <i class="fa fa-chevron-left"></i> centos7内核升级
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/blog/2021/09/12/dockerfile%E7%AC%94%E8%AE%B0/" rel="next" title="dockerfile笔记">
+      dockerfile笔记 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85docker-compose"><span class="nav-number">1.</span> <span class="nav-text">安装docker-compose</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%96%E5%86%99docker-compose"><span class="nav-number">2.</span> <span class="nav-text">编写docker-compose</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%90%E8%A1%8Cdocker-compose"><span class="nav-number">3.</span> <span class="nav-text">运行docker-compose</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%89%A9%E5%B1%95-docker%E5%AE%B9%E5%99%A8%E4%BA%92%E8%AE%BF"><span class="nav-number">4.</span> <span class="nav-text">扩展 docker容器互访</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Ryanstian</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/blog/archives/">
+        
+          <span class="site-state-item-count">50</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/blog/categories/">
+          
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/blog/tags/">
+          
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" class="cc-opacity" rel="noopener" target="_blank"><img src="/blog/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Ryanstian</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/blog/lib/anime.min.js"></script>
+  <script src="/blog/lib/velocity/velocity.min.js"></script>
+  <script src="/blog/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/blog/js/utils.js"></script>
+
+<script src="/blog/js/motion.js"></script>
+
+
+<script src="/blog/js/schemes/muse.js"></script>
+
+
+<script src="/blog/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

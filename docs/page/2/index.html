@@ -155,6 +155,666 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://ryanstian.github.io/blog/2021/08/27/mysql%E6%95%B0%E6%8D%AE%E9%87%8F%E5%A4%A7%E5%A6%82%E4%BD%95%E5%81%9ADDL/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/blog/images/avatar.gif">
+      <meta itemprop="name" content="Ryanstian">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Ryanstian的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/blog/2021/08/27/mysql%E6%95%B0%E6%8D%AE%E9%87%8F%E5%A4%A7%E5%A6%82%E4%BD%95%E5%81%9ADDL/" class="post-title-link" itemprop="url">mysql数据量大如何做DDL</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-08-27 00:03:00" itemprop="dateCreated datePublished" datetime="2021-08-27T00:03:00+08:00">2021-08-27</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-09-05 10:13:29" itemprop="dateModified" datetime="2021-09-05T10:13:29+08:00">2021-09-05</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/blog/categories/mysql/" itemprop="url" rel="index"><span itemprop="name">mysql</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="一、背景"><a href="#一、背景" class="headerlink" title="一、背景"></a>一、背景</h1><p>mysql单表数据量小，并发压力小时，我们可以考虑直接在表上做alter操作。<br>一旦数据量达到百万千万级别，直接alter会导致长时间缩表，此时我们就无法无脑alter。<br>这章与大家聊一聊，mysql表中数据量大时，如何做DDL操作。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/blog/2021/08/27/mysql%E6%95%B0%E6%8D%AE%E9%87%8F%E5%A4%A7%E5%A6%82%E4%BD%95%E5%81%9ADDL/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://ryanstian.github.io/blog/2021/08/22/%E7%AE%80%E8%AE%B020210822174300/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/blog/images/avatar.gif">
+      <meta itemprop="name" content="Ryanstian">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Ryanstian的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/blog/2021/08/22/%E7%AE%80%E8%AE%B020210822174300/" class="post-title-link" itemprop="url">简记20210822174300</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-08-22 17:43:00" itemprop="dateCreated datePublished" datetime="2021-08-22T17:43:00+08:00">2021-08-22</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-08-26 23:56:18" itemprop="dateModified" datetime="2021-08-26T23:56:18+08:00">2021-08-26</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/blog/categories/%E7%AE%80%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">简记</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <span id="more"></span>
+<h1 id="二、跳出固化思维"><a href="#二、跳出固化思维" class="headerlink" title="二、跳出固化思维"></a>二、跳出固化思维</h1><p>经过第一阶段在摸爬滚打，相信已经有了些许积累，学到了很多。  </p>
+<p>这时，我相信你至少已经知道了。什么时候该用分库分表，什么时候该用redis，什么时候该用kafka等等一系列的简单应用。</p>
+<p>大致了解原理以及会用是一方面，精通又是另一方面。大部分工作的人，也仅仅是了解原理及停留在会用的阶段。当然这并不会妨碍我们用它们来设计我们的程序。</p>
+<p>好了，让我们回归正题。</p>
+<p>当你进行一项程序，我希望你忘记自己学过的各种中间件，学过的各种语言等等。</p>
+<p>此时便可以从程序本质出发，从需求开始，一点点分析你需要哪些特性来组装出你的程序，然后去寻找适合的技能，而非从自己所有的技能中做排除法。</p>
+<p>等我们把所需的特性一一列出以后。才是需要结合团队掌握的技能，以及底层支持等各种情况，来进行综合考虑的情况。</p>
+<p>这里我会举几个例子，当然受限于保密等原因，无法说的太过详细。但已经足以辅助理解。</p>
+<p>examle1：<br>刚入职场时曾经遇到了这样一个问题：  </p>
+<p>我需要定时对一系列的信息进行处理，根据来源方不通进行不同的处理规则，处理规则依托于各渠道方强相关。  </p>
+<p>并且在我程序运行过程中，还会源源不断的增加新来源方，以及改变旧有渠道处理方式。  </p>
+<p>在我处理完数据后，会对几方数据进行比对，然后根据渠道组合不同，定制不同的清理流程  </p>
+<p>solution1-1：<br>此时，其实总的来说就两个问题。</p>
+<ul>
+<li>1.通用性 VS 定制化</li>
+<li>2.流程复杂性</li>
+</ul>
+<p>这一阶段，我所掌握的知识相当有限。在我的认知范围内，我是这样思考的：</p>
+<ul>
+<li>1.由于各个业务流程过于复杂，如果单独为每个业务定制，那么后期维护复杂度会把我拖垮。于是我需要在所有业务中抽象出一个共性模型。在通用的基础上，用不同的策略（策略模式）去处理定制化问题</li>
+<li>2.因为流程复杂多变，我对需求进行了分析，去google上参考业界通用流程，在复杂流程中关键步骤抽离出来，考虑各自成为服务，各服务无状态且可横向扩展。<br>让数据通过中间件为中转，流转于各个服务中，通过控制不同数据在服务中的流转顺序，以此来解决流程复杂性问题（后来考虑到维护成本，被要求压缩在一个服务里，通过方法调用来分割了）</li>
+<li>3.但还有一个问题没有解决，各业务的定制化逻辑。这里比较困难的一点为，逻辑与渠道方高度耦合，即我们需要完全掌握业务方逻辑才可以定制出处理规则，这是相当困难的。<br>我曾考虑过采用动态加载插件的形式，让业务将他们的规则封装在一个插件中，交由我们在程序中热拔插。后来考虑到这其中的不可控性便被放弃了（例如业务方写的规则需要在我们服务上跑，很容易失控）。<br>最终，基于各种压力，我们选择将一小部分及其特殊的逻辑让各渠道方预处理（或是我们替其进行预处理），然后走入通用逻辑。</li>
+</ul>
+<p>在这一阶段，我的知识储备中并没有dag调度，大数据处理等概念。但是通过对业务的分析，已经衍生出雏形。</p>
+<p>这也是我为什么强调，忘记自己的知识储备，从需求来分析需要什么，而不是你会什么。</p>
+<p>———–扩展———–  </p>
+<p>solution1-2：<br>后来接触了DAG调度平台，可以发现。其中的流程复杂性，便是dag中的流程控制。  </p>
+<p>本质上与我们先前拆分为多个微服务进行处理并没有区别，只不过dag平台提供了更为巧妙的调度方式，以及更为简洁的编码。</p>
+<p>让我们在思考一下，我们拥有了流程调度能力，并且我们的业务已经发展的比较复杂，各种渠道的定制化流程复杂交错。  </p>
+<p>先前我们制定的通用化模型，应付现在的场景非常吃力。任何一个渠道的改动，均需们发版来更新，会影响到所有渠道的处理。而且每次改动均需考虑兼容性问题</p>
+<p>此时，我们该如何协调定制化与通用化的矛盾呢？（该答案并未亲自实践）</p>
+<p>答案是，反过来，在定制化的基础上做通用。  </p>
+<p>先前我已经提到，我们是定时任务，也就意味着，当我们有能力通过调度平台将各渠道拆分后，我们并不需要程序一直在run。可以在需要被调度时，通过调度平台启动对应渠道的处理程序。</p>
+<p>此时我们的编程思想要转换一下，我们的代码并不需要控制整个流程，而是像一个个插件一样被使用，我们仅需维护一个插件库。  </p>
+<p>当某个渠道紧急需求过来时，我们可以在插件库中找到该渠道对应的通用模型，复制出来一份，对其进行紧急定制化。在后期维护时，我们尝试将定制化功能抽离成通用功能，再添加回插件库。</p>
+<p>调度平台通过在我们插件库中选择合适的插件，编排出各个渠道的任务</p>
+<p>solution1-3：<br>随着后来的学习，我们接触了大数据。了解到对于数据的处理，原来是已经有现成的轮子，不需要我们自己去费尽心思，进行横向扩展来增加吞吐。</p>
+<p>那么回过头来，我们再思考一下。随着时间的增长，我们的程序资源占用逐渐出现了问题。</p>
+<p>在高峰期，我们的任务全堆在一起，CPU内存带宽磁盘IO等非常吃紧，并且有宕机趋势。然而在非任务期间，所有资源全部闲置。那么我们该如何解决这个问题？</p>
+<p>这里就不得不提到大数据平台了。之前提到，我们的数据流其实是在各个服务中流转的，这无疑增大了我们的负担。但如果，我们的程序仅仅负责命令流呢？</p>
+<p>通过将数据加载到大数据平台，我们的插件被调度平台控制，向大数据平台提交命令，处理任务。整个流程中，我们的流程控制的机器几乎不会接触到任何数据流，命令的发出几乎不会消耗资源。</p>
+<p>这时候你或许会问，大数据平台难道不需要消耗资源处理数据吗？</p>
+<p>当然时需要的，只不过你是跟其他团队在共享资源。你的任务空闲时，这些资源会被其他团队使用。</p>
+<p>当然类似的，你也可以做到与k8s团队合作，做到动态删减容器节点，在满足你使用的情况下节约资源</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://ryanstian.github.io/blog/2021/08/22/%E7%AE%80%E8%AE%B020210822191000/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/blog/images/avatar.gif">
+      <meta itemprop="name" content="Ryanstian">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Ryanstian的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/blog/2021/08/22/%E7%AE%80%E8%AE%B020210822191000/" class="post-title-link" itemprop="url">简记20210822191000</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-08-22 17:43:00" itemprop="dateCreated datePublished" datetime="2021-08-22T17:43:00+08:00">2021-08-22</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-08-27 00:01:42" itemprop="dateModified" datetime="2021-08-27T00:01:42+08:00">2021-08-27</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/blog/categories/%E7%AE%80%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">简记</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <span id="more"></span>
+<h1 id="三、能RUN就行"><a href="#三、能RUN就行" class="headerlink" title="三、能RUN就行"></a>三、能RUN就行</h1><p>这是一则真实的段子</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">有人在网上发帖提问</span><br><span class="line">提问者：自己写的代码太难看了怎么办？</span><br><span class="line">路人A：能run吗？</span><br><span class="line">提问者：我run还是代码run？</span><br><span class="line">路人B：有一个能run就行</span><br></pre></td></tr></table></figure>
+<p>不得不说，真的是人间真实。接下来我们聊一聊，该如何做到“能RUN就行”。</p>
+<p>记得在我刚刚实习的时候，一段简单的代码写了改，改了写，最后推到重构。写完了，自己看着代码非常愉悦，但却又因几天后的一个紧急需求，不得不改成他最初的样子。</p>
+<p>经过了一年的修修补补，我理解了什么叫“能RUN就行”。当然，这仅针对业务代码而言，因为业务需要紧跟市场脚步，需要的是最短时间代码能RUN，不宕机，而且后面还改的动，能坚持到下次被重构，这就是一份代码的使命。</p>
+<p>之前我曾看到有人这么评价业务架构师（注意是业务）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">程序员的作用是堆粪。架构师的作用是搭架子。</span><br><span class="line">屎山堆高，自己就塌了。有架子在，尽管臭，却能用</span><br></pre></td></tr></table></figure>
+
+<p>实在是很形象了。</p>
+<p>平时我们设计方案也是如此，方案不是越复杂越好，难的不是把方案完成，而是把复杂方案简单化。</p>
+<p>比如说才几万条数据，没啥热点，未来2年也不会增长到接近几百万，这时候来个分库分表，实属闲的。等到后面做编码的时候，这分库分表的编码复杂度反而得不偿失。</p>
+<p>又比如各个表都是按相同维度进行分表，你经过一系列的分析，算出来这个表该分表10张，另一个15张，再来一个50张。<br>当你接到个批量跨表数据分析工作，麻烦就来了。</p>
+<ul>
+<li>扫全表，压力大。</li>
+<li>扫单表，你就只能根据分表id计算最大公倍数，再来hash到对应分表  </li>
+</ul>
+<p>或许这里有人会反驳，数据分析这种东西，不都是用数仓么？<br>但是这仅是个例子，不是所有的公司都支撑的起数仓，也不是所有的数据分析业务都需要放到数仓去跑</p>
+<p>我曾经也是追逐“完美”的人，但在追逐过程中我学到：<br>世上并没有真正的完美，但从一种角度，它是完美的。但换一种角度，丑陋不堪。最终美好的仅是综合情况下的取舍。</p>
+<p>话说回来，一切都要讲究变通。  </p>
+<p>曾经我见过有人为了尽量少的采用中间件，用mysql来控制并发场景下的库存，还设计预分配库存量等机制。<br>显然，运行了一段时间后QPS上来，程序RUN实在不动，人RUN了。<br>我们只能含泪接手代码，花费大力气把他的设计废掉改用redis</p>
+<p>总之，不要为了复杂而复杂，也不要为了简化而简化，凡事讲究有度。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://ryanstian.github.io/blog/2021/08/18/%E7%AE%80%E8%AE%B020210818234900/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/blog/images/avatar.gif">
+      <meta itemprop="name" content="Ryanstian">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Ryanstian的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/blog/2021/08/18/%E7%AE%80%E8%AE%B020210818234900/" class="post-title-link" itemprop="url">简记20210818234900</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-08-18 23:49:00" itemprop="dateCreated datePublished" datetime="2021-08-18T23:49:00+08:00">2021-08-18</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-08-26 23:55:21" itemprop="dateModified" datetime="2021-08-26T23:55:21+08:00">2021-08-26</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/blog/categories/%E7%AE%80%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">简记</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <span id="more"></span>
+<h1 id="一、看清屎山"><a href="#一、看清屎山" class="headerlink" title="一、看清屎山"></a>一、看清屎山</h1><p>校招生踏入公司，普遍第一项工作是熟悉业务，熟悉架构，熟悉代码。</p>
+<p>这个流程本没有错，那么坑在哪？在于习惯。新人就像海绵，看到什么，便会学什么</p>
+<p>而大家都知道。业务代码，由于历史包袱，或是人力紧张，又或者是种种不可抗力因素，本身就是屎山中混杂金子。</p>
+<p>有的新人懂得多，或者习惯求索原因，可以从中看出设计中不合理的地方  </p>
+<p>而有些更为初学者的新人，则会在学习过程中全都当知识学进去，导致后续到自己设计时把代码补丁当成设计原则。不得不说，这简直是灾难</p>
+<p>在这里，我不得不提醒大家们两点</p>
+<ul>
+<li>相信推理胜过相信别人。</li>
+<li>防火防盗，防同事吹逼</li>
+</ul>
+<p>这两句话具体怎么理解，我给大家举个例子就懂了</p>
+<ul>
+<li>曾经有个team轰轰烈烈推广他们的工具，看完他们功能介绍PPT和文档，内部讨论一波，感觉这工具很可以。<br>后来找他们team开始深入沟通。然而这一沟通，就发现了大坑，大致过程如下：<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">一顿背景介绍过后。。。</span><br><span class="line"></span><br><span class="line">我方team：能给我们详细讲下你们这个架构是咋玩的吗？</span><br><span class="line">对方team：巴拉巴拉。。。</span><br><span class="line"></span><br><span class="line">我方team：诶，那这个xxx问题你们是怎么解决的？</span><br><span class="line">对方team：噢，我们是这个场景，巴拉巴拉。</span><br><span class="line"></span><br><span class="line">我方team：有点问题，那如果这个地方xxx你们怎么解决？</span><br><span class="line">对方team：额，这个问题我们不会遇到</span><br><span class="line"></span><br><span class="line">沉默ing。。。</span><br><span class="line"></span><br><span class="line">我方team：感谢感谢，了解了</span><br></pre></td></tr></table></figure>
+仔细品，我相信可以品出来很多东西。  </li>
+</ul>
+<p>很多情况下，我们的项目只适合于某些特定的场景，又或是迫于KPI，将半成品伪装成精品。</p>
+<p>不是所有人都会承认自己项目存在缺陷，若是隐藏起缺陷，而你又被精美PPT忽悠了。那么恭喜，你又会隐藏起自己项目缺陷再次背刺下一位幸运儿。  </p>
+<p>在工作中，最重要的，是相信自己的思考。伪装再好的缺陷，也能被找到蛛丝马迹。隐藏再深的金子，当思绪扫过，也能透出点点微光</p>
+<p>总之一句话：屎山中淘金，莫把屎当宝</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://ryanstian.github.io/blog/2021/08/18/%E7%AE%80%E8%AE%B020210818234800/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/blog/images/avatar.gif">
+      <meta itemprop="name" content="Ryanstian">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Ryanstian的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/blog/2021/08/18/%E7%AE%80%E8%AE%B020210818234800/" class="post-title-link" itemprop="url">简记20210818234800</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-08-18 23:48:00 / 修改时间：23:50:40" itemprop="dateCreated datePublished" datetime="2021-08-18T23:48:00+08:00">2021-08-18</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/blog/categories/%E7%AE%80%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">简记</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <span id="more"></span>
+<p>时光荏苒,不知不觉已然进入社会一个春秋  </p>
+<p>博客的事情停滞许久。究其因，怠惰自然居首位，然还有一点便是提笔难下</p>
+<p>一年前的自己，觉得自己懂得很多。一年后的自己，知道<br>自己才不过是刚刚入门。不得不说，学到的越多，越会发现自己的无知。</p>
+<p>这一年里，求知，热情，激动，无奈，彷徨，最终归于平静。接下来我将逐渐记录这些岁月，记录这有趣的生活，以及一路上所学所看所感。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://ryanstian.github.io/blog/2020/09/08/%E4%B8%80%E6%AC%A1%E6%80%A7%E7%A8%8B%E5%BA%8F%E8%B7%91%E5%AE%8C%EF%BC%8C%E6%97%A5%E5%BF%97%E6%B2%A1%E6%89%93%E5%8D%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/blog/images/avatar.gif">
+      <meta itemprop="name" content="Ryanstian">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Ryanstian的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/blog/2020/09/08/%E4%B8%80%E6%AC%A1%E6%80%A7%E7%A8%8B%E5%BA%8F%E8%B7%91%E5%AE%8C%EF%BC%8C%E6%97%A5%E5%BF%97%E6%B2%A1%E6%89%93%E5%8D%B0/" class="post-title-link" itemprop="url">一次性程序跑完，日志没打印</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-09-08 22:59:00" itemprop="dateCreated datePublished" datetime="2020-09-08T22:59:00+08:00">2020-09-08</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-09-08 23:01:26" itemprop="dateModified" datetime="2021-09-08T23:01:26+08:00">2021-09-08</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/blog/categories/BUG/" itemprop="url" rel="index"><span itemprop="name">BUG</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <span id="more"></span>
+<p>问题：写了个单元测试，程序跑完，结果发现log日志里面没有东西</p>
+<p>答：使用的是异步log，log线程存在于程序进程中。当进程跑完关闭，日志还灭来得及打印，log线程就跟着进程一起结束了</p>
+<p>一般日志组件都允许选择异步还是同步，修改下就好</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://ryanstian.github.io/blog/2020/09/05/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B020210905225399-%E5%A4%A7%E6%95%B0%E6%8D%AE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/blog/images/avatar.gif">
+      <meta itemprop="name" content="Ryanstian">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Ryanstian的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/blog/2020/09/05/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B020210905225399-%E5%A4%A7%E6%95%B0%E6%8D%AE/" class="post-title-link" itemprop="url">学习笔记20210905225399-大数据</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-09-05 22:53:00" itemprop="dateCreated datePublished" datetime="2020-09-05T22:53:00+08:00">2020-09-05</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-09-07 19:47:26" itemprop="dateModified" datetime="2021-09-07T19:47:26+08:00">2021-09-07</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/blog/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <span id="more"></span>
+<h2 id="Hadoop生态圈基础三件套"><a href="#Hadoop生态圈基础三件套" class="headerlink" title="Hadoop生态圈基础三件套"></a>Hadoop生态圈基础三件套</h2><h4 id="HDFS"><a href="#HDFS" class="headerlink" title="HDFS"></a>HDFS</h4><pre><code>HDFS是分布式文件系统。hadoop生态圈组件大部分依赖HDFS中存储的数据。由于底层存储一样，往往各个开源组件都是可以数据互通
+</code></pre>
+<h4 id="MapReduce"><a href="#MapReduce" class="headerlink" title="MapReduce"></a>MapReduce</h4><pre><code>分布式计算框架/模型。（我们自己写代码的话，通常会分片，并行计算，再合并等，该框架方便我们处理这些非业务问题）
+</code></pre>
+<h4 id="Yarn"><a href="#Yarn" class="headerlink" title="Yarn"></a>Yarn</h4><pre><code>资源统一管理与调度平台
+</code></pre>
+<p>通常的用法为：我们利用MapReduce框架写的程序，读取HDFS上文件，当作数据输入进行处理。众多MapReduce程序跑在众多机器上，由yarn进行资源调度</p>
+<h2 id="DAG"><a href="#DAG" class="headerlink" title="DAG"></a>DAG</h2><p>通常我们对数据的处理，例如分片，过滤，聚合等操作。都采用类似DAG模型（有向无环图），每个操作相当于有向无环图中的每个节点。</p>
+<p>我们可以用流程编排的方式，将每个操作编排起来，也可以借助DAG调度平台实现</p>
+<h2 id="平台概念"><a href="#平台概念" class="headerlink" title="平台概念"></a>平台概念</h2><p>大数据与我们平时的程序驱动方式不太相同。大数据中，处理流程往往是由平台来驱动我们代码；而平时，整个程序是由我们代码自己写控制流程进行驱动</p>
+<h2 id="离线OLAP框架"><a href="#离线OLAP框架" class="headerlink" title="离线OLAP框架"></a>离线OLAP框架</h2><p>离线OLAP通常应用场景是，不要求延迟时间的场景。<br>通常有：日志分析，报表生成，其他离线分析型场景</p>
+<h4 id="TiSpark"><a href="#TiSpark" class="headerlink" title="TiSpark"></a>TiSpark</h4><pre><code>TiSpark既可以批处理，也可流处理
+</code></pre>
+<h4 id="Hive"><a href="#Hive" class="headerlink" title="Hive"></a>Hive</h4><pre><code>基于Hadoop的数据仓库，解决海量结构化数据统计问题。支持类似sql的语法（但不支持事务），原理是将sql转化为mapreduce去执行  
+- 倾向于处理结构化数据，要求先声明数据结构，再载入数据
+- 数据仓库，允许增删改查。但是修改和删除，本质是先将文件数据块读出，修改后再存入，代价极大
+</code></pre>
+<h4 id="Pig"><a href="#Pig" class="headerlink" title="Pig"></a>Pig</h4><pre><code>与Hive基本一致。  
+- 倾向于处理非结构化数据，允许先载入数据，再声明数据结构
+- 纯粹文件处理，不允许增加修改删除
+- 数据分析语法比Hive略全
+</code></pre>
+<p>有时会Pig，Hive结合使用。利用Pig非结构化数据处理特性清晰数据，Hive在后方做数据分析</p>
+<h2 id="数据存储-搜索框架"><a href="#数据存储-搜索框架" class="headerlink" title="数据存储/搜索框架"></a>数据存储/搜索框架</h2><h4 id="Hbase"><a href="#Hbase" class="headerlink" title="Hbase"></a>Hbase</h4><ul>
+<li>分布式KV存储，方便随机读写访问</li>
+<li>更新支持能力极好（底层不是直接删除，而是记录数据及时间戳，读取最新数据。）</li>
+<li>查询性能极好。由于其kv存储，无法做到复杂分析</li>
+</ul>
+<h4 id="ES"><a href="#ES" class="headerlink" title="ES"></a>ES</h4><ul>
+<li>更新能力差，由于底层HDFS存储，只能整块修改</li>
+<li>查询能力强。自身会建立反向索引（索引可常驻内存），且具备复杂分析能力</li>
+</ul>
+<h2 id="流处理框架"><a href="#流处理框架" class="headerlink" title="流处理框架"></a>流处理框架</h2><p>流处理通常运用在，欺诈识别，基于规则的异常告警，业务监控，广告推荐系统，实时分析等场景</p>
+<h4 id="流批概念"><a href="#流批概念" class="headerlink" title="流批概念"></a>流批概念</h4><p>流处理通常为事件驱动，即收到消息会触发计算。<br>批处理会当数据积累到一定数量时再计算。<br>两者在延迟和吞吐量有所差别</p>
+<h4 id="storm"><a href="#storm" class="headerlink" title="storm"></a>storm</h4><p>流处理框架，延迟在几毫米-&gt;几十毫秒，可保证消息最少被处理一次</p>
+<h4 id="spark"><a href="#spark" class="headerlink" title="spark"></a>spark</h4><p>支持选择流处理或批处理，延迟在秒级，有spark生态支撑。<br>流处理的原理是，通过极小的批处理伪装流处理<br>spark某种程度上弱于flink，其优点在于建立在spark生态上，需要离线&amp;实时处理结合的场景尤为适合</p>
+<h4 id="flink"><a href="#flink" class="headerlink" title="flink"></a>flink</h4><p>流批一体，延迟几十毫秒-&gt;几百毫秒。<br>批处理原理是，流处理伪装成批处理</p>
+<h4 id="samza"><a href="#samza" class="headerlink" title="samza"></a>samza</h4><p>强依赖kafka，优点是可以将中间计算结果存储至kafka供下游消费</p>
+<p>流处理</p>
+<h2 id="一些其他工具"><a href="#一些其他工具" class="headerlink" title="一些其他工具"></a>一些其他工具</h2><h4 id="mahout"><a href="#mahout" class="headerlink" title="mahout"></a>mahout</h4><p>是个机器学习库</p>
+<h4 id="flume"><a href="#flume" class="headerlink" title="flume"></a>flume</h4><p>跟logstash功能类似，但侧重点有所差别</p>
+<h4 id="scoop"><a href="#scoop" class="headerlink" title="scoop"></a>scoop</h4><p>在mysql等关系型数据库，与HDFS存储的各种大数据工具中，复制数据</p>
+<h4 id="zookeeper"><a href="#zookeeper" class="headerlink" title="zookeeper"></a>zookeeper</h4><h4 id="kafka"><a href="#kafka" class="headerlink" title="kafka"></a>kafka</h4><h2 id="学习顺序"><a href="#学习顺序" class="headerlink" title="学习顺序"></a>学习顺序</h2><p>HDFS-&gt;离线-&gt;批处理-&gt;流处理</p>
+<h2 id="究竟谁优谁劣"><a href="#究竟谁优谁劣" class="headerlink" title="究竟谁优谁劣"></a>究竟谁优谁劣</h2><p>没有绝对上的优劣，各个框架都在飞速发展中，经常会出现互相借鉴的情况。<br>有可能过上一段时间，支持特性便有所进步</p>
+<h2 id="如何看待大数据"><a href="#如何看待大数据" class="headerlink" title="如何看待大数据"></a>如何看待大数据</h2><p>大数据仅仅是帮助我们简化代码编写的工具。即使不用大数据，我们也依旧需要按照大数据的方式去处理数据。不必排斥，也不必过度推崇</p>
+<h2 id="什么时候会需要使用大数据框架"><a href="#什么时候会需要使用大数据框架" class="headerlink" title="什么时候会需要使用大数据框架"></a>什么时候会需要使用大数据框架</h2><ul>
+<li>由于大数据通常是由平台驱动代码，团队需具备运维能力</li>
+<li>代码处理时，数据量已经多到需要提前按哈希分批来处理的底部</li>
+</ul>
+<h2 id="目前自己的疑问"><a href="#目前自己的疑问" class="headerlink" title="目前自己的疑问"></a>目前自己的疑问</h2><p>如何基于全部历史数据，来进行实时持续聚合</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://ryanstian.github.io/blog/2020/08/23/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B020200823000000/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -454,602 +1114,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://ryanstian.github.io/blog/2020/08/10/%E5%85%B3%E4%BA%8E%E6%B5%81%E5%BC%8F%E4%B8%8B%E8%BD%BD%E7%9A%84%E6%80%9D%E8%80%83/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/blog/images/avatar.gif">
-      <meta itemprop="name" content="Ryanstian">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Ryanstian的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/blog/2020/08/10/%E5%85%B3%E4%BA%8E%E6%B5%81%E5%BC%8F%E4%B8%8B%E8%BD%BD%E7%9A%84%E6%80%9D%E8%80%83/" class="post-title-link" itemprop="url">关于流式下载的思考</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-08-10 23:56:00" itemprop="dateCreated datePublished" datetime="2020-08-10T23:56:00+08:00">2020-08-10</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-09-05 10:37:16" itemprop="dateModified" datetime="2021-09-05T10:37:16+08:00">2021-09-05</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <span id="more"></span>
-<h4 id="为什么需要流式下载"><a href="#为什么需要流式下载" class="headerlink" title="为什么需要流式下载?"></a>为什么需要流式下载?</h4><ul>
-<li>情况1:前端点击下载后,后端生成数据过慢,导致超时<ul>
-<li>解决1:当然这可以通过调整前后端超时时间</li>
-<li>解决2:给用户loading或其他方法展现</li>
-<li>解决3:异步,后端接到请求后返回并异步生成,前端轮询状态(这种方式注意控制导出频率和重复利用导出文件,避免用户疯狂点击爆掉服务端)</li>
-</ul>
-</li>
-<li>情况2:数据量过大,服务器内存扛不住数据且导出数据不会出现重复,无保存价值<ul>
-<li>解决1:使用可暂存硬盘的文件生成工具</li>
-<li>其他方式:参考情况1</li>
-</ul>
-</li>
-</ul>
-<p>由于资源及时间问题,我们通常想用流式下载</p>
-<h4 id="什么情况下流式下载可行-此处指的文件需要时时生成-非已存在的文件"><a href="#什么情况下流式下载可行-此处指的文件需要时时生成-非已存在的文件" class="headerlink" title="什么情况下流式下载可行?(此处指的文件需要时时生成,非已存在的文件)"></a>什么情况下流式下载可行?(此处指的文件需要时时生成,非已存在的文件)</h4><p>目前根据了解,无需文件头的文件可行(例如txt以及任何可以通过更改txt后缀来变更为想要类型的文件)或者文件头数据固定不变的可行</p>
-<p>原因:</p>
-<ul>
-<li>如果无需文件头,那么仅需文件体数据,我们完全可以直接通过流式传输给浏览器(设置为流文件类型)让前端按序保存到文件中。</li>
-<li>而如果需要文件头的话,文件头中往往包含了文件长度,文件校验码等信息(例如压缩文件就包含了校验码,压缩后大小,压缩前大小,另外压缩文件还需通过文件头标识的文件长度来识别压缩包中有几个文件并解压)</li>
-<li>我们流式传输是顺序传输,我们在开始传输时并不知道文件长度,传输结束也无法回头修改文件头(如果前端有某些操作配合除外),所以流式传输在该种情况下不可行</li>
-</ul>
-<p>ps:提示下,excel有行数限制。而且10W行以上的excel就已经不适合查看了,打开速度已经影响用户体验。所以大量数据的话谨慎用excel</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://ryanstian.github.io/blog/2020/08/08/docker%20for%20mac%E7%BD%91%E7%BB%9C%E4%B8%8D%E9%80%9A/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/blog/images/avatar.gif">
-      <meta itemprop="name" content="Ryanstian">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Ryanstian的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/blog/2020/08/08/docker%20for%20mac%E7%BD%91%E7%BB%9C%E4%B8%8D%E9%80%9A/" class="post-title-link" itemprop="url">docker for mac网络不通</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-08-08 21:15:00" itemprop="dateCreated datePublished" datetime="2020-08-08T21:15:00+08:00">2020-08-08</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-09-05 10:11:44" itemprop="dateModified" datetime="2021-09-05T10:11:44+08:00">2021-09-05</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/blog/categories/docker/" itemprop="url" rel="index"><span itemprop="name">docker</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>现象:docker安装在linux上一切正常,安装在mac上,宿主机无法ping通容器ip<br>经常出现在宿主机连接容器kafka集群的情况下,无法连通</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/blog/2020/08/08/docker%20for%20mac%E7%BD%91%E7%BB%9C%E4%B8%8D%E9%80%9A/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://ryanstian.github.io/blog/2020/08/04/mysql%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/blog/images/avatar.gif">
-      <meta itemprop="name" content="Ryanstian">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Ryanstian的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/blog/2020/08/04/mysql%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B/" class="post-title-link" itemprop="url">mysql存储过程</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-08-04 23:19:00" itemprop="dateCreated datePublished" datetime="2020-08-04T23:19:00+08:00">2020-08-04</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-09-05 10:26:46" itemprop="dateModified" datetime="2021-09-05T10:26:46+08:00">2021-09-05</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>1.此篇记录简单的mysql存储过程,意在分表,将1个数据库表根据id分为多个表,用于数据迁移。然而实测速度极慢(本地1000W条数据分表,1分钟分了5W条),根据搜集资料显示,瓶颈疑似出现在游标,google回答建议采用临时表代替游标</p>
-<p>2.根据搜集资料,现阶段不建议使用存储过程,而是在业务层来处理数据。因为存储过程极其依赖数据库,难以迁移。<br>存储过程会加重数据库负担,数据库应该仅承担数据存储职责而非业务职责</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/blog/2020/08/04/mysql%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://ryanstian.github.io/blog/2020/07/30/go_mac_http_fd/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/blog/images/avatar.gif">
-      <meta itemprop="name" content="Ryanstian">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Ryanstian的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/blog/2020/07/30/go_mac_http_fd/" class="post-title-link" itemprop="url">go_mac_http_fd</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-07-30 00:06:00" itemprop="dateCreated datePublished" datetime="2020-07-30T00:06:00+08:00">2020-07-30</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-09-05 10:25:42" itemprop="dateModified" datetime="2021-09-05T10:25:42+08:00">2021-09-05</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/blog/categories/BUG/" itemprop="url" rel="index"><span itemprop="name">BUG</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <span id="more"></span>
-<p>用jmeter压测go web项目时突然新的请求被阻塞无法被执行,通过命令lsof -nP -i -l查看,发现大量类似这样信息,此时jmeter已经stop,客户端与服务端之间并不存在存活的请求</p>
-<h4 id="状况一-TCP-IP-PORT-gt-IP-PORT-CLOSED"><a href="#状况一-TCP-IP-PORT-gt-IP-PORT-CLOSED" class="headerlink" title="状况一: TCP[IP]PORT-&gt;[IP]PORT (CLOSED)"></a>状况一: TCP[IP]PORT-&gt;[IP]PORT (CLOSED)</h4><p>链接断开<br>我们代码客户端和mysql服务端的连接时存在超时时间的，如果一定时间内没有使用，则会断开。<br>当时用到mysql客户端包，并不会在断开时帮我们自动重建连接</p>
-<h4 id="状况二-TCP-IP-PORT-gt-IP-PORT-ESTABLISHED"><a href="#状况二-TCP-IP-PORT-gt-IP-PORT-ESTABLISHED" class="headerlink" title="状况二:TCP[IP]PORT-&gt;[IP]PORT (ESTABLISHED)"></a>状况二:TCP[IP]PORT-&gt;[IP]PORT (ESTABLISHED)</h4><p>结论:正常现象,表示连接状态的socket</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://ryanstian.github.io/blog/2020/07/30/can't%20assign%20requested%20address/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/blog/images/avatar.gif">
-      <meta itemprop="name" content="Ryanstian">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Ryanstian的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/blog/2020/07/30/can't%20assign%20requested%20address/" class="post-title-link" itemprop="url">can't assign requested address,i/o timeout,too many open files in system</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-07-30 00:05:00" itemprop="dateCreated datePublished" datetime="2020-07-30T00:05:00+08:00">2020-07-30</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-09-05 10:25:47" itemprop="dateModified" datetime="2021-09-05T10:25:47+08:00">2021-09-05</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/blog/categories/BUG/" itemprop="url" rel="index"><span itemprop="name">BUG</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <span id="more"></span>
-<h4 id="状况一-can’t-assign-requested-address"><a href="#状况一-can’t-assign-requested-address" class="headerlink" title="状况一:can’t assign requested address"></a>状况一:can’t assign requested address</h4><p>go用了mysql连接池,高并发压测时出现该报错</p>
-<p>分析:该报错是由于mac自身fd句柄打开数限制,并且mysql连接池并非一开始就创建出连接,而是随着请求进来才创建连接,大量并发同时进入,占满了mac的fd,导致mysql连接池无法使用fd,无法分配新的连接</p>
-<p>结论:修改mac参数限制/上服务器测<br>临时修改方式,命令行直接输入<br>永久修改方式,写入/etc/sysctl.conf后重启</p>
-<p>参数详情(懂的话建议按需修改,不需要全改):</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">sysctl kern.maxfiles 查看系统所能打开的最大文件数（文件描述符）(全局)</span><br><span class="line">sudo sysctl -w kern.maxfiles 修改</span><br><span class="line">sysctl kern.maxfilesperproc 查看系统所能打开的最大文件数（文件描述符）(一个进程)</span><br><span class="line">sudo sysctl -w kern.maxfilesperproc 修改</span><br><span class="line">ulimit －n 查看shell能打开的最大文件数</span><br><span class="line">ulimit -n 123123 修改(123123为任意值,但不得大于kern.maxfilesperproc)</span><br><span class="line">sysctl net.inet.ip.portrange 查看端口范围</span><br><span class="line">sysctl -w net.inet.ip.portrange.first=32768 修改</span><br></pre></td></tr></table></figure>
-
-<h4 id="状况二-dial-tcp-127-0-0-1-3306-i-o-timeout"><a href="#状况二-dial-tcp-127-0-0-1-3306-i-o-timeout" class="headerlink" title="状况二:dial tcp 127.0.0.1:3306:i/o timeout"></a>状况二:dial tcp 127.0.0.1:3306:i/o timeout</h4><p>分析:待补充</p>
-<p>结论:解决方式同状况一</p>
-<h4 id="状况三-too-many-open-files-in-system"><a href="#状况三-too-many-open-files-in-system" class="headerlink" title="状况三:too many open files in system"></a>状况三:too many open files in system</h4><p>分析:原因同状况一</p>
-<p>结论:解决方式同状况一</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://ryanstian.github.io/blog/2019/11/30/mysql%E4%BA%8B%E5%8A%A1/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/blog/images/avatar.gif">
-      <meta itemprop="name" content="Ryanstian">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Ryanstian的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/blog/2019/11/30/mysql%E4%BA%8B%E5%8A%A1/" class="post-title-link" itemprop="url">mysql事务</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2019-11-30 21:06:00" itemprop="dateCreated datePublished" datetime="2019-11-30T21:06:00+08:00">2019-11-30</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-09-05 22:52:58" itemprop="dateModified" datetime="2021-09-05T22:52:58+08:00">2021-09-05</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <span id="more"></span>
-<p>ps:当时写的语序很乱，改不动了，后面重新整理一波 DOING</p>
-<p>下面我所提到的mysql事务,均是基于InnoDB引擎(平时我们常用的引擎),千万不要将对InnoDB的理解代入其他的引擎</p>
-<p>提到mysql,对于业务场景来说,肯定是需要懂一些mysql事务方面的内容,那么本篇就来谈一下关于mysql事务的问题</p>
-<p>说到事务,我们就会问了,何时要用到事务?又或者事务是用来做什么的?  </p>
-<p>其实,在我看来,事务是用来将一系列的非原子性操作封装成某种程度上外部感知上的原子性操作(这里要注意,事务并不是将所有操作压缩起来,类似redis中LUA脚本那样,而是你每句sql是确实的被执行了的,数据库也确实发生了修改的,只是用了某种技巧使得其可以支持事务失败时的回滚,以及其对其他外部行为可见性等)</p>
-<p>以汇款行为为例,我们需要从A账户中取出金额,放到B账户下,在这两个行为的过程中,可能会发生各种意外导致数字货币的丢失<br>那么为了防止这种情况发生,我们就需要想办法将其打包成原子性操作,其中一种方式就是用mysql事务(当然,这仅仅是数据库层面上的方式,我们当然还有其他可选方式)</p>
-<p>下面我们先来简单介绍一下mysql事务的几种隔离级别  </p>
-<p>这里要解释一下为什么会有隔离级别这个东西。因为我们提到过,mysql事务的原子性，并不是将我们所要进行的操作压缩在一起执行,而是每次的sql语句确实的被mysql执行了  </p>
-<p>那么如果两个事务同时进行,那么我们如何保证一个事务所做的修改对于另一个事务而言的可见性呢?  </p>
-<p>这就涉及到了事务隔离级别。事务隔离级别分为以下几种,后面我会再详细的分析隔离级别是如何实现的</p>
-<h4 id="Read-uncommitted"><a href="#Read-uncommitted" class="headerlink" title="Read uncommitted"></a>Read uncommitted</h4><p>从名字可以看出这种模式可以允许你读取另一个事务已经执行但是未进行commit之前的修改</p>
-<h4 id="Read-committed"><a href="#Read-committed" class="headerlink" title="Read committed"></a>Read committed</h4><p>同理,这个模式只能读取另一个事务已经commit的修改</p>
-<h4 id="Repeatable-read"><a href="#Repeatable-read" class="headerlink" title="Repeatable read"></a>Repeatable read</h4><p>在提到这种模式之前,我们先思考下之前的两种模式(我们此时要注意换位思考,即假设A,B两个事务同时运行,我们要分别从AB的角度去看待原子性)</p>
-<p>Read uncommitted显而易见,如果是当A读取,B修改(这里我们把它想象成连续修改可能更容易理解)时,对于A而言他看到的B事务并不是原子性的(即如果A连续读,会发现B造成的修改是在不断变动的)，Read committed可以说他的一部分已经开始向原子性靠拢了  </p>
-<p>还是当A读取,B连续修改这种情况下<br>对于从A的角度而言B的修改是原子性的,从B的角度而言A的修改也是原子性的(即B只能看到A事务开启前或提交后的值)  </p>
-<p>如果你认为这就已经达到了原子性,那么恭喜你漏了一个很重要的一点。<br>从A的角度而言A自身并不是原子性的。<br>我这么说或许大家会感到奇怪,那么首先我们再来看一下对原子性的理解。</p>
-<p>何为原子性?<br>即如果A,B两个行为,他们互相看对方是原子性的,并且A看A也必须是原子性的(即在他们动作执行开始到结束,在他们的眼里整个世界是停滞的,只有他们自己在活跃)。  </p>
-<p>好,理解了这一点,我们再回来看。  </p>
-<p>假设A事务正在执行,B事务也在执行。那么如果B不提交A就已经执行完了,A认为整个世界只有他在活跃  </p>
-<p>那么如果A事务执行时B提交了呢?<br>在A眼里整个世界就不是停滞的,还有B的存在,B的种种行为都会影响到A的判断,具体会有何种影响我们后面再说</p>
-<p>让我们回到Repeatable read。<br>理解了上面的,我们就很容易理解Repeatable read这种模式。<br>字面上来看,就是可重复读,那么他的作用是什么呢,拿上面的举例来说,即A执行(严格来讲并不是执行,而是只在第一次select操作时,后面我会说明原因)的一瞬间,在他看来整个世界对他停滞了,即时外界有任何事务的提交,也不会影响他,直到他完成自己的工作,而在mysql中,这也是默认的隔离级别。这里有个提示,所有的命令都是活跃在事务中的,即时你只有单条sql语句,mysql也会默认给你包装为一个事务,那么平时我们单条sql语句并不需要执行commit是因为有个属性autocommit=1自动帮我们执行了commit</p>
-<ul>
-<li>Serializable<ul>
-<li>这种模式就比较简单粗暴了,每次读取数据时都会获取表级共享锁(这里不明白的同学可以简单的将其理解为被获取共享锁的对象只能看不能动),由于直接给你表套了个共享锁,所以其他事务对于本事务都是原子性的(其他事务连动数据都动不了,更别提原子性不原子性的问题了。如果其他事务的修改操作先于本串行化事务开始时,由于排他锁会阻止加共享锁,所以直到加排他锁的事务commit,本Serializable的事务根本无法执行,反之也同理,连修改都无法进行,还谈什么修改可见不可见的问题呢)</li>
-</ul>
-</li>
-</ul>
-<p>&emsp;在这里我并不会总结几种隔离级别和脏读不可重复度幻读等的关系,因为在搜资料的过程中发现大家对这些概念说法有一定的差别,当然这并不意味谁的理解是错的,只是站在不同角度而已,下面以两个版本来说</p>
-<p>&emsp;先说网上的各种教程的版本</p>
-<ul>
-<li>脏读<ul>
-<li>读到了其他事务未提交的数据,在Read uncommitted模式下会发生</li>
-</ul>
-</li>
-<li>不可重复读<ul>
-<li>一个事务中两次select获取的数据不一样,在Read committed,Read uncommitted模式下会发生</li>
-</ul>
-</li>
-<li>幻读<ul>
-<li>同一个事物中连续读两次发现读到的行(该行可能以前存在也可能不存在)不一样,在Read committed,Read uncommitted,Repeatable read模式下均会发生</li>
-</ul>
-</li>
-</ul>
-<p>&emsp;再说下自己的理解(在看接下来内容之前先看下这篇,<a href="#">Post not found: InnoDB的MVCC机制 InnoDB的MVCC机制</a>)</p>
-<p>&emsp;看完MVCC机制之后,我们可以思考这么一个问题,假如AB两个事务(Repeatable read模式),A先全表读一次,B插入一条数据(事务并未提交),A全表update一次,A再读一次,那么他读出来的跟第一次读出来的一样吗?</p>
-<p>&emsp;如果仔细看过刚才MVCC机制的文章,会发现,其实刚才的那个问题,A两次读取出的已经不一样了,那么仔细思考一下,这算不算脏读呢?这算不算重复读呢?这算不算幻读呢?(对于幻读当然你也可以把条件定义为其他事务的改变对于本事务来说不可见而不是当前事务的修改对自身不可见,但在这里我并不想纠结于文字)其实我也分不清。在很多情况下我们死记脏读,不可重复读,幻读是毫无意义的,不如直接去弄清他的原理,根据具体需要去分析</p>
-<p>&emsp;接下来我们再仔细想一下之前的MVCC和前三种隔离级别(最后一种串行化隔离级别我们可以把它放到锁那部分来讨论了,这里提他并没有意义),我们不难感觉出,有哪里怪怪的,我们看到的和实际操作的是不一样的。那在这里,让我们再引入两个概念,当前读和快照读(请自行搜索),现在我们不难看出,无论是MVCC还是三种隔离级别都是针对于读(select)这一行为而言,他们并没有规定insert,update,delete等操作,看过MVCC我们知道,update和delete是由undo log来维护的,并且会置入操作他们的事务的id(insert也会置入id,但是网上说他不由undo log维护,具体我还要再去验证),虽然读会受此id影响,但是修改(这里泛指增删改)并不会走MVCC判断事务id,也就是说,你只要有方式能触碰到该条记录(例如update where id=),则这条记录会被你修改,并且事务id会置为你的事务id,那么以后的select,就会受MVCC影响而可以查询出来这条数据,当然还有很多情况,这里随便列举一个</p>
-<ul>
-<li>事务A读了一下表发现了abc三条数据,事务B读了一下表发现了abc三条数据,事务A插入了一条数据d,事务B再读表发现还是abc三条数据,那么事务B插入了一条数据d(注意,此时跟事务A刚才插入的主键重复),那么插入失败。</li>
-</ul>
-<p>&emsp;到这里mysql事务的介绍差不多就结束了,仅靠MVCC是不足以支撑我们对原子性的要求的,事实上大部分情况都是MVCC与锁配合来达到我们的期望(好吧,其实我本来想用需求这个词来表达,但是不禁想到了产品提需求的噩梦,相信很多人都对此深有感触)</p>
-<p>&emsp;最后提一点题外话,如果你想测试mysql的事务,千万不要在springboot或者hibernate框架中测试,他们自身的事务管理机制会扰乱你的测试,在下面的几篇(可能要鸽一阵子,毕竟这俩框架体量比较庞大)会分析一下为何他们会扰乱你的测试</p>
-<p>ps:其实在进行测试时,有一个地方暂时没搞清楚,假设事务AB(Repeatable read模式均为),B全表读一次,A删除一条数据并提交,B全表读一次。第一次读取和第二次读取出的行记录(仅仅是少了一行,每行的数据是符合RR的)在mysql workbench 8.0CE模式下是不同的(事务A的删除对B可见),而在navicat premium 12和mysql命令行模式下两次读取出是相同的(事务A的删除对事务B不可见),有人可以指点下吗</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://ryanstian.github.io/blog/2019/10/05/FutureTask%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/blog/images/avatar.gif">
-      <meta itemprop="name" content="Ryanstian">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Ryanstian的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/blog/2019/10/05/FutureTask%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/" class="post-title-link" itemprop="url">FutureTask源码分析</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2019-10-05 18:11:00" itemprop="dateCreated datePublished" datetime="2019-10-05T18:11:00+08:00">2019-10-05</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-09-05 10:20:11" itemprop="dateModified" datetime="2021-09-05T10:20:11+08:00">2021-09-05</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>FutureTask直接继承了RunnableFuture,间接继承了Future,Runnable。当我们使用Runnable时,是无法获得返回值的,而RunnableFuture则是为了解决这一个问题而存在</p>
-<p>在该类中,有一点你会发现,他用到了自定义的链表,并且在get阻塞等待以及任务完成时都会操作该链表,例如awaitDone(boolean timed, long nanos)方法中的这些操作,该链表的作用是,如果多个线程同时get阻塞等待该任务,这些线程的信息分别保存在链表上的一个节点中,那么当任务完成时可以通过该操作来即时唤醒这些线程,超时的被从链表中移除,例如下面代码demo</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test42</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">        <span class="comment">//构造FutureTask</span></span><br><span class="line">        FutureTask futureTask = <span class="keyword">new</span> FutureTask(() -&gt; &#123;</span><br><span class="line">            Thread.sleep(<span class="number">5000</span>);</span><br><span class="line">            System.out.println(<span class="string">&quot;callable has run&quot;</span>);</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&quot;123&quot;</span>;</span><br><span class="line">        &#125;);</span><br><span class="line">        <span class="comment">//运行FutureTask中传入的任务</span></span><br><span class="line">        <span class="keyword">new</span> Thread(() -&gt; futureTask.run()).start();</span><br><span class="line">        <span class="comment">//开启第一个get</span></span><br><span class="line">        <span class="keyword">new</span> Thread(() -&gt; &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                System.out.println(<span class="string">&quot;Thread one:&quot;</span>+futureTask.get());</span><br><span class="line">            &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125; <span class="keyword">catch</span> (ExecutionException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;).start();</span><br><span class="line">        <span class="comment">//开启第二个get</span></span><br><span class="line">        <span class="keyword">new</span> Thread(() -&gt; &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                System.out.println(<span class="string">&quot;Thread two:&quot;</span>+futureTask.get());</span><br><span class="line">            &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125; <span class="keyword">catch</span> (ExecutionException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;).start();</span><br><span class="line">        <span class="comment">//主线程睡眠等待其他线程结束</span></span><br><span class="line">        Thread.sleep(<span class="number">10000</span>);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-
-<p>在该类中有一处代码,这里保存该任务的状态,这种方式很常见,也可以方便的通过比较大小等方式来判断其状态范围</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">int</span> state;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> NEW          = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> COMPLETING   = <span class="number">1</span>;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> NORMAL       = <span class="number">2</span>;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> EXCEPTIONAL  = <span class="number">3</span>;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> CANCELLED    = <span class="number">4</span>;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> INTERRUPTING = <span class="number">5</span>;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> INTERRUPTED  = <span class="number">6</span>;</span><br></pre></td></tr></table></figure>
-
-<p>callable是接到的任务,即使构造时采用的Future也会为了统一而被封装为Callable,outcome是返回值,如果任务执行过程中出现异常,那么outcome中保存的则是异常信息,waitNode则是刚刚提到的链表,runner是运行该任务的线程信息,在本类中常被用来做CAS操作,只有当其为null,run()才可被调用,避免连续调用两次run()导致重复运行任务</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/** The underlying callable; nulled out after running */</span></span><br><span class="line"><span class="keyword">private</span> Callable&lt;V&gt; callable;</span><br><span class="line"><span class="comment">/** The result to return or exception to throw from get() */</span></span><br><span class="line"><span class="keyword">private</span> Object outcome; <span class="comment">// non-volatile, protected by state reads/writes</span></span><br><span class="line"><span class="comment">/** The thread running the callable; CASed during run() */</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">volatile</span> Thread runner;</span><br><span class="line"><span class="comment">/** Treiber stack of waiting threads */</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">volatile</span> WaitNode waiters;</span><br></pre></td></tr></table></figure>
-
-<p>finishCompletion()方法就是之前提到的唤醒链表上所有get阻塞的线程<br>LockSupport.unpark和park可以理解为信号量<br>runAndReset()这是个protected方法,作用是,通过不改变state的状态使其可以运行多次,普通的run()运行一次以后state状态就改变了</p>
-<p>其他的代码没啥难度,看下源码附带的注释就能理解了</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1119,14 +1183,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/blog/archives/">
         
-          <span class="site-state-item-count">42</span>
+          <span class="site-state-item-count">50</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/blog/categories/">
           
-        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-count">12</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
